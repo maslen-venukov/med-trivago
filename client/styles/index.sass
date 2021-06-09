@@ -1,6 +1,38 @@
 @import 'antd/dist/antd.css'
 
 .container
-  max-width: 1200px
+  width: 100%
+  max-width: 1000px
   padding: 0 15px
   margin: 0 auto
+
+.layout
+  background-color: #fff
+
+.header
+  display: flex
+  align-items: center
+  background-color: #fff
+
+.sider
+  background-color: #fff
+  padding-right: 8px
+
+.content
+  padding-left: 8px
+
+.search
+  .ant-form-item
+    margin-right: 0
+    &:first-child
+      flex: 1
+      margin-right: 8px
+
+.ant-input-number
+  width: 100%
+
+.ant-form-item .ant-form-item
+  margin-bottom: 0
+  width: calc(50% - 1px)
+  &:first-child
+    margin-right: 2px

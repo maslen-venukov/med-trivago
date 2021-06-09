@@ -1,10 +1,46 @@
+import React, { useEffect } from 'react'
+import axios from 'axios'
 
-const Index = () => {
+import message from 'antd/lib/message'
+
+import MainLayout from '../layouts/MainLayout'
+
+import { ICategory } from '../types/categories'
+
+interface IIndexProps {
+  categories: ICategory[]
+  error: string
+}
+
+const Index: React.FC<IIndexProps> = ({ categories, error }) => {
+  useEffect(() => {
+    error && message.error(error)
+  }, [error])
+
   return (
-    <div>
-      app
-    </div>
+    <MainLayout>
+      {!error && categories.map(category => <p key={category._id}>{category.name}</p>)}
+      index
+    </MainLayout>
   )
 }
 
 export default Index
+
+export const getServerSideProps = async () => {
+  try {
+    const { data } = await axios.get('http://localhost:5000/api/categories')
+    const { categories } = data
+    return {
+      props: {
+        categories
+      }
+    }
+  } catch {
+    return {
+      props: {
+        error: 'Ошибка при загрузке категорий'
+      }
+    }
+  }
+}
