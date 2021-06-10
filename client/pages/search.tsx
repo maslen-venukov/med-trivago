@@ -1,16 +1,22 @@
 import React, { useEffect } from 'react'
+import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
 import List from 'antd/lib/list'
+import Select from 'antd/lib/select'
 
 import SearchLayout from '../layouts/SearchLayout'
 
+import { setSort } from '../store/actions/search'
+
 import { ICategory } from '../types/categories'
 import { IService } from '../types/services'
-import { RootState } from '../store/reducers'
 import pushQueryToUrl from '../utils/pushQueryToUrl'
+
+import { RootState } from '../store/reducers'
+import { Sort } from '../types/search'
 
 interface ISearchProps {
   categories: ICategory[]
@@ -19,18 +25,33 @@ interface ISearchProps {
 }
 
 const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
+  const dispatch = useDispatch()
   const router = useRouter()
 
   const { q, filters, sort } = useSelector((state: RootState) => state.search)
 
+  const onSortChange = (value: Sort) => {
+    dispatch(setSort({ ...sort, p: value }))
+  }
+
   useEffect(() => {
-    // console.log(router.query)
-    // const data = { q, ...filters, ...sort }
+    const data = { q, ...filters, ...sort }
+    pushQueryToUrl(router, data)
+  }, [sort])
+
+  useEffect(() => {
     pushQueryToUrl(router, router.query)
   }, [])
 
   return (
     <SearchLayout categories={categories} error={error}>
+      <div className="sort">
+        <Select defaultValue="" onChange={onSortChange}>
+          <Select.Option value="">По умолчанию</Select.Option>
+          <Select.Option value="asc">Дешевле</Select.Option>
+          <Select.Option value="desc">Дороже</Select.Option>
+        </Select>
+      </div>
       <List
         bordered
         dataSource={services}
@@ -46,13 +67,10 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
 
 export default Search
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps  = async (context) => {
   try {
-    const { q, cat, minp, maxp, p } = context.query
     const categories = await axios.get('/api/categories')
-    const services = await axios.get('/api/services', {
-      params: { q, cat, minp, maxp, p }
-    })
+    const services = await axios.get('/api/services', { params: context.query })
     return {
       props: {
         categories: categories.data.categories,
@@ -62,7 +80,7 @@ export const getServerSideProps = async (context) => {
   } catch {
     return {
       props: {
-        error: 'Ошибка при загрузке категорий'
+        error: 'Ошибка при загрузке данных'
       }
     }
   }

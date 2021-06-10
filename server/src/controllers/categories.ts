@@ -19,9 +19,7 @@ class Controller {
       }
 
       const { name } = req.body
-      const category = new Category({
-        name
-      })
+      const category = new Category({ name })
       await category.save()
 
       return res.status(HTTPStatusCodes.Created).json({ message: 'Категория успешно создана', category })

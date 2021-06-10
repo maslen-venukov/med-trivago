@@ -3,9 +3,9 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",
+    "lib": ["es2019"],
     "moduleResolution": "node",
     "outDir": "./build",
     "rootDir": "./src"
-  },
-  "lib": ["es2015"]
+  }
 }

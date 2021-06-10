@@ -9,10 +9,11 @@ import connectDB from './core/db'
 import accountsRouter from './routes/accounts'
 import categoriesRouter from './routes/categories'
 import errorsRouter from './routes/errors'
+import servicesRouter from './routes/services'
 
 // import Account from './models/Account'
 // import Category from './models/Category'
-// import Hospital from './models/Hospital'
+import Hospital from './models/Hospital'
 
 const PORT = process.env.PORT || 5000
 const MONGO_URI = process.env.MONGO_URI
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/accounts', accountsRouter)
 app.use('/api/categories', categoriesRouter)
 app.use('/api/errors', errorsRouter)
+app.use('/api/services', servicesRouter)
 
 const start = async () => {
   try {

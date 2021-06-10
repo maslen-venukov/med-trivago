@@ -4,8 +4,10 @@ export interface IFilters {
   maxp: string | number
 }
 
+export type Sort = 'desc' | 'asc' | ''
+
 export interface ISort {
-  p: 'desc' | 'asc' | ''
+  p: Sort
 }
 
 export interface ISearchState {

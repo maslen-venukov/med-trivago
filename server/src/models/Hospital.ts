@@ -7,12 +7,14 @@ interface IWorkingHours {
   end: string
 }
 
-interface IService {
+export interface IService {
+  _id?: string
   name: string
   price: number
 }
 
-interface IServiceList {
+export interface IServiceList {
+  _id?: string
   category: string
   workingHours: IWorkingHours
   list: IService[]

@@ -8,11 +8,7 @@ const getQueryString = (values: any): string => {
 
   const query = str.slice(0, -1)
 
-  if(!query) {
-    return ''
-  }
-
-  return '?' + query
+  return query ? `?${query}` : ''
 }
 
 export default getQueryString

@@ -62,7 +62,7 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
               }
             />
           ) : (
-            <Input placeholder="Категория" />
+            <Input placeholder="Категория" allowClear />
           )}
         </Form.Item>
 
