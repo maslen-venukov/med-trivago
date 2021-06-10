@@ -1,38 +1,66 @@
 import { Request, Response } from 'express'
 
-import Hospital, { IServiceList, IService } from '../models/Hospital'
+import Service from '../models/Service'
+import Category from '../models/Category'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 
+type NameFilter = RegExp | null
+
+type CategoryFilter = string | null
+
+interface IPriceFilter {
+  $gte?: number
+  $lte?: number
+}
+
+type PriceFilter = IPriceFilter | null
+
+interface IFilters {
+  name?: RegExp
+  price?: IPriceFilter
+  category?: CategoryFilter
+}
+
+interface ISort {
+  _id?: string
+  price?: string
+}
+
 class Controller {
   async getAll(req: Request, res: Response): Promise<Response> {
     try {
-      const hospitals = await Hospital.find()
-      const serviceLists: IServiceList[] = hospitals.map(hospital => hospital.serviceList).flat()
-      let services: IService[] = serviceLists.map(serviceList => serviceList.list).flat()
+      const { q, cat, minp, maxp, p } = req.query
 
-      const { q, minp, maxp, p } = req.query
-
+      let name: NameFilter = null
       if(q && typeof q === 'string') {
-        services = services.filter(service => service.name.toLowerCase().includes(q.toLowerCase()))
+        name = new RegExp(q, 'gi')
       }
 
-      if(minp) {
-        services = services.filter(service => service.price >= Number(minp))
+      let category: CategoryFilter = null
+      if(cat && typeof cat === 'string') {
+        const obj = await Category.findOne({ name: cat })
+        category = obj?._id || null
       }
 
-      if(maxp) {
-        services = services.filter(service => service.price <= Number(maxp))
+      let price: PriceFilter = null
+      if(minp) price = { ...price, $gte: Number(minp)}
+      if(maxp) price = { ...price, $lte: Number(maxp)}
+
+      let sort: ISort = { _id: 'desc' }
+      if(p && typeof p === 'string') {
+        sort = { price: p }
       }
 
-      if(p === 'desc') {
-        services = services.sort((a, b) => a.price < b.price ? 1 : -1)
-      }
+      const filters = { name, category, price }
+      const find: IFilters = Object.keys(filters).reduce((acc, key) => {
+        const value = filters[key]
+        if(value) return { ...acc, [key]: value }
+        return acc
+      }, {})
 
-      if(p === 'asc') {
-        services = services.sort((a, b) => a.price > b.price ? 1 : -1)
-      }
+      const services = await Service.find(find).sort(sort)
 
       return res.json({ services })
     } catch (e) {

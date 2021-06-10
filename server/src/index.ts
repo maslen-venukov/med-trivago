@@ -14,6 +14,7 @@ import servicesRouter from './routes/services'
 // import Account from './models/Account'
 // import Category from './models/Category'
 import Hospital from './models/Hospital'
+import Service from './models/Service'
 
 const PORT = process.env.PORT || 5000
 const MONGO_URI = process.env.MONGO_URI
@@ -81,6 +82,16 @@ const start = async () => {
     // })
 
     // await hospital.save()
+
+    // await Service.insertMany([
+    //   { name: 'УЗИ поджелудочной железы', price: 300, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbed' },
+    //   { name: 'УЗИ почек и мочевого пузыря', price: 600, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbed' },
+    //   { name: 'УЗИ селезнки', price: 300, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbed' },
+    //   { name: 'УЗИ коленного сустава', price: 500, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbed' },
+    //   { name: 'МРТ гипофиза', price: 1500, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbec' },
+    //   { name: 'МРТ гипофиза с контрастом', price: 5000, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbec' },
+    //   { name: 'МРТ головного мозга', price: 2100, hospital: '60bf42ae939b7445ccb45b04', category: '60bf248c6f318b3af4fdbbec' }
+    // ])
   } catch (e) {
     console.log(e)
   }

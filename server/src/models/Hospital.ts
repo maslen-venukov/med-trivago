@@ -7,20 +7,13 @@ interface IWorkingHours {
   end: string
 }
 
-export interface IService {
-  _id?: string
-  name: string
-  price: number
-}
-
-export interface IServiceList {
+interface IServiceList {
   _id?: string
   category: string
   workingHours: IWorkingHours
-  list: IService[]
 }
 
-export interface IHospital {
+interface IHospital {
   _id?: string
   name: string
   address: string
@@ -43,11 +36,7 @@ const schema = new Schema({
     workingHours: {
       start: { type: String, required: true },
       end: { type: String, required: true }
-    },
-    list: [{
-      name: { type: String, required: true },
-      price: { type: Number, required: true, min: 0 }
-    }]
+    }
   }],
   account: { type: ObjectId, ref: 'Accounts', required: true, unique: true }
 }, {
