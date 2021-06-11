@@ -30,23 +30,32 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
 
   const { q, filters, sort } = useSelector((state: RootState) => state.search)
 
-  const onSortChange = (value: Sort) => {
-    dispatch(setSort({ ...sort, p: value }))
+  const onChange = (value: Sort) => {
+    const p = value
+    const data = { q, ...filters, ...sort, p }
+    pushQueryToUrl(router, data)
+    dispatch(setSort({ ...sort, p }))
   }
 
+  // TODO разобраться с typescipt
   useEffect(() => {
-    const data = { q, ...filters, ...sort }
-    pushQueryToUrl(router, data)
-  }, [sort])
-
-  useEffect(() => {
-    pushQueryToUrl(router, router.query)
+    const p = router.query.p || ''
+    dispatch(setSort({ ...sort, p }))
   }, [])
+
+  // useEffect(() => {
+  //   const data = { q, ...filters, ...sort }
+  //   pushQueryToUrl(router, data)
+  // }, [sort])
+
+  // useEffect(() => {
+  //   pushQueryToUrl(router, router.query)
+  // }, [])
 
   return (
     <SearchLayout categories={categories} error={error}>
       <div className="sort">
-        <Select defaultValue="" onChange={onSortChange}>
+        <Select defaultValue="" value={sort.p} onChange={onChange}>
           <Select.Option value="">По умолчанию</Select.Option>
           <Select.Option value="asc">Дешевле</Select.Option>
           <Select.Option value="desc">Дороже</Select.Option>

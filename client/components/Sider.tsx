@@ -12,6 +12,7 @@ import Button from 'antd/lib/button'
 import { setFilters } from '../store/actions/search'
 
 import pushQueryToUrl from '../utils/pushQueryToUrl'
+import lazyInput from '../utils/lazyInput'
 
 import { ICategory } from '../types/categories'
 import { RootState } from '../store/reducers'
@@ -21,12 +22,6 @@ interface ISiderProps {
   error: string
 }
 
-interface ISiderFormValues {
-  cat: string
-  minp: string
-  maxp: string
-}
-
 const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -34,15 +29,42 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
   const { q, filters, sort } = useSelector((state: RootState) => state.search)
 
   const [mounted, setMounted] = useState<boolean>(false)
+  const [timer, setTimer] = useState(0)
 
-  const onShow = (values: ISiderFormValues) => {
-    dispatch(setFilters({ ...values }))
+  const { cat, minp, maxp } = router.query
+
+  const initialValues = {
+    cat: cat || '',
+    minp: minp || '',
+    maxp: maxp || ''
   }
 
-  useEffect(() => {
+  const onShow = () => {
     const data = { q, ...filters, ...sort }
     pushQueryToUrl(router, data)
-  }, [filters])
+  }
+
+  const onChange = (value: string | number, fieldName: string) => {
+    lazyInput(timer, setTimer, () => {
+      dispatch(setFilters({ ...filters, [fieldName]: value }))
+    })
+  }
+
+  const onCategoryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    lazyInput(timer, setTimer, () => {
+      dispatch(setFilters({ ...filters, cat: e.target.value }))
+    })
+  }
+
+  // useEffect(() => {
+  //   const data = { q, ...filters, ...sort }
+  //   pushQueryToUrl(router, data)
+  // }, [filters])
+
+  // TODO разобраться с typescipt
+  useEffect(() => {
+    dispatch(setFilters({ cat, minp, maxp }))
+  }, [])
 
   useEffect(() => {
     setMounted(true)
@@ -50,19 +72,26 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
 
   return (
     <Layout.Sider className="sider">
-      <Form onFinish={onShow} layout="vertical">
+      <Form onFinish={onShow} layout="vertical" initialValues={initialValues}>
         <Form.Item label="Категория" name="cat">
           {!error ? (
             <AutoComplete
               options={categories.map(category => ({ value: category.name }))}
               placeholder="Категория"
               allowClear
-              filterOption={(inputValue, option) =>
-                option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-              }
+              filterOption={(inputValue, option) => {
+                return option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+              }}
+              value={filters.cat}
+              onChange={value => onChange(value, 'cat')}
             />
           ) : (
-            <Input placeholder="Категория" allowClear />
+            <Input
+              placeholder="Категория"
+              allowClear
+              value={filters.cat}
+              onChange={onCategoryInputChange}
+            />
           )}
         </Form.Item>
 
@@ -71,10 +100,20 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
           <Form.Item label="Цена">
             <Input.Group compact>
               <Form.Item name="minp">
-                <InputNumber placeholder="Цена от" min="0" />
+                <InputNumber
+                  placeholder="Цена от"
+                  min="0"
+                  value={filters.minp}
+                  onChange={value => onChange(value, 'minp')}
+                />
               </Form.Item>
               <Form.Item name="maxp">
-                <InputNumber placeholder="до" min="0" />
+                <InputNumber
+                  placeholder="до"
+                  min="0"
+                  value={filters.maxp}
+                  onChange={value => onChange(value, 'maxp')}
+                />
               </Form.Item>
             </Input.Group>
           </Form.Item>

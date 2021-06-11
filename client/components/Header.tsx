@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -24,28 +24,52 @@ const Header: React.FC = () => {
 
   const { q, filters, sort } = useSelector((state: RootState) => state.search)
 
-  const onSearch = (values: ISearchFormValues) => {
-    const query = values.q
-    router.pathname === '/'
-      ? router.push(`/search?q=${query || ''}`)
-      : dispatch(setQuery(query))
+  const initialValues = {
+    q: router.query.q || ''
+  }
+
+  const onSearch = () => {
+    // const query = values.q
+    // router.pathname === '/'
+    //   ? router.push(`/search?q=${query || ''}`)
+    //   : dispatch(setQuery(query))
+    if(router.pathname === '/') {
+      const url = `/search?q=${q || ''}`
+      router.push(url)
+    } else {
+      const data = { q, ...filters, ...sort }
+      pushQueryToUrl(router, data)
+    }
+  }
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setQuery(e.target.value))
   }
 
   useEffect(() => {
-    const data = { q, ...filters, ...sort }
-    pushQueryToUrl(router, data)
-  }, [q])
+    const { q } = router.query
+    if(q && typeof q === 'string') {
+      dispatch(setQuery(q))
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   const data = { q, ...filters, ...sort }
+  //   pushQueryToUrl(router, data)
+  // }, [q])
 
   return (
     <Layout.Header className="header">
       <div className="container">
         <div className="search">
-          <Form onFinish={onSearch} layout="inline">
+          <Form onFinish={onSearch} layout="inline" initialValues={initialValues}>
             <Form.Item name="q">
               <Input
                 placeholder="Поиск по услугам"
                 prefix={<SearchOutlined />}
                 allowClear
+                value={q}
+                onChange={onChange}
               />
             </Form.Item>
             <Form.Item>
