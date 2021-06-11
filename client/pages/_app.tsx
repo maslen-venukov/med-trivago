@@ -6,11 +6,11 @@ import axios from 'axios'
 import ConfigProvider from 'antd/lib/config-provider'
 import locale from 'antd/lib/locale/ru_RU'
 
-
 import { API_URL } from '../constants'
 
-import '../styles/index.sass'
 import store from '../store'
+
+import '../styles/index.sass'
 
 axios.defaults.baseURL = API_URL
 

@@ -14,10 +14,6 @@ import pushQueryToUrl from '../utils/pushQueryToUrl'
 
 import { RootState } from '../store/reducers'
 
-interface ISearchFormValues {
-  q: string
-}
-
 const Header: React.FC = () => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -29,10 +25,6 @@ const Header: React.FC = () => {
   }
 
   const onSearch = () => {
-    // const query = values.q
-    // router.pathname === '/'
-    //   ? router.push(`/search?q=${query || ''}`)
-    //   : dispatch(setQuery(query))
     if(router.pathname === '/') {
       const url = `/search?q=${q || ''}`
       router.push(url)
@@ -52,11 +44,6 @@ const Header: React.FC = () => {
       dispatch(setQuery(q))
     }
   }, [])
-
-  // useEffect(() => {
-  //   const data = { q, ...filters, ...sort }
-  //   pushQueryToUrl(router, data)
-  // }, [q])
 
   return (
     <Layout.Header className="header">

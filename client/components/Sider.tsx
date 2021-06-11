@@ -56,11 +56,6 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
     })
   }
 
-  // useEffect(() => {
-  //   const data = { q, ...filters, ...sort }
-  //   pushQueryToUrl(router, data)
-  // }, [filters])
-
   // TODO разобраться с typescipt
   useEffect(() => {
     dispatch(setFilters({ cat, minp, maxp }))

@@ -43,15 +43,6 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
     dispatch(setSort({ ...sort, p }))
   }, [])
 
-  // useEffect(() => {
-  //   const data = { q, ...filters, ...sort }
-  //   pushQueryToUrl(router, data)
-  // }, [sort])
-
-  // useEffect(() => {
-  //   pushQueryToUrl(router, router.query)
-  // }, [])
-
   return (
     <SearchLayout categories={categories} error={error}>
       <div className="sort">
