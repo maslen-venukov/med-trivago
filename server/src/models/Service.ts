@@ -6,6 +6,8 @@ export interface IService {
   _id?: string
   name: string
   price: number
+  hospital: string
+  category: string
 }
 
 const schema = new Schema({

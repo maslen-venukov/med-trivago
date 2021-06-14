@@ -1,5 +1,8 @@
 @import 'antd/dist/antd.css'
 
+$accent: #1890ff
+$green: #52c41a
+
 .container
   width: 100%
   max-width: 1000px
@@ -17,6 +20,7 @@
 .sider
   background-color: #fff
   padding-right: 8px
+  margin-top: 18px
 
 .content
   padding-left: 8px
@@ -43,3 +47,20 @@
   margin-bottom: 16px
   .ant-select
     min-width: 140px
+
+.services
+  margin-bottom: 16px
+  &__price
+    color: $green
+  .ant-typography + .ant-typography
+    margin-top: 0
+  .anticon
+    margin-right: 4px
+    &-phone
+      transform: scale(-1, 1)
+  &__link
+    width: 100%
+    color: inherit
+    & > *
+      &:last-child
+        margin-bottom: 0

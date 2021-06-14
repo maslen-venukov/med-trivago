@@ -9,12 +9,14 @@ import Select from 'antd/lib/select'
 
 import SearchLayout from '../layouts/SearchLayout'
 
+import Service from '../components/Service'
+
 import { setSort } from '../store/actions/search'
+
+import pushQueryToUrl from '../utils/pushQueryToUrl'
 
 import { ICategory } from '../types/categories'
 import { IService } from '../types/services'
-import pushQueryToUrl from '../utils/pushQueryToUrl'
-
 import { RootState } from '../store/reducers'
 import { Sort } from '../types/search'
 
@@ -53,13 +55,10 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
         </Select>
       </div>
       <List
+        className="services"
         bordered
         dataSource={services}
-        renderItem={(service: IService) => (
-          <List.Item key={service._id}>
-            {service.name} {service.price}
-          </List.Item>
-        )}
+        renderItem={(service: IService) => <Service {...service} />}
       />
     </SearchLayout>
   )
