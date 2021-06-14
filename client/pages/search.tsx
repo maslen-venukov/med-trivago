@@ -66,7 +66,7 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
 
 export default Search
 
-export const getServerSideProps: GetServerSideProps  = async (context) => {
+export const getServerSideProps: GetServerSideProps  = async context => {
   try {
     const categories = await axios.get('/api/categories')
     const services = await axios.get('/api/services', { params: context.query })

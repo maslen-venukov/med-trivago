@@ -6,6 +6,9 @@ import Hospital from '../models/Hospital'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
+import isValidObjectId from '../utils/isValidObjectId'
+
+import { HTTPStatusCodes } from '../types'
 
 type NameFilter = RegExp | null
 
@@ -66,9 +69,9 @@ class Controller {
       const hospitalIds = [...new Set(services.map(service => service.hospital.toString()))]
       const hospitals = await Hospital.find({ _id: hospitalIds })
 
-      const result = services.map((service: any) => {
+      const result = services.map(service => {
         const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
-        const { name, address, phone, serviceList } = hospital
+        const { name, address, phone } = hospital
         return {
           ...service._doc,
           hospital: {
@@ -80,6 +83,42 @@ class Controller {
       })
 
       return res.json({ services: result })
+    } catch (e) {
+      console.log(e)
+      createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async getById(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params
+      if(!isValidObjectId(id)) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
+      }
+
+      const service = await Service.findById(id)
+      if(!service) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
+
+      const category = await Category.findById(service.category)
+      const hospital = await Hospital.findById(service.hospital)
+      const workingHours = hospital.serviceList.find(list => list.category.toString() === category._id.toString()).workingHours
+
+      const result = {
+        ...service._doc,
+        category: category.name,
+        workingHours,
+        hospital: {
+          name: hospital.name,
+          address: hospital.address,
+          phone: hospital.phone,
+          workingHours: hospital.workingHours
+        }
+      }
+
+      return res.json({ service: result })
     } catch (e) {
       console.log(e)
       createError(e)

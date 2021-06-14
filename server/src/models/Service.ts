@@ -3,6 +3,7 @@ import { model, Schema, Document, Types } from 'mongoose'
 const { ObjectId } = Types
 
 export interface IService {
+  _doc?: IService
   _id?: string
   name: string
   price: number

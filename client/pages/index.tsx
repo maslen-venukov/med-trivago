@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { GetServerSideProps } from 'next'
 import axios from 'axios'
 
 import message from 'antd/lib/message'
@@ -27,7 +28,7 @@ const Index: React.FC<IIndexProps> = ({ categories, error }) => {
 
 export default Index
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const { data } = await axios.get('http://localhost:5000/api/categories')
     const { categories } = data
