@@ -1,29 +1,5 @@
-@import 'antd/dist/antd.css'
-
-$accent: #1890ff
-$green: #52c41a
-
-.container
-  width: 100%
-  max-width: 1000px
-  padding: 0 15px
-  margin: 0 auto
-
-.layout
-  background-color: #fff
-
-.header
-  display: flex
-  align-items: center
-  background-color: #fff
-
-.sider
-  background-color: #fff
-  padding-right: 8px
-  margin-top: 18px
-
-.content
-  padding-left: 8px
+@import 'libs'
+@import 'global'
 
 .search
   .ant-form-item
@@ -32,39 +8,30 @@ $green: #52c41a
       flex: 1
       margin-right: 8px
 
-.ant-input-number
-  width: 100%
-
-.ant-form-item .ant-form-item
-  margin-bottom: 0
-  width: calc(50% - 1px)
-  &:first-child
-    margin-right: 2px
-
 .sort
   display: flex
   justify-content: flex-end
   margin-bottom: 16px
-  .ant-select
+  &__select
     min-width: 140px
 
 .services
   margin-bottom: 16px
-  &__price
-    color: $green
-  .ant-typography + .ant-typography
-    margin-top: 0
-  .anticon
-    margin-right: 4px
-    &-phone
-      transform: scale(-1, 1)
   &__link
     width: 100%
     color: inherit
-    & > *
-      &:last-child
-        margin-bottom: 0
+  &__phone.ant-typography
+    margin-bottom: 4px
+  &__rate .ant-rate-star
+    cursor: pointer
 
 .service
   &__title.ant-typography
     color: $accent
+    & + .ant-typography
+      margin-bottom: 14px
+  &__schedule
+    .ant-typography
+      margin: 0
+  &__phone a
+    color: inherit

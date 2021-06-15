@@ -14,8 +14,9 @@ import { setFilters } from '../store/actions/search'
 import pushQueryToUrl from '../utils/pushQueryToUrl'
 import lazyInput from '../utils/lazyInput'
 
-import { ICategory } from '../types/categories'
 import { RootState } from '../store/reducers'
+import { ICategory } from '../types/categories'
+import { IFilters } from '../types/search'
 
 interface ISiderProps {
   categories: ICategory[]
@@ -58,7 +59,8 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
 
   // TODO разобраться с typescipt
   useEffect(() => {
-    dispatch(setFilters({ cat, minp, maxp }))
+    const filters = { cat, minp, maxp } as IFilters
+    dispatch(setFilters(filters))
   }, [])
 
   useEffect(() => {

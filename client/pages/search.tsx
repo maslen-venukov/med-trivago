@@ -39,16 +39,15 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
     dispatch(setSort({ ...sort, p }))
   }
 
-  // TODO разобраться с typescipt
   useEffect(() => {
-    const p = router.query.p || ''
+    const p = (router.query.p || '') as Sort
     dispatch(setSort({ ...sort, p }))
   }, [])
 
   return (
     <SearchLayout categories={categories} error={error}>
       <div className="sort">
-        <Select defaultValue="" value={sort.p} onChange={onChange}>
+        <Select defaultValue="" value={sort.p} onChange={onChange} className="sort__select">
           <Select.Option value="">По умолчанию</Select.Option>
           <Select.Option value="asc">Дешевле</Select.Option>
           <Select.Option value="desc">Дороже</Select.Option>

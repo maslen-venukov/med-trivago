@@ -26,7 +26,7 @@ const Header: React.FC = () => {
 
   const onSearch = () => {
     if(router.pathname === '/') {
-      const url = `/search?q=${q || ''}`
+      const url = `/search${q ? `?q=${q}` : ''}`
       router.push(url)
     } else {
       const data = { q, ...filters, ...sort }

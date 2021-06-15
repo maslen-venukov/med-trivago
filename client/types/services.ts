@@ -1,13 +1,22 @@
+export interface ISchedule {
+  start: string
+  end: string
+}
+
 export interface IService {
   _id?: string
   name: string
   price: number
   category: string
-  workingHours?: string
+  schedule?: {
+    weekdays: ISchedule
+    saturday?: ISchedule
+    sunday?: ISchedule
+  }
   hospital: {
     name: string
     address: string
     phone: string
-    workingHours?: string
+    schedule?: ISchedule
   }
 }

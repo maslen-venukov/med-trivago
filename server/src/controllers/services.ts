@@ -104,17 +104,17 @@ class Controller {
 
       const category = await Category.findById(service.category)
       const hospital = await Hospital.findById(service.hospital)
-      const workingHours = hospital.serviceList.find(list => list.category.toString() === category._id.toString()).workingHours
+      const schedule = hospital.serviceList.find(list => list.category.toString() === category._id.toString()).schedule
 
       const result = {
         ...service._doc,
         category: category.name,
-        workingHours,
+        schedule,
         hospital: {
           name: hospital.name,
           address: hospital.address,
           phone: hospital.phone,
-          workingHours: hospital.workingHours
+          schedule: hospital.schedule
         }
       }
 

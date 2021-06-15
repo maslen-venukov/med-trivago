@@ -1,17 +1,22 @@
 import React from 'react'
 import { GetServerSideProps } from 'next'
+import Link from 'next/link'
 import axios from 'axios'
 
 import Row from 'antd/lib/row'
 import Col from 'antd/lib/col'
 import Typography from 'antd/lib/typography'
-import Form from 'antd/lib/form'
-import Input from 'antd/lib/input'
-import Button from 'antd/lib/button'
+import Popover from 'antd/lib/popover'
+import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
+import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
+import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 
 import MainLayout from '../../layouts/MainLayout'
 
 import NotFound from '../../components/NotFound'
+import AppointmentForm from '../../components/AppointmentForm'
+
+import getPeriod from '../../utils/getPeriod'
 
 import { IService } from '../../types/services'
 
@@ -19,44 +24,45 @@ interface IServiceProps extends IService {
   error: string
 }
 
-// TODO доделать страницу
+const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, error }) => {
+  const popover = (
+    <div className="service__schedule">
+      <Typography.Paragraph>Будние: {getPeriod(schedule?.weekdays)}</Typography.Paragraph>
+      <Typography.Paragraph>Суббота: {getPeriod(schedule?.saturday)}</Typography.Paragraph>
+      <Typography.Paragraph>Воскресенье: {getPeriod(schedule?.sunday)}</Typography.Paragraph>
+    </div>
+  )
 
-const Service: React.FC<IServiceProps> = ({ name, price, category, workingHours, hospital, error }) => {
+  const getWeekend = () => {
+    const arr = []
+    !schedule?.saturday && arr.push(6)
+    !schedule?.sunday && arr.push(0)
+    return arr
+  }
+
   return (
     <MainLayout>
       {!error ? (
         <Row className="service">
           <Col xs={18}>
             <Typography.Title level={3} className="service__title">{name}</Typography.Title>
-            <p>{price}</p>
-            <p>{hospital.name}</p>
-            <p>{hospital.address}</p>
-            <p>{hospital.phone}</p>
+            <Typography.Title level={4} type="success">{price} ₽</Typography.Title>
+              <Typography.Paragraph>
+                <Popover content={popover} title="График работы" placement="right">
+                  <ClockCircleTwoTone className="icon" /> {schedule && getPeriod(schedule.weekdays)}
+                </Popover>
+              </Typography.Paragraph>
+            <Typography.Paragraph>
+              <HomeTwoTone className="icon" /> {hospital.name}, {hospital.address}
+            </Typography.Paragraph>
+            <Typography.Paragraph className="service__phone">
+              <Link href={`tel:${hospital.phone.replace(/[^+\d]+/g, '')}`}>
+                <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
+              </Link>
+            </Typography.Paragraph>
           </Col>
           <Col xs={6}>
-            <Form layout="vertical" onFinish={values => console.log(values)}>
-              <Form.Item
-                label="Ваше имя"
-                name="name"
-                rules={[{ required: true, message: 'Пожалуйста введите ваше имя!' }]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Номер телефона"
-                name="phone"
-                rules={[{ required: true, message: 'Пожалуйста введите ваш номер телефона!' }]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item style={{}}>
-                <Button type="primary" htmlType="submit">
-                  Записаться
-                </Button>
-              </Form.Item>
-            </Form>
+            <AppointmentForm weekend={getWeekend()} schedule={schedule} />
           </Col>
         </Row>
       ) : <NotFound />}
