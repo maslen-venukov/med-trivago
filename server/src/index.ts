@@ -6,7 +6,7 @@ dotenv.config()
 
 import connectDB from './core/db'
 
-import accountsRouter from './routes/accounts'
+import usersRouter from './routes/users'
 import categoriesRouter from './routes/categories'
 import errorsRouter from './routes/errors'
 import servicesRouter from './routes/services'
@@ -20,7 +20,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use('/api/accounts', accountsRouter)
+app.use('/api/users', usersRouter)
 app.use('/api/categories', categoriesRouter)
 app.use('/api/errors', errorsRouter)
 app.use('/api/services', servicesRouter)

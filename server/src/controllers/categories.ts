@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import Account, { IAccountRequest } from '../models/Account'
+import User, { IUserRequest } from '../models/User'
 import Category, { ICategory } from '../models/Category'
 
 import errorHandler from '../utils/errorHandler'
@@ -10,11 +10,11 @@ import createError from '../utils/createError'
 import { HTTPStatusCodes, Roles } from '../types'
 
 class Controller {
-  async create(req: IAccountRequest, res: Response): Promise<Response> {
+  async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await Account.findById(req.account._id)
+      const user = await User.findById(req.user._id)
 
-      if(account.role !== Roles.Admin) {
+      if(user.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 
@@ -41,10 +41,10 @@ class Controller {
     }
   }
 
-  async update(req: IAccountRequest, res: Response): Promise<Response> {
+  async update(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await Account.findById(req.account._id)
-      if(account.role !== Roles.Admin) {
+      const user = await User.findById(req.user._id)
+      if(user.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 
@@ -70,11 +70,11 @@ class Controller {
     }
   }
 
-  async remove(req: IAccountRequest, res: Response): Promise<Response> {
+  async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await Account.findById(req.account._id)
+      const user = await User.findById(req.user._id)
 
-      if(account.role !== Roles.Admin) {
+      if(user.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 

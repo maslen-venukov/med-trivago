@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import Account, { IAccountRequest } from '../models/Account'
+import User, { IUserRequest } from '../models/User'
 import Error, { IError } from '../models/Error'
 
 import errorHandler from '../utils/errorHandler'
@@ -9,9 +9,9 @@ import createError from '../utils/createError'
 import { HTTPStatusCodes, Roles } from '../types'
 
 class Controller {
-  async getAll(req: IAccountRequest, res: Response): Promise<Response> {
+  async getAll(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await Account.findById(req.account._id)
+      const account = await User.findById(req.user._id)
 
       if(account.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')

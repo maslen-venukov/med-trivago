@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-import Account, { IAccount, IAccountRequest } from '../models/Account'
+import User, { IUser, IUserRequest } from '../models/User'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
@@ -15,9 +15,9 @@ const TOKEN_LIFETIME = '24h'
 class Controller {
   async register(req: Request, res: Response): Promise<Response> {
     try {
-      const { login, password, passwordCheck } = req.body
+      const { email, password, passwordCheck } = req.body
 
-      if(!login || !password || !passwordCheck) {
+      if(!email || !password || !passwordCheck) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
       }
 
@@ -30,21 +30,20 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Пароль должен содержать не менее 6 символов, строчные и заглавные буквы латинского алфавита, хотя бы одно число и специальный символ')
       }
 
-      const candidate = await Account.findOne({ login })
+      const candidate = await User.findOne({ email })
       if(candidate) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Аккаунт с таким именем уже зарегистрирован' )
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Пользователь с таким email уже зарегистрирован' )
       }
 
       const hashedPassword = bcrypt.hashSync(password, 7)
 
-      const account = new Account({
-        login,
+      const user = await User.create({
+        email,
         password: hashedPassword
       })
 
-      const { _id, role } = account
-      const data = { _id, login, role }
-      await account.save()
+      const { _id, role } = user
+      const data = { _id, email, role }
 
       const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
 
@@ -52,7 +51,7 @@ class Controller {
         .status(HTTPStatusCodes.Created)
         .json({
           token,
-          account: data,
+          user: data,
           message: 'Аккаунт успешно зарегистрирован'
         })
     } catch (e) {
@@ -64,31 +63,31 @@ class Controller {
 
   async login(req: Request, res: Response): Promise<Response> {
     try {
-      const { login, password }: IAccount = req.body
+      const { email, password }: IUser = req.body
 
-      if(!login || !password) {
+      if(!email || !password) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля' )
       }
 
-      const account = await Account.findOne({ login })
-      if(!account) {
-        return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Неверный логин или пароль' )
+      const user = await User.findOne({ email })
+      if(!user) {
+        return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Неверный email или пароль' )
       }
 
-      const isMatch = bcrypt.compareSync(password, account.password)
+      const isMatch = bcrypt.compareSync(password, user.password)
       if(!isMatch) {
-        return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Неверный логин или пароль' )
+        return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Неверный email или пароль' )
       }
 
-      const { _id, role } = account
-      const data = { _id, login, role }
+      const { _id, role } = user
+      const data = { _id, email, role }
 
       const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
 
       return res.json({
         message: 'Авторизация выполнена успешно',
         token,
-        account: data
+        user: data
       })
     } catch (e) {
       console.log(e)
@@ -97,22 +96,22 @@ class Controller {
     }
   }
 
-  async auth(req: IAccountRequest, res: Response): Promise<Response> {
+  async auth(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await Account.findById(req.account._id)
+      const user = await User.findById(req.user._id)
 
-      if(!account) {
+      if(!user) {
         return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Не удалось авторизоваться')
       }
 
-      const { _id, login, role } = account
-      const data = { _id, login, role }
+      const { _id, email, role } = user
+      const data = { _id, email, role }
 
       const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
 
       return res.json({
         token,
-        account: data
+        user: data
       })
     } catch (e) {
       console.log(e)

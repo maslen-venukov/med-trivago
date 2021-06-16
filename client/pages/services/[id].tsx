@@ -7,6 +7,8 @@ import Row from 'antd/lib/row'
 import Col from 'antd/lib/col'
 import Typography from 'antd/lib/typography'
 import Popover from 'antd/lib/popover'
+import Rate from 'antd/lib/rate'
+import Tooltip from 'antd/lib/tooltip'
 import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
@@ -40,6 +42,8 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     return arr
   }
 
+  const rate = Number(price?.toString()[0])
+
   return (
     <MainLayout>
       {!error ? (
@@ -47,11 +51,11 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
           <Col xs={18}>
             <Typography.Title level={3} className="service__title">{name}</Typography.Title>
             <Typography.Title level={4} type="success">{price} ₽</Typography.Title>
-              <Typography.Paragraph>
-                <Popover content={popover} title="График работы" placement="right">
-                  <ClockCircleTwoTone className="icon" /> {schedule && getPeriod(schedule.weekdays)}
-                </Popover>
-              </Typography.Paragraph>
+            <Typography.Paragraph>
+              <Popover content={popover} title="График работы" placement="right">
+                <ClockCircleTwoTone className="icon" /> {schedule && getPeriod(schedule.weekdays)}
+              </Popover>
+            </Typography.Paragraph>
             <Typography.Paragraph>
               <HomeTwoTone className="icon" /> {hospital.name}, {hospital.address}
             </Typography.Paragraph>
@@ -60,6 +64,11 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
                 <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
               </Link>
             </Typography.Paragraph>
+            <Tooltip title={rate} placement="right">
+              <span>
+                <Rate disabled defaultValue={rate} />
+              </span>
+            </Tooltip>
           </Col>
           <Col xs={6}>
             <AppointmentForm weekend={getWeekend()} schedule={schedule} />

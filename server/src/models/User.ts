@@ -1,27 +1,27 @@
 import { Request } from 'express'
 import { model, Schema, Document } from 'mongoose'
 
-export interface IAccountRequest extends Request {
-  account: {
+export interface IUserRequest extends Request {
+  user: {
     _id: string
-    login: string
+    email: string
     role: string
   }
 }
 
-export interface IAccount {
+export interface IUser {
   _id?: string
-  login: string
+  email: string
   password: string
   role: string
 }
 
 const schema = new Schema({
-  login: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: 'HOSPITAL' }
 }, {
   timestamps: true
 })
 
-export default model<IAccount & Document>('Accounts', schema)
+export default model<IUser & Document>('Users', schema)

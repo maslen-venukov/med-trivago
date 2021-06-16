@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Moment } from 'moment'
+import { useRouter } from 'next/router'
+import moment, { Moment } from 'moment'
 
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
@@ -28,7 +29,14 @@ interface AppointmentFormValues {
 }
 
 const AppointmentForm: React.FC<IAppointmentFormProps> = ({ weekend, schedule }) => {
+  const router = useRouter()
+
   const [weekday, setWeekday] = useState<number | null>(null)
+
+  const onFormFinish = (values: AppointmentFormValues) => {
+    const service = router.query.id
+    console.log({ ...values, service })
+  }
 
   const onDateChange = (date: Moment | null) => {
     const dateWeekday = date?.weekday()
@@ -36,8 +44,14 @@ const AppointmentForm: React.FC<IAppointmentFormProps> = ({ weekend, schedule })
     setWeekday(value)
   }
 
+  const getDisabledDate = (date: Moment) => {
+    const isWeekend = weekend.includes(date.weekday())
+    const isBefore = date.isBefore(moment(new Date()).add(-1, 'days'))
+    return isWeekend || isBefore
+  }
+
   return (
-    <Form layout="vertical" onFinish={(values: AppointmentFormValues) => console.log(values)}>
+    <Form layout="vertical" onFinish={onFormFinish}>
       <Form.Item
         label="Ваше имя"
         name="name"
@@ -62,7 +76,7 @@ const AppointmentForm: React.FC<IAppointmentFormProps> = ({ weekend, schedule })
         <DatePicker
           format={'DD.MM.YYYY'}
           onChange={onDateChange}
-          disabledDate={date => weekend.includes(date.weekday())}
+          disabledDate={getDisabledDate}
           hideDisabledOptions
           inputReadOnly
         />

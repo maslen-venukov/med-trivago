@@ -24,7 +24,7 @@ interface IHospital {
   schedule: ISchedule
   phone: string
   serviceList: IServiceList[]
-  account: string
+  user: string
 }
 
 const schedule = {
@@ -48,7 +48,7 @@ const schema = new Schema({
       sunday: { type: schedule }
     }
   }],
-  account: { type: ObjectId, ref: 'Accounts', required: true, unique: true }
+  user: { type: ObjectId, ref: 'Users', required: true, unique: true }
 }, {
   timestamps: true
 })
