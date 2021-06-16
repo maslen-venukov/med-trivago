@@ -1,27 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import type { AppProps } from 'next/app'
-import { Provider } from 'react-redux'
+
 import axios from 'axios'
 
 import ConfigProvider from 'antd/lib/config-provider'
 import locale from 'antd/lib/locale/ru_RU'
 
-import { API_URL } from '../constants'
+import { wrapper } from '../store'
 
-import store from '../store'
+import { auth } from '../store/actions/user'
+
+import { API_URL } from '../constants'
 
 import '../styles/index.sass'
 
 axios.defaults.baseURL = API_URL
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if(token) {
+      dispatch(auth(token))
+    }
+  }, [])
+
   return (
-    <Provider store={store}>
-      <ConfigProvider locale={locale}>
-        <Component {...pageProps} />
-      </ConfigProvider>
-    </Provider>
+    <ConfigProvider locale={locale}>
+      <Component {...pageProps} />
+    </ConfigProvider>
   )
 }
 
-export default MyApp
+export default wrapper.withRedux(WrappedApp)

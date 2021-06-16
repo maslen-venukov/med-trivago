@@ -1,14 +1,13 @@
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { createWrapper } from 'next-redux-wrapper'
 import thunk from 'redux-thunk'
 
 import rootReducer from './reducers'
 
-const middleware = [thunk]
-
-const store = createStore(
+const makeStore = () => createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(...middleware))
+  composeWithDevTools(applyMiddleware(thunk))
 )
 
-export default store
+export const wrapper = createWrapper(makeStore, { debug: true })

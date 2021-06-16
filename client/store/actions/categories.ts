@@ -4,7 +4,7 @@ import message from 'antd/lib/message'
 
 import { CategoriesActionTypes, ICategory, CategoriesAction } from '../../types/categories'
 
-const setCategories = (payload: ICategory[]): CategoriesAction => ({
+export const setCategories = (payload: ICategory[]): CategoriesAction => ({
   type: CategoriesActionTypes.SET_CATEGORIES,
   payload
 })

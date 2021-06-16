@@ -1,7 +1,8 @@
 import React from 'react'
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
 
 import Row from 'antd/lib/row'
-import Col from 'antd/lib/col'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -10,14 +11,22 @@ import LockOutlined from '@ant-design/icons/LockOutlined'
 
 import MainLayout from '../layouts/MainLayout'
 
+import { logIn } from '../store/actions/user'
+
 interface ILoginFormValues {
   email: string
   password: string
 }
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
   const onLogin = (values: ILoginFormValues) => {
-    console.log(values)
+    const { email, password } = values
+    dispatch(logIn(email, password, () => {
+      router.push('/profile')
+    }))
   }
 
   return (

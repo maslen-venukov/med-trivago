@@ -30,14 +30,15 @@ export default Index
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const { data } = await axios.get('http://localhost:5000/api/categories')
+    const { data } = await axios.get('/api/categories')
     const { categories } = data
     return {
       props: {
         categories
       }
     }
-  } catch {
+  } catch (e) {
+    console.log(e)
     return {
       props: {
         error: 'Ошибка при загрузке категорий'

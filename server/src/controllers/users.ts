@@ -52,7 +52,7 @@ class Controller {
         .json({
           token,
           user: data,
-          message: 'Аккаунт успешно зарегистрирован'
+          message: 'Пользователь успешно зарегистрирован'
         })
     } catch (e) {
       console.log(e)
@@ -85,9 +85,9 @@ class Controller {
       const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
 
       return res.json({
-        message: 'Авторизация выполнена успешно',
         token,
-        user: data
+        user: data,
+        message: 'Авторизация выполнена успешно'
       })
     } catch (e) {
       console.log(e)
