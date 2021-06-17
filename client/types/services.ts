@@ -1,7 +1,4 @@
-export interface ISchedule {
-  start: string
-  end: string
-}
+import { ISchedule } from './'
 
 export interface IService {
   _id?: string

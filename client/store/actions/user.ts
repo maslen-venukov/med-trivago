@@ -13,7 +13,7 @@ const logOut = (): UserAction => ({
   type: UserActionTypes.LOG_OUT
 })
 
-const setReady = (): UserAction => ({
+export const setReady = (): UserAction => ({
   type: UserActionTypes.SET_READY
 })
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import type { AppProps } from 'next/app'
+import { AppProps } from 'next/app'
 
 import axios from 'axios'
 
@@ -9,7 +9,7 @@ import locale from 'antd/lib/locale/ru_RU'
 
 import { wrapper } from '../store'
 
-import { auth } from '../store/actions/user'
+import { auth, setReady } from '../store/actions/user'
 
 import { API_URL } from '../constants'
 
@@ -22,9 +22,9 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if(token) {
-      dispatch(auth(token))
-    }
+    token
+      ? dispatch(auth(token))
+      : dispatch(setReady())
   }, [])
 
   return (

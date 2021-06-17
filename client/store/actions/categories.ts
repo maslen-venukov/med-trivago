@@ -19,5 +19,5 @@ export const fetchCategories = () => (dispatch: Dispatch<CategoriesAction>) => {
   axios.get('/api/categories')
     .then(({ data }) => dispatch(setCategories(data.categories)))
     .catch(e => message.error(e.response.data?.message || 'Ошибка при загрузке категорий'))
-    .finally(() => setCategoriesLoading(false))
+    .finally(() => dispatch(setCategoriesLoading(false)))
 }

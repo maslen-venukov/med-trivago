@@ -1,4 +1,4 @@
-import { ISchedule } from '../types/services'
+import { ISchedule } from '../types'
 
 const getPeriod = (schedule?: ISchedule) => {
   if(schedule) {

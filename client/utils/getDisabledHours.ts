@@ -1,4 +1,4 @@
-import { ISchedule } from '../types/services'
+import { ISchedule } from '../types'
 
 const getDisabledHours = (
   weekday: number | null,

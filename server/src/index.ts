@@ -10,6 +10,7 @@ import usersRouter from './routes/users'
 import categoriesRouter from './routes/categories'
 import errorsRouter from './routes/errors'
 import servicesRouter from './routes/services'
+import hospitalsRouter from './routes/hospitals'
 
 const PORT = process.env.PORT || 5000
 const MONGO_URI = process.env.MONGO_URI
@@ -24,6 +25,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/categories', categoriesRouter)
 app.use('/api/errors', errorsRouter)
 app.use('/api/services', servicesRouter)
+app.use('/api/hospitals', hospitalsRouter)
 
 const start = async () => {
   try {

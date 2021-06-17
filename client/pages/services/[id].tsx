@@ -17,8 +17,10 @@ import MainLayout from '../../layouts/MainLayout'
 
 import NotFound from '../../components/NotFound'
 import AppointmentForm from '../../components/AppointmentForm'
+import Schedule from '../../components/Schedule'
 
 import getPeriod from '../../utils/getPeriod'
+import getPhoneHref from '../../utils/getPhoneHref'
 
 import { IService } from '../../types/services'
 
@@ -27,14 +29,6 @@ interface IServiceProps extends IService {
 }
 
 const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, error }) => {
-  const popover = (
-    <div className="service__schedule">
-      <Typography.Paragraph>Будние: {getPeriod(schedule?.weekdays)}</Typography.Paragraph>
-      <Typography.Paragraph>Суббота: {getPeriod(schedule?.saturday)}</Typography.Paragraph>
-      <Typography.Paragraph>Воскресенье: {getPeriod(schedule?.sunday)}</Typography.Paragraph>
-    </div>
-  )
-
   const getWeekend = () => {
     const arr = []
     !schedule?.saturday && arr.push(6)
@@ -52,15 +46,15 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             <Typography.Title level={3} className="service__title">{name}</Typography.Title>
             <Typography.Title level={4} type="success">{price} ₽</Typography.Title>
             <Typography.Paragraph>
-              <Popover content={popover} title="График работы" placement="right">
+              <Schedule schedule={schedule}>
                 <ClockCircleTwoTone className="icon" /> {schedule && getPeriod(schedule.weekdays)}
-              </Popover>
+              </Schedule>
             </Typography.Paragraph>
             <Typography.Paragraph>
               <HomeTwoTone className="icon" /> {hospital.name}, {hospital.address}
             </Typography.Paragraph>
             <Typography.Paragraph className="service__phone">
-              <Link href={`tel:${hospital.phone.replace(/[^+\d]+/g, '')}`}>
+              <Link href={`tel:${getPhoneHref(hospital.phone)}`}>
                 <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
               </Link>
             </Typography.Paragraph>

@@ -10,7 +10,7 @@ import Button from 'antd/lib/button'
 
 import getDisabledHours from '../utils/getDisabledHours'
 
-import { ISchedule } from '../types/services'
+import { ISchedule } from '../types'
 
 interface IAppointmentFormProps {
   weekend: number[]

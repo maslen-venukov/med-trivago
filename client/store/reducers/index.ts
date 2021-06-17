@@ -1,13 +1,15 @@
 import { combineReducers } from 'redux'
 
-import categories from './categories'
-import search from './search'
 import user from './user'
+import search from './search'
+import categories from './categories'
+import hospitals from './hospitals'
 
 const rootReducer = combineReducers({
-  categories,
+  user,
   search,
-  user
+  categories,
+  hospitals
 })
 
 export type RootState = ReturnType<typeof rootReducer>
