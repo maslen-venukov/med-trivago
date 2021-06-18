@@ -57,7 +57,6 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
     })
   }
 
-  // TODO разобраться с typescipt
   useEffect(() => {
     const filters = { cat, minp, maxp } as IFilters
     dispatch(setFilters(filters))

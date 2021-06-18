@@ -21,11 +21,12 @@ import getPeriod from '../../utils/getPeriod'
 
 import { RootState } from '../../store/reducers'
 import { IHospital, IServiceList } from '../../types/hospitals'
+import { Roles } from '../../types'
 
 const Executors = () => {
   const dispatch = useDispatch()
 
-  const { token } = useSelector((state: RootState) => state.user)
+  const { user, token } = useSelector((state: RootState) => state.user)
   const { hospitals, loading } = useSelector((state: RootState) => state.hospitals)
 
   const [executor, setExecutor] = useState<string | null>(null)
@@ -54,8 +55,8 @@ const Executors = () => {
   }
 
   useEffect(() => {
-    token && dispatch(fetchHospitals(token))
-  }, [dispatch, token])
+    token && user?.role === Roles.Admin && dispatch(fetchHospitals(token))
+  }, [dispatch, token, user])
 
   return (
     <ProfileLayout>
