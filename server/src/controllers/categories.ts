@@ -19,8 +19,7 @@ class Controller {
       }
 
       const { name } = req.body
-      const category = new Category({ name })
-      await category.save()
+      const category = await Category.create({ name })
 
       return res.status(HTTPStatusCodes.Created).json({ message: 'Категория успешно создана', category })
     } catch (e) {
@@ -53,14 +52,12 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
       }
 
-      const category = await Category.findById(id)
+      const { name } = req.body
+
+      const category = await Category.findByIdAndUpdate(id, { name }, { new: true })
       if(!category) {
         return errorHandler(res, HTTPStatusCodes.NotFound, 'Категория не найдена')
       }
-
-      const { name } = req.body
-      category.name = name
-      await category.save()
 
       return res.json({ message: 'Категория успешно изменена', category })
     } catch (e) {
