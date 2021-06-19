@@ -19,7 +19,7 @@ export interface IUser {
 const schema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, default: 'HOSPITAL' }
+  role: { type: String, default: 'USER' }
 }, {
   timestamps: true
 })

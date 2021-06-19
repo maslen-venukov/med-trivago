@@ -22,7 +22,7 @@ class Controller {
       return res.json({ errors })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }

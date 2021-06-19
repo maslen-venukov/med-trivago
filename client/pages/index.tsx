@@ -30,8 +30,8 @@ export default Index
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const { data } = await axios.get('/api/categories')
-    const { categories } = data
+    const res = await axios.get('/api/categories')
+    const { categories } = res.data
     return {
       props: {
         categories

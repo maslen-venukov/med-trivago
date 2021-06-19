@@ -21,7 +21,7 @@ const auth = (req: IUserRequest, res: Response, next: NextFunction) => {
     next()
   } catch (e) {
     console.log(e)
-    return errorHandler(res)
+    return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Не удалось авторизоваться')
   }
 }
 

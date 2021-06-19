@@ -5,13 +5,15 @@ import { useSelector } from 'react-redux'
 
 import Layout from 'antd/lib/layout'
 import Menu from 'antd/lib/menu'
+import message from 'antd/lib/message'
+
+import MainLayout from './MainLayout'
 
 import Loading from '../components/Loading'
 import NotFound from '../components/NotFound'
 
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
-import MainLayout from './MainLayout'
 
 interface ILink {
   label: string
@@ -43,7 +45,10 @@ const ProfileLayout: React.FC = ({ children }) => {
     ))
 
   useEffect(() => {
-    ready && !user && router.push('/login')
+    if(ready && !user) {
+      router.push('/login')
+      message.warning('Пожалуйста авторизуйтесь')
+    }
   }, [ready, user, router])
 
   useEffect(() => {

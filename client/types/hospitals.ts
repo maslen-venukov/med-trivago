@@ -1,3 +1,5 @@
+import { Moment } from 'moment'
+
 import { ISchedule } from './'
 
 interface IShortService {
@@ -46,3 +48,13 @@ interface ISetHospitalsLoading {
 }
 
 export type HospitalsAction = ISetHospitals | ISetHospitalsLoading
+
+export interface IRegisterHospitalData {
+  email: string
+  password: string
+  passwordCheck: string
+  name: string
+  address: string
+  phone: string
+  schedule: [Moment, Moment] | ISchedule
+}

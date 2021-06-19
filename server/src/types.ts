@@ -9,5 +9,6 @@ export enum HTTPStatusCodes {
 
 export enum Roles {
   Admin = 'ADMIN',
-  Hospital = 'HOSPITAL'
+  Hospital = 'HOSPITAL',
+  User = 'USER'
 }

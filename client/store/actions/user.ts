@@ -2,9 +2,11 @@ import { Dispatch } from 'react'
 import axios from 'axios'
 import message from 'antd/lib/message'
 
+import catchError from '../../utils/catchError'
+
 import { IUser, UserAction, UserActionTypes } from '../../types/user'
 
-const setUser = (payload: { token: string, user: IUser }): UserAction => ({
+export const setUser = (payload: { token: string, user: IUser }): UserAction => ({
   type: UserActionTypes.SET_USER,
   payload
 })
@@ -27,7 +29,7 @@ export const logIn = (email: string, password: string, cb: () => void) => (dispa
       message.success('Авторизация выполнена успешно')
       cb()
     })
-    .catch(e => message.error(e.response.data.message))
+    .catch(catchError)
 }
 
 export const auth = (token: string) => (dispatch: Dispatch<UserAction>) => {

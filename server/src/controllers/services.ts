@@ -85,7 +85,7 @@ class Controller {
       return res.json({ services: result })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }
@@ -121,7 +121,7 @@ class Controller {
       return res.json({ service: result })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }

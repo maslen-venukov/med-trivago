@@ -24,7 +24,7 @@ class Controller {
       return res.status(HTTPStatusCodes.Created).json({ message: 'Категория успешно создана', category })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }
@@ -35,7 +35,7 @@ class Controller {
       return res.json({ categories })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }
@@ -62,7 +62,7 @@ class Controller {
       return res.json({ message: 'Категория успешно изменена', category })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }
@@ -85,7 +85,7 @@ class Controller {
       return res.json({ message: 'Категория успешно удалена' })
     } catch (e) {
       console.log(e)
-      createError(e)
+      await createError(e)
       return errorHandler(res)
     }
   }

@@ -6,7 +6,7 @@ import Row from 'antd/lib/row'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
-import UserOutlined from '@ant-design/icons/UserOutlined'
+import MailOutlined from '@ant-design/icons/MailOutlined'
 import LockOutlined from '@ant-design/icons/LockOutlined'
 
 import MainLayout from '../layouts/MainLayout'
@@ -31,8 +31,8 @@ const Login: React.FC = () => {
 
   return (
     <MainLayout>
-      <Row justify="center" align="middle" className="login">
-        <Form onFinish={onLogin} className="login__form">
+      <Row justify="center" align="middle" className="auth">
+        <Form onFinish={onLogin} className="auth__form">
           <Form.Item
             name="email"
             rules={[
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
             ]}
           >
             <Input
-              prefix={<UserOutlined className="login__icon" />}
+              prefix={<MailOutlined className="auth__icon" />}
               placeholder="Email"
             />
           </Form.Item>
@@ -51,13 +51,13 @@ const Login: React.FC = () => {
             rules={[{ required: true, message: 'Пожалуйста введите ваш пароль!' }]}
           >
             <Input.Password
-              prefix={<LockOutlined className="login__icon" />}
+              prefix={<LockOutlined className="auth__icon" />}
               placeholder="Пароль"
             />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="login__btn">
+            <Button type="primary" htmlType="submit" className="auth__btn">
               Войти
             </Button>
           </Form.Item>

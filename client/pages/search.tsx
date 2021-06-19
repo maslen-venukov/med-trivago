@@ -67,12 +67,18 @@ export default Search
 
 export const getServerSideProps: GetServerSideProps  = async context => {
   try {
-    const categories = await axios.get('/api/categories')
-    const services = await axios.get('/api/services', { params: context.query })
+    const res = await axios.all([
+      axios.get('/api/categories'),
+      axios.get('/api/services', { params: context.query })
+    ])
+
+    const { categories } = res[0].data
+    const { services } = res[1].data
+
     return {
       props: {
-        categories: categories.data.categories,
-        services: services.data.services
+        categories,
+        services
       }
     }
   } catch {
