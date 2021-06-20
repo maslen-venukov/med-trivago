@@ -19,6 +19,11 @@ const setHospitalsLoading = (payload: boolean): HospitalsAction => ({
   payload
 })
 
+const removeHospital = (payload: string): HospitalsAction => ({
+  type: HospitalsActionTypes.REMOVE_HOSPITAL,
+  payload
+})
+
 export const fetchHospitals = (token: string) => (dispatch: Dispatch<HospitalsAction>) => {
   dispatch(setHospitalsLoading(true))
   axios.get('/api/hospitals', {
@@ -36,6 +41,17 @@ export const registerHospital = (data: IRegisterHospitalData, cb: () => void) =>
       dispatch(setUser({ token, user }))
       message.success('Регистрация выполнена успешно')
       cb()
+    })
+    .catch(catchError)
+}
+
+export const fetchRemoveHospital = (id: string, token: string) => (dispatch: Dispatch<HospitalsAction>) => {
+  axios.delete(`/api/hospitals/${id}`, {
+    headers: { Authorization: token }
+  })
+    .then(({ data }) => {
+      dispatch(removeHospital(id))
+      message.success(data.message)
     })
     .catch(catchError)
 }

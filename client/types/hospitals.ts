@@ -34,7 +34,8 @@ export interface IHospitalsState {
 
 export enum HospitalsActionTypes {
   SET_HOSPITALS = 'SET_HOSPITALS',
-  SET_HOSPITALS_LOADING = 'SET_HOSPITALS_LOADING'
+  SET_HOSPITALS_LOADING = 'SET_HOSPITALS_LOADING',
+  REMOVE_HOSPITAL = 'REMOVE_HOSPITAL'
 }
 
 interface ISetHospitals {
@@ -47,7 +48,12 @@ interface ISetHospitalsLoading {
   payload: boolean
 }
 
-export type HospitalsAction = ISetHospitals | ISetHospitalsLoading
+interface IRemoveHospital {
+  type: HospitalsActionTypes.REMOVE_HOSPITAL,
+  payload: string
+}
+
+export type HospitalsAction = ISetHospitals | ISetHospitalsLoading | IRemoveHospital
 
 export interface IRegisterHospitalData {
   email: string

@@ -25,8 +25,9 @@ export const logIn = (email: string, password: string, cb: () => void) => (dispa
     password
   })
     .then(({ data }) => {
-      dispatch(setUser(data))
-      message.success('Авторизация выполнена успешно')
+      const { token, user } = data
+      dispatch(setUser({ token, user }))
+      message.success(data.message)
       cb()
     })
     .catch(catchError)

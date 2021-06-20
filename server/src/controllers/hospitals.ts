@@ -11,6 +11,7 @@ import register from '../services/register'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
+import isValidObjectId from '../utils/isValidObjectId'
 
 import { HTTPStatusCodes, Roles } from '../types'
 
@@ -105,6 +106,35 @@ class Controller {
       })
 
       return res.json({ hospitals: result })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async remove(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const account = await User.findById(req.user._id)
+
+      if(account.role !== Roles.Admin) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const { id } = req.params
+      if(!isValidObjectId(id)) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
+      }
+
+      const hospital = await Hospital.findByIdAndDelete(id)
+      if(!hospital) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Медицинское учреждение не найдено')
+      }
+
+      await Service.deleteMany({ hospital: id })
+      await User.deleteOne({ _id: hospital.user })
+
+      return res.json({ message: 'Медицинское учреждение успешно удалено' })
     } catch (e) {
       console.log(e)
       await createError(e)

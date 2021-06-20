@@ -8,14 +8,13 @@ import Modal from 'antd/lib/modal'
 import List from 'antd/lib/list'
 import Typography from 'antd/lib/typography'
 import Popconfirm from 'antd/lib/popconfirm'
-import message from 'antd/lib/message'
 import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
 import Schedule from '../../components/Schedule'
 
-import { fetchHospitals } from '../../store/actions/hospitals'
+import { fetchHospitals, fetchRemoveHospital } from '../../store/actions/hospitals'
 
 import getPeriod from '../../utils/getPeriod'
 
@@ -46,12 +45,10 @@ const Executors = () => {
   }
 
   // TODO сделать страницу инвайта исполнителя (profile/invite) у админа
-  // TODO доделать удаление исполнителя (вместе с исполнителем удалять его услуги)
   // TODO сделать страницы исполнителя в админке
 
   const onRemove = (id: string) => {
-    console.log(id)
-    message.success('Исполнитель успешно удален')
+    token && dispatch(fetchRemoveHospital(id, token))
   }
 
   useEffect(() => {

@@ -19,6 +19,12 @@ const hospitals = (state = initialState, action: HospitalsAction): IHospitalsSta
         loading: action.payload
       }
 
+    case HospitalsActionTypes.REMOVE_HOSPITAL:
+      return {
+        ...state,
+        hospitals: state.hospitals.filter(hospital => hospital._id !== action.payload)
+      }
+
     default:
       return state
   }
