@@ -44,8 +44,8 @@ const Executors = () => {
     setServiceList(null)
   }
 
-  // TODO сделать страницу инвайта исполнителя (profile/invite) у админа
   // TODO сделать страницы исполнителя в админке
+  // TODO сделать запись на оказание услуг
 
   const onRemove = (id: string) => {
     token && dispatch(fetchRemoveHospital(id, token))
@@ -75,7 +75,7 @@ const Executors = () => {
               <Tag
                 color="blue"
                 key={list.category}
-                className="executors__category"
+                className="cursor-pointer"
                 onClick={() => onOpenModal(record.name, list)}
               >
                 {list.category}
@@ -85,7 +85,6 @@ const Executors = () => {
         />
         <Column
           title="Действия"
-          dataIndex="action"
           key="action"
           render={(_, record: IHospital) => (
             <Popconfirm
@@ -96,7 +95,7 @@ const Executors = () => {
             >
               <Typography.Text
                 type="danger"
-                className="executors__remove"
+                className="cursor-pointer"
               >
                 Удалить
               </Typography.Text>

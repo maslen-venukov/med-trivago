@@ -55,15 +55,3 @@ export const fetchRemoveHospital = (id: string, token: string) => (dispatch: Dis
     })
     .catch(catchError)
 }
-
-export const inviteExecutor = (email: string, token: string) => (dispatch: Dispatch<HospitalsAction>) => {
-  dispatch(setHospitalsLoading(true))
-  axios.post('/api/register-links', { email }, {
-    headers: { Authorization: token }
-  })
-    .then(({ data }) => {
-      dispatch(setHospitalsLoading(false))
-      message.success(data.message)
-    })
-    .catch(catchError)
-}

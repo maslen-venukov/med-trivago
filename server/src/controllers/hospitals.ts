@@ -74,9 +74,9 @@ class Controller {
 
   async getAll(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await User.findById(req.user._id)
+      const user = await User.findById(req.user._id)
 
-      if(account.role !== Roles.Admin) {
+      if(user.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 
@@ -115,9 +115,9 @@ class Controller {
 
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await User.findById(req.user._id)
+      const user = await User.findById(req.user._id)
 
-      if(account.role !== Roles.Admin) {
+      if(user.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 

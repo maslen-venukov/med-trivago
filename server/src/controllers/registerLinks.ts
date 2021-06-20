@@ -9,13 +9,14 @@ import createError from '../utils/createError'
 import sendEmail from '../utils/sendEmail'
 
 import { HTTPStatusCodes, Roles } from '../types'
+import isValidObjectId from '../utils/isValidObjectId'
 
 class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const account = await User.findById(req.user._id)
+      const user = await User.findById(req.user._id)
 
-      if(account.role !== Roles.Admin) {
+      if(user.role !== Roles.Admin) {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 
@@ -52,6 +53,24 @@ class Controller {
     }
   }
 
+  async getAll(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const user = await User.findById(req.user._id)
+
+      if(user.role !== Roles.Admin) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const registerLinks = await RegisterLink.find().sort({ _id: -1 })
+
+      return res.json({ registerLinks })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
   async getByLink(req: Request, res: Response): Promise<Response> {
     try {
       const { link } = req.params
@@ -59,6 +78,32 @@ class Controller {
       const registerLink = await RegisterLink.findOne({ link })
 
       return res.json({ link: registerLink?.link || null })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async remove(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const user = await User.findById(req.user._id)
+
+      if(user.role !== Roles.Admin) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const { id } = req.params
+      if(!isValidObjectId(id)) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
+      }
+
+      const registerLink = await RegisterLink.findByIdAndDelete(id)
+      if(!registerLink) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Приглашение не найдено')
+      }
+
+      return res.json({ message: 'Приглашение отменено' })
     } catch (e) {
       console.log(e)
       await createError(e)

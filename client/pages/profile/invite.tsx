@@ -1,16 +1,23 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Typography from 'antd/lib/typography'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
+import Table from 'antd/lib/table'
+import Column from 'antd/lib/table/Column'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import { inviteExecutor } from '../../store/actions/hospitals'
+// import { inviteExecutor } from '../../store/actions/hospitals'
+import { fetchCreateRegisterLink, fetchRegisterLinks, fetchRemoveRegisterLink } from '../../store/actions/registerLinks'
 
 import { RootState } from '../../store/reducers'
+import moment from 'moment'
+import Popconfirm from 'antd/lib/popconfirm'
+import { IRegisterLink } from '../../types/registerLinks'
 
 interface IInviteFormvalues {
   email: string
@@ -21,18 +28,41 @@ const Invite: React.FC = () => {
   const [form] = Form.useForm()
 
   const { token } = useSelector((state: RootState) => state.user)
-  const { loading } = useSelector((state: RootState) => state.hospitals)
+  const { registerLinks, loading } = useSelector((state: RootState) => state.registerLinks)
+  // const { loading } = useSelector((state: RootState) => state.hospitals)
+
+  const [sending, setSending] = useState<boolean>(false)
 
   const onInvite = (values: IInviteFormvalues) => {
-    token && dispatch(inviteExecutor(values.email, token))
+    setSending(true)
+    token && dispatch(fetchCreateRegisterLink(values.email, token, () => {
+      setSending(false)
+    }))
     form.resetFields()
   }
+
+  const onCancel = (id: string) => {
+    token && dispatch(fetchRemoveRegisterLink(id, token))
+  }
+
+  const renderLink = (link: string) => (
+    <Link href={`/register/${link}`}>
+      <a>{link}</a>
+    </Link>
+  )
+
+  const renderDate = (text: string) => moment(text).format('HH:mm DD.MM.YYYY')
+
+  useEffect(() => {
+    token && dispatch(fetchRegisterLinks(token))
+  }, [dispatch, token])
 
   return (
     <ProfileLayout title="Добавить исполнителя" className="invite">
       <Typography.Title level={5} className="invite__title">
         Чтобы отправить медицинскому учреждению письмо с приглашением, <br /> введите email и нажмите кнпоку «Отправить»
       </Typography.Title>
+
       <Form
         onFinish={onInvite}
         form={form}
@@ -53,12 +83,45 @@ const Invite: React.FC = () => {
           <Button
             type="primary"
             htmlType="submit"
-            loading={loading}
+            loading={sending}
           >
-            {loading ? 'Отправка' : 'Отправить'}
+            {sending ? 'Отправка' : 'Отправить'}
           </Button>
         </Form.Item>
       </Form>
+
+      <Typography.Title level={5} className="invite__title">
+        Список отправленных приглашений
+      </Typography.Title>
+
+      <Table
+        dataSource={registerLinks}
+        loading={loading}
+        rowKey={record => record._id}
+      >
+        <Column title="Ссылка" dataIndex="link" key="link" render={renderLink} />
+        <Column title="Email" dataIndex="email" key="email" />
+        <Column title="Отправлено" dataIndex="createdAt" key="createdAt" render={renderDate} />
+        <Column
+          title="Действия"
+          key="action"
+          render={(_, record: IRegisterLink) => (
+            <Popconfirm
+              title="Вы действительно хотите отменить приглашение?"
+              onConfirm={() => onCancel(record._id)}
+              okText="Да"
+              cancelText="Нет"
+            >
+              <Typography.Text
+                type="danger"
+                className="cursor-pointer"
+              >
+                Отменить
+              </Typography.Text>
+            </Popconfirm>
+          )}
+        />
+      </Table>
     </ProfileLayout>
   )
 }

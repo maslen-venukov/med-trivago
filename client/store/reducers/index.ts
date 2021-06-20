@@ -4,12 +4,14 @@ import user from './user'
 import search from './search'
 import categories from './categories'
 import hospitals from './hospitals'
+import registerLinks from './registerLinks'
 
 const rootReducer = combineReducers({
   user,
   search,
   categories,
-  hospitals
+  hospitals,
+  registerLinks
 })
 
 export type RootState = ReturnType<typeof rootReducer>

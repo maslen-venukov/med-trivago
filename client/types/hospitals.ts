@@ -2,6 +2,16 @@ import { Moment } from 'moment'
 
 import { ISchedule } from './'
 
+export interface IRegisterHospitalData {
+  email: string
+  password: string
+  passwordCheck: string
+  name: string
+  address: string
+  phone: string
+  schedule: [Moment, Moment] | ISchedule
+}
+
 interface IShortService {
   _id: string
   name: string
@@ -54,13 +64,3 @@ interface IRemoveHospital {
 }
 
 export type HospitalsAction = ISetHospitals | ISetHospitalsLoading | IRemoveHospital
-
-export interface IRegisterHospitalData {
-  email: string
-  password: string
-  passwordCheck: string
-  name: string
-  address: string
-  phone: string
-  schedule: [Moment, Moment] | ISchedule
-}
