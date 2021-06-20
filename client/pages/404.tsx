@@ -6,7 +6,7 @@ import NotFound from '../components/NotFound'
 
 const Error404 = () => {
   return (
-    <MainLayout>
+    <MainLayout title="Страница не найдена">
       <NotFound />
     </MainLayout>
   )

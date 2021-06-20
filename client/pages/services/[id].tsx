@@ -38,7 +38,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   const rate = Number(price?.toString()[0])
 
   return (
-    <MainLayout>
+    <MainLayout title={name}>
       {!error ? (
         <Row className="service">
           <Col xs={18}>

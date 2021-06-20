@@ -56,12 +56,11 @@ const Executors = () => {
   }, [dispatch, token, user])
 
   return (
-    <ProfileLayout>
+    <ProfileLayout title="Список исполнителей" className="executors">
       <Table
         dataSource={hospitals}
         loading={loading}
         rowKey={record => record._id}
-        className="executors"
       >
         <Column title="Название" dataIndex="name" key="name" />
         <Column title="Адрес" dataIndex="address" key="address" />

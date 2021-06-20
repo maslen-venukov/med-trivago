@@ -45,7 +45,7 @@ const RegisterByLink: React.FC<IRegisterByLinkProps> = ({ link }) => {
   }
 
   return (
-    <MainLayout>
+    <MainLayout title="Регистрация">
       {link ? (
         <Row justify="center" align="middle" className="auth">
           <Form onFinish={onRegister} className="auth__form">

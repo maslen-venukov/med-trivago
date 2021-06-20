@@ -6,22 +6,22 @@
     margin-right: 0
     &:first-child
       flex: 1
-      margin-right: 8px
+      margin-right: $size
 
 .sort
   display: flex
   justify-content: flex-end
-  margin-bottom: 16px
+  margin-bottom: $size * 2
   &__select
     min-width: 140px
 
 .services
-  margin-bottom: 16px
+  margin-bottom: $size * 2
   &__link
     width: 100%
     color: inherit
   &__phone.ant-typography
-    margin-bottom: 4px
+    margin-bottom: $size * .5
   &__rate .ant-rate-star
     cursor: pointer
 
@@ -54,7 +54,21 @@
   &__btn
     width: 100%
 
+.profile
+  min-height: 100vh
+  &__menu
+    height: 100%
+  &__container
+    max-width: 1200px
+    padding-top: $size * 2
+
 .executors
   &__category,
   &__remove
     cursor: pointer
+
+.invite
+  &__title.ant-typography
+    margin-bottom: $size * 2
+  &__form
+    max-width: 300px

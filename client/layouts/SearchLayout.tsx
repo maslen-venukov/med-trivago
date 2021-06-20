@@ -11,12 +11,13 @@ import { ICategory } from '../types/categories'
 interface ISearchLayoutProps {
   categories: ICategory[]
   error: string
+  title: string
 }
 
-const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, error }) => {
+const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, error, title }) => {
   return (
     <>
-      <Head />
+      <Head title={title} />
       <Layout className="layout">
         <Header />
         <Layout className="layout container">

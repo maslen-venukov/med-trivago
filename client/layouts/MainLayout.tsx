@@ -5,10 +5,14 @@ import Layout from 'antd/lib/layout'
 import Header from '../components/Header'
 import Head from '../components/Head'
 
-const MainLayout: React.FC = ({ children }) => {
+interface IMainLayoutProps {
+  title?: string
+}
+
+const MainLayout: React.FC<IMainLayoutProps> = ({ children, title }) => {
   return (
     <>
-      <Head />
+      <Head title={title} />
       <Layout className="layout">
         <Header />
         <Layout.Content>

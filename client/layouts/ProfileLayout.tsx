@@ -11,6 +11,7 @@ import MainLayout from './MainLayout'
 
 import Loading from '../components/Loading'
 import NotFound from '../components/NotFound'
+import Head from '../components/Head'
 
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
@@ -21,7 +22,12 @@ interface ILink {
   role?: string
 }
 
-const ProfileLayout: React.FC = ({ children }) => {
+interface IProfileLayoutProps {
+  title?: string
+  className?: string
+}
+
+const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, className }) => {
   const router = useRouter()
 
   const { user, ready } = useSelector((state: RootState) => state.user)
@@ -59,17 +65,19 @@ const ProfileLayout: React.FC = ({ children }) => {
 
   return ready && user ? (
     rights ? (
-      <Layout className="layout">
-        <Layout.Sider width={250} style={{ backgroundColor: '#fff' }}>
+      <Layout className="profile">
+        <Head title={`${title ? `${title} - ` : ''}Профиль`} />
+        <Layout.Sider width={250}>
           <Menu
             mode="inline"
+            theme="dark"
             defaultSelectedKeys={[router.pathname]}
-            style={{ height: '100%' }}
+            className="profile__menu"
           >
             {linksToRender}
           </Menu>
         </Layout.Sider>
-        <Layout.Content className="profile container">
+        <Layout.Content className={`container profile__container ${className}`}>
           {children}
         </Layout.Content>
       </Layout>

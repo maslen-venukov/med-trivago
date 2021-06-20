@@ -27,14 +27,6 @@ class Controller {
 
       const link = v4()
 
-      const afterEmail = async (): Promise<Response> => {
-        await RegisterLink.deleteOne({ email })
-        const registerLink = await RegisterLink.create({ link, email })
-        return res
-          .status(HTTPStatusCodes.Created)
-          .json({ message: 'Приглашение успешно отправлено', registerLink })
-      }
-
       sendEmail({
         from: `Запись на анализы ${process.env.NODEMAILER_USER}`,
         to: email,
@@ -46,7 +38,11 @@ class Controller {
           await createError(e)
           return errorHandler(res, HTTPStatusCodes.BadRequest, 'Не удалось отправить письмо')
         } else {
-          return afterEmail()
+          await RegisterLink.deleteOne({ email })
+          const registerLink = await RegisterLink.create({ link, email })
+          return res
+            .status(HTTPStatusCodes.Created)
+            .json({ message: 'Приглашение успешно отправлено', registerLink })
         }
       })
     } catch (e) {

@@ -44,8 +44,13 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
     dispatch(setSort({ ...sort, p }))
   }, [])
 
+  const getTitle = () => {
+    const { q } = router.query
+    return typeof q === 'string' ? q : ''
+  }
+
   return (
-    <SearchLayout categories={categories} error={error}>
+    <SearchLayout categories={categories} error={error} title={getTitle()}>
       <div className="sort">
         <Select defaultValue="" value={sort.p} onChange={onChange} className="sort__select">
           <Select.Option value="">По умолчанию</Select.Option>

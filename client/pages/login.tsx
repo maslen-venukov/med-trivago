@@ -30,7 +30,7 @@ const Login: React.FC = () => {
   }
 
   return (
-    <MainLayout>
+    <MainLayout title="Авторизация">
       <Row justify="center" align="middle" className="auth">
         <Form onFinish={onLogin} className="auth__form">
           <Form.Item

@@ -11,7 +11,7 @@ interface IHeadProps {
 const Head: React.FC<IHeadProps> = ({ title, description, keywords, robots = true }) => {
   return (
     <NextHead>
-      <title>Запись на анализы{title ? ` — ${title}` : ''}</title>
+      <title>{title ? `${title} - ` : ''}Запись на анализы</title>
       <meta name="description" content={description || 'Запись на платные анализы Оренбург, МРТ, УЗИ, ЭКГ'} />
       <meta name="robots" content={robots ? 'all' : 'none'} />
       <meta name="keywords" content={`запись на анализы, анализы, оренбург, мрт, узи, экг, клиника, больница${keywords ? `, ${keywords}` : ''}`} />
