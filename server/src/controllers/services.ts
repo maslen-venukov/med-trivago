@@ -3,12 +3,13 @@ import { Request, Response } from 'express'
 import Service, { IService } from '../models/Service'
 import Category from '../models/Category'
 import Hospital from '../models/Hospital'
+import User, { IUserRequest } from '../models/User'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import isValidObjectId from '../utils/isValidObjectId'
 
-import { HTTPStatusCodes } from '../types'
+import { HTTPStatusCodes, Roles } from '../types'
 
 type NameFilter = RegExp | null
 
@@ -104,7 +105,9 @@ class Controller {
 
       const category = await Category.findById(service.category)
       const hospital = await Hospital.findById(service.hospital)
-      const schedule = hospital.serviceList.find(list => list.category.toString() === category._id.toString()).schedule
+
+      const serviceList = hospital.serviceList.find(list => list.category.toString() === category._id.toString())
+      const schedule = serviceList?.schedule || { weekdays: hospital.schedule }
 
       const result = {
         ...service._doc,
@@ -119,6 +122,26 @@ class Controller {
       }
 
       return res.json({ service: result })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async getByHospital(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const user = await User.findById(req.user._id)
+
+      if(user.role !== Roles.Hospital) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const hospital = await Hospital.findOne({ user: user._id })
+
+      const services = await Service.find({ hospital: hospital._id })
+
+      return res.json({ services })
     } catch (e) {
       console.log(e)
       await createError(e)

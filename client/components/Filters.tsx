@@ -18,12 +18,12 @@ import { RootState } from '../store/reducers'
 import { ICategory } from '../types/categories'
 import { IFilters } from '../types/search'
 
-interface ISiderProps {
+interface IFiltersProps {
   categories: ICategory[]
   error: string
 }
 
-const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
+const Filters: React.FC<IFiltersProps> = ({ categories, error }) => {
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -123,4 +123,4 @@ const Sider: React.FC<ISiderProps> = ({ categories, error }) => {
   )
 }
 
-export default Sider
+export default Filters

@@ -4,7 +4,7 @@ import Layout from 'antd/lib/layout'
 
 import Header from '../components/Header'
 import Head from '../components/Head'
-import Sider from '../components/Sider'
+import Filters from '../components/Filters'
 
 import { ICategory } from '../types/categories'
 
@@ -21,7 +21,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
       <Layout className="layout">
         <Header />
         <Layout className="layout container">
-          <Sider categories={categories} error={error} />
+          <Filters categories={categories} error={error} />
           <Layout.Content className="content">
             {children}
           </Layout.Content>

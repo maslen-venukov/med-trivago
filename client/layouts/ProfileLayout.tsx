@@ -37,8 +37,12 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   const links: ILink[] = [
     { label: 'Главная', route: '/' },
     { label: 'Список исполнителей', route: '/profile/executors', role: Roles.Admin },
-    { label: 'Добавить исполнителя', route: '/profile/invite', role: Roles.Admin }
+    { label: 'Добавить исполнителя', route: '/profile/invite', role: Roles.Admin },
+    { label: 'Услуги', route: '/profile/services', role: Roles.Hospital },
+    { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital }
   ]
+
+  // TODO сделать добавление услуг и принятие заявок
 
   const linksToRender = links
     .filter(link => link.role === user?.role || !link.role)
