@@ -8,15 +8,15 @@ import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 import Table from 'antd/lib/table'
 import Column from 'antd/lib/table/Column'
+import Popconfirm from 'antd/lib/popconfirm'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-// import { inviteExecutor } from '../../store/actions/hospitals'
 import { fetchCreateRegisterLink, fetchRegisterLinks, fetchRemoveRegisterLink } from '../../store/actions/registerLinks'
 
+import renderDate from '../../utils/renderDate'
+
 import { RootState } from '../../store/reducers'
-import moment from 'moment'
-import Popconfirm from 'antd/lib/popconfirm'
 import { IRegisterLink } from '../../types/registerLinks'
 
 interface IInviteFormvalues {
@@ -29,7 +29,6 @@ const Invite: React.FC = () => {
 
   const { token } = useSelector((state: RootState) => state.user)
   const { registerLinks, loading } = useSelector((state: RootState) => state.registerLinks)
-  // const { loading } = useSelector((state: RootState) => state.hospitals)
 
   const [sending, setSending] = useState<boolean>(false)
 
@@ -50,8 +49,6 @@ const Invite: React.FC = () => {
       <a>{link}</a>
     </Link>
   )
-
-  const renderDate = (text: string) => moment(text).format('HH:mm DD.MM.YYYY')
 
   useEffect(() => {
     token && dispatch(fetchRegisterLinks(token))

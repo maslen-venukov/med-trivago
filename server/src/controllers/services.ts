@@ -141,7 +141,17 @@ class Controller {
 
       const services = await Service.find({ hospital: hospital._id })
 
-      return res.json({ services })
+      const categoriesIds = [...new Set(services.map(service => service.category?.toString()))].filter(id => id)
+      const categories = await Category.find({ _id: categoriesIds })
+
+      const result = services.map(service => {
+        return {
+          ...service._doc,
+          category: categories.find(category => category._id.toString() === service.category?.toString())?.name || null
+        }
+      })
+
+      return res.json({ services: result })
     } catch (e) {
       console.log(e)
       await createError(e)

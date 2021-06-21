@@ -22,9 +22,11 @@ import getPeriod from '../../utils/getPeriod'
 import getPhoneHref from '../../utils/getPhoneHref'
 
 import { IService } from '../../types/services'
+import { IHospital } from '../../types/hospitals'
 
 interface IServiceProps extends IService {
   error: string
+  hospital: IHospital
 }
 
 const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, error }) => {

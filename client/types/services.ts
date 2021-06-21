@@ -1,7 +1,7 @@
 import { ISchedule } from './'
 
 export interface IService {
-  _id?: string
+  _id: string
   name: string
   price: number
   category: string
@@ -17,3 +17,25 @@ export interface IService {
     schedule?: ISchedule
   }
 }
+
+export interface IServicesState {
+  services: IService[]
+  loading: boolean
+}
+
+export enum ServicesActionTypes {
+  SET_SERVICES = 'SET_SERVICES',
+  SET_SERVICES_LOADING = 'SET_SERVICES_LOADING'
+}
+
+interface ISetIServices {
+  type: ServicesActionTypes.SET_SERVICES,
+  payload: IService[]
+}
+
+interface ISetIServicesLoading {
+  type: ServicesActionTypes.SET_SERVICES_LOADING,
+  payload: boolean
+}
+
+export type ServicesAction = ISetIServices | ISetIServicesLoading
