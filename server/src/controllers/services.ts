@@ -139,15 +139,15 @@ class Controller {
 
       const hospital = await Hospital.findOne({ user: user._id })
 
-      const services = await Service.find({ hospital: hospital._id })
+      const services = await Service.find({ hospital: hospital._id }).sort({ _id: -1 })
 
-      const categoriesIds = [...new Set(services.map(service => service.category?.toString()))].filter(id => id)
+      const categoriesIds = [...new Set(services.map(service => service.category.toString()))].filter(id => id)
       const categories = await Category.find({ _id: categoriesIds })
 
       const result = services.map(service => {
         return {
           ...service._doc,
-          category: categories.find(category => category._id.toString() === service.category?.toString())?.name || null
+          category: categories.find(category => category._id.toString() === service.category.toString()).name
         }
       })
 

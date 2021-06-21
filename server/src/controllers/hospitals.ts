@@ -88,13 +88,20 @@ class Controller {
         const { _id, name, address, phone, schedule } = hospital
         const serviceList = hospital.serviceList.map(list => {
           const category = categories.find(category => category._id.toString() === list.category.toString())
-          const listServices = services.filter(service => service.category.toString() === category._id.toString())
+
+          const listServices = services.filter(service => {
+            const thisCategory = service.category.toString() === category._id.toString()
+            const thisHospital = service.hospital.toString() === hospital._id.toString()
+            return thisCategory && thisHospital
+          })
+
           return {
             category: category.name,
             schedule: list.schedule,
             services: listServices.map(({ _id, name, price }) => ({ _id, name, price }))
           }
         })
+
         return {
           _id,
           name,
