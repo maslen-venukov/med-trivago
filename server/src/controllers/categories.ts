@@ -1,23 +1,17 @@
 import { Request, Response } from 'express'
 
-import User, { IUserRequest } from '../models/User'
+import { IUserRequest } from '../models/User'
 import Category, { ICategory } from '../models/Category'
 
 import errorHandler from '../utils/errorHandler'
 import isValidObjectId from '../utils/isValidObjectId'
 import createError from '../utils/createError'
 
-import { HTTPStatusCodes, Roles } from '../types'
+import { HTTPStatusCodes } from '../types'
 
 class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { name } = req.body
       const category = await Category.create({ name })
 
@@ -42,11 +36,6 @@ class Controller {
 
   async update(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { id } = req.params
       if(!isValidObjectId(id)) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
@@ -69,12 +58,6 @@ class Controller {
 
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { id } = req.params
       if(!isValidObjectId(id)) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')

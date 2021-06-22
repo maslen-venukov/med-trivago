@@ -50,7 +50,7 @@ class Controller {
       const role = Roles.Hospital
 
       const user = await User.create({ ...userData, role })
-      const hospital = await Hospital.create({ name, address, phone, schedule, user: user._id.toString() })
+      const hospital = await Hospital.create({ name, address, phone, schedule, user: user._id })
       await RegisterLink.deleteOne({ link })
 
       const data = { _id: user._id, email, role }
@@ -74,12 +74,6 @@ class Controller {
 
   async getAll(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const hospitals = await Hospital.find().sort({ _id: -1 })
       const categories = await Category.find()
       const services = await Service.find()
@@ -122,12 +116,6 @@ class Controller {
 
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { id } = req.params
       if(!isValidObjectId(id)) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')

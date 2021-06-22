@@ -36,12 +36,6 @@ interface ISort {
 class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Hospital) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { name, price, category: categoryId } = req.body
       if(!name || !price || !categoryId) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
@@ -52,7 +46,7 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Категория не найдена')
       }
 
-      const hospital = await Hospital.findOne({ user: user._id })
+      const hospital = await Hospital.findOne({ user: req.user._id })
 
       const service = await Service.create({
         name,
@@ -168,13 +162,7 @@ class Controller {
 
   async getByHospital(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Hospital) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
-      const hospital = await Hospital.findOne({ user: user._id })
+      const hospital = await Hospital.findOne({ user: req.user._id })
 
       const services = await Service.find({ hospital: hospital._id }).sort({ _id: -1 })
 
@@ -198,18 +186,12 @@ class Controller {
 
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Hospital) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { id } = req.params
       if(!isValidObjectId(id)) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
       }
 
-      const hospital = await Hospital.findOne({ user: user._id })
+      const hospital = await Hospital.findOne({ user: req.user._id })
 
       const service = await Service.findOneAndDelete({ _id: id, hospital: hospital._id })
       if(!service) {

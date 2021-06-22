@@ -1,25 +1,19 @@
 import { Request, Response } from 'express'
 import { v4 } from 'uuid'
 
-import User, { IUserRequest } from '../models/User'
+import { IUserRequest } from '../models/User'
 import RegisterLink from '../models/RegisterLink'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import sendEmail from '../utils/sendEmail'
 
-import { HTTPStatusCodes, Roles } from '../types'
+import { HTTPStatusCodes } from '../types'
 import isValidObjectId from '../utils/isValidObjectId'
 
 class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { email } = req.body
 
       if(!email) {
@@ -55,14 +49,7 @@ class Controller {
 
   async getAll(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const registerLinks = await RegisterLink.find().sort({ _id: -1 })
-
       return res.json({ registerLinks })
     } catch (e) {
       console.log(e)
@@ -87,12 +74,6 @@ class Controller {
 
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.user._id)
-
-      if(user.role !== Roles.Admin) {
-        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
-      }
-
       const { id } = req.params
       if(!isValidObjectId(id)) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
