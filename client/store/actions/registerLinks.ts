@@ -37,6 +37,7 @@ export const fetchRegisterLinks = (token: string) => (dispatch: Dispatch<Registe
 }
 
 export const fetchCreateRegisterLink = (email: string, token: string, cb: () => void) => (dispatch: Dispatch<RegisterLinksAction>) => {
+  dispatch(setRegisterLinksLoading(true))
   axios.post('/api/register-links', { email }, {
     headers: { Authorization: token }
   })
@@ -45,10 +46,14 @@ export const fetchCreateRegisterLink = (email: string, token: string, cb: () => 
       message.success(data.message)
     })
     .catch(catchError)
-    .finally(cb)
+    .finally(() => {
+      dispatch(setRegisterLinksLoading(false))
+      cb()
+    })
 }
 
 export const fetchRemoveRegisterLink = (id: string, token: string) => (dispatch: Dispatch<RegisterLinksAction>) => {
+  dispatch(setRegisterLinksLoading(true))
   axios.delete(`/api/register-links/${id}`, {
     headers: { Authorization: token }
   })
@@ -57,4 +62,5 @@ export const fetchRemoveRegisterLink = (id: string, token: string) => (dispatch:
       message.success(data.message)
     })
     .catch(catchError)
+    .finally(() => dispatch(setRegisterLinksLoading(false)))
 }

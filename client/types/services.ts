@@ -18,6 +18,12 @@ export interface IService {
   }
 }
 
+export interface IShortService {
+  name: string
+  price: number
+  category: string
+}
+
 export interface IServicesState {
   services: IService[]
   loading: boolean
@@ -25,7 +31,9 @@ export interface IServicesState {
 
 export enum ServicesActionTypes {
   SET_SERVICES = 'SET_SERVICES',
-  SET_SERVICES_LOADING = 'SET_SERVICES_LOADING'
+  SET_SERVICES_LOADING = 'SET_SERVICES_LOADING',
+  ADD_SERVICE = 'ADD_SERVICE',
+  REMOVE_SERVICE = 'REMOVE_SERVICE'
 }
 
 interface ISetIServices {
@@ -38,4 +46,14 @@ interface ISetIServicesLoading {
   payload: boolean
 }
 
-export type ServicesAction = ISetIServices | ISetIServicesLoading
+interface IAddService {
+  type: ServicesActionTypes.ADD_SERVICE,
+  payload: IService
+}
+
+interface IRemoveService {
+  type: ServicesActionTypes.REMOVE_SERVICE,
+  payload: string
+}
+
+export type ServicesAction = ISetIServices | ISetIServicesLoading | IAddService | IRemoveService

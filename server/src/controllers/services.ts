@@ -34,6 +34,43 @@ interface ISort {
 }
 
 class Controller {
+  async create(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const user = await User.findById(req.user._id)
+
+      if(user.role !== Roles.Hospital) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const { name, price, category: categoryId } = req.body
+      if(!name || !price || !categoryId) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
+      }
+
+      const category = await Category.findById(categoryId)
+      if(!category) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Категория не найдена')
+      }
+
+      const hospital = await Hospital.findOne({ user: user._id })
+
+      const service = await Service.create({
+        name,
+        price,
+        category,
+        hospital: hospital._id
+      })
+
+      const result = { ...service._doc, category: category.name }
+
+      return res.json({ message: 'Услуга успешно добавлена', service: result })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
   async getAll(req: Request, res: Response): Promise<Response> {
     try {
       const { q, cat, minp, maxp, p } = req.query
@@ -152,6 +189,34 @@ class Controller {
       })
 
       return res.json({ services: result })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async remove(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const user = await User.findById(req.user._id)
+
+      if(user.role !== Roles.Hospital) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const { id } = req.params
+      if(!isValidObjectId(id)) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
+      }
+
+      const hospital = await Hospital.findOne({ user: user._id })
+
+      const service = await Service.findOneAndDelete({ _id: id, hospital: hospital._id })
+      if(!service) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
+
+      return res.json({ message: 'Услуга успешно удалена' })
     } catch (e) {
       console.log(e)
       await createError(e)

@@ -19,6 +19,18 @@ const services = (state = initialState, action: ServicesAction): IServicesState 
         loading: action.payload
       }
 
+    case ServicesActionTypes.ADD_SERVICE:
+      return {
+        ...state,
+        services: [action.payload, ...state.services]
+      }
+
+    case ServicesActionTypes.REMOVE_SERVICE:
+      return {
+        ...state,
+        services: state.services.filter(service => service._id !== action.payload)
+      }
+
     default:
       return state
   }
