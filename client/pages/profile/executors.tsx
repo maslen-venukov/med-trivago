@@ -44,9 +44,6 @@ const Executors = () => {
     setServiceList(null)
   }
 
-  // TODO сделать страницы исполнителя в админке
-  // TODO сделать запись на оказание услуг
-
   const onRemove = (id: string) => {
     token && dispatch(fetchRemoveHospital(id, token))
   }

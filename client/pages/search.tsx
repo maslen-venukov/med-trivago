@@ -50,7 +50,7 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
   }
 
   return (
-    <SearchLayout categories={categories} error={error} title={getTitle()}>
+    <SearchLayout categories={categories} error={error} title={getTitle()} keywords={[getTitle()]}>
       <div className="sort">
         <Select defaultValue="" value={sort.p} onChange={onChange} className="sort__select">
           <Select.Option value="">По умолчанию</Select.Option>

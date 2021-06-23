@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 
@@ -11,7 +11,7 @@ import LockOutlined from '@ant-design/icons/LockOutlined'
 
 import MainLayout from '../layouts/MainLayout'
 
-import { logIn } from '../store/actions/user'
+import { login } from '../store/actions/user'
 
 interface ILoginFormValues {
   email: string
@@ -22,11 +22,14 @@ const Login: React.FC = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
+  const [loging, setLoging] = useState<boolean>(false)
+
   const onLogin = (values: ILoginFormValues) => {
     const { email, password } = values
-    dispatch(logIn(email, password, () => {
-      router.push('/profile')
-    }))
+    const success = () => router.push('/profile')
+    const error = () => setLoging(false)
+    setLoging(true)
+    dispatch(login(email, password, success, error))
   }
 
   return (
@@ -57,8 +60,8 @@ const Login: React.FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="auth__btn">
-              Войти
+            <Button type="primary" htmlType="submit" loading={loging} className="auth__btn">
+              {loging ? 'Вход...' : 'Войти'}
             </Button>
           </Form.Item>
         </Form>

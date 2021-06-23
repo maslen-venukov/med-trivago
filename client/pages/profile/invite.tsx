@@ -82,7 +82,7 @@ const Invite: React.FC = () => {
             htmlType="submit"
             loading={sending}
           >
-            {sending ? 'Отправка' : 'Отправить'}
+            {sending ? 'Отправка...' : 'Отправить'}
           </Button>
         </Form.Item>
       </Form>

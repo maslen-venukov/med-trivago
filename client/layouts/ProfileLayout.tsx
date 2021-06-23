@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Layout from 'antd/lib/layout'
 import Menu from 'antd/lib/menu'
+import Button from 'antd/lib/button'
 import message from 'antd/lib/message'
 
 import MainLayout from './MainLayout'
@@ -12,6 +13,8 @@ import MainLayout from './MainLayout'
 import Loading from '../components/Loading'
 import NotFound from '../components/NotFound'
 import Head from '../components/Head'
+
+import { logout } from '../store/actions/user'
 
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
@@ -28,6 +31,7 @@ interface IProfileLayoutProps {
 }
 
 const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, className }) => {
+  const dispatch = useDispatch()
   const router = useRouter()
 
   const { user, ready } = useSelector((state: RootState) => state.user)
@@ -42,7 +46,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital }
   ]
 
-  // TODO сделать добавление услуг и принятие заявок
+  const onLogout = () => dispatch(logout())
 
   const linksToRender = links
     .filter(link => link.role === user?.role || !link.role)
@@ -81,9 +85,18 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
             {linksToRender}
           </Menu>
         </Layout.Sider>
-        <Layout.Content className={`container profile__container ${className}`}>
-          {children}
-        </Layout.Content>
+        <Layout>
+          <Layout.Header className="profile__header">
+            <div className="container profile__container">
+              <Button onClick={onLogout} danger type="primary" className="profile__logout">
+                Выйти
+              </Button>
+            </div>
+          </Layout.Header>
+          <Layout.Content className={`container profile__container profile__content ${className}`}>
+            {children}
+          </Layout.Content>
+        </Layout>
       </Layout>
     ) : (
       <MainLayout>

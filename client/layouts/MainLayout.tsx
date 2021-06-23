@@ -7,12 +7,13 @@ import Head from '../components/Head'
 
 interface IMainLayoutProps {
   title?: string
+  keywords?: string[]
 }
 
-const MainLayout: React.FC<IMainLayoutProps> = ({ children, title }) => {
+const MainLayout: React.FC<IMainLayoutProps> = ({ children, title, keywords }) => {
   return (
     <>
-      <Head title={title} />
+      <Head title={title} keywords={keywords} />
       <Layout className="layout">
         <Header />
         <Layout.Content>

@@ -35,6 +35,28 @@
       margin: 0
   &__phone a
     color: inherit
+  &__rate
+    margin-bottom: $size * 3
+  &__calendar
+    max-width: 500px
+    border: 1px solid #f0f0f0
+    border-radius: 2px
+    margin-bottom: $size * 6
+    .ant-picker-calendar-mode-switch
+      display: none
+  &__appointment-hour
+    margin-bottom: $size
+  &__trigger
+    position: absolute
+    top: 50%
+    left: 50%
+    z-index: 2
+    transform: translate(-50%, -50%)
+    width: 70px
+    height: 40px
+    background-color: transparent
+    border: 0
+    cursor: pointer
 
 .auth
   min-height: 75vh
@@ -58,8 +80,17 @@
   min-height: 100vh
   &__menu
     height: 100%
+  &__header
+    display: flex
+    align-items: center
+    background-color: #fff
+    padding: 0 $size * 2
+  &__logout
+    display: block
+    margin-left: auto
   &__container
     max-width: 1200px
+  &__content
     padding-top: $size * 2
 
 .invite

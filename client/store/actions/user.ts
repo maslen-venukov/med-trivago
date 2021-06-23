@@ -11,7 +11,7 @@ export const setUser = (payload: { token: string, user: IUser }): UserAction => 
   payload
 })
 
-const logOut = (): UserAction => ({
+export const logout = (): UserAction => ({
   type: UserActionTypes.LOG_OUT
 })
 
@@ -19,7 +19,7 @@ export const setReady = (): UserAction => ({
   type: UserActionTypes.SET_READY
 })
 
-export const logIn = (email: string, password: string, cb: () => void) => (dispatch: Dispatch<UserAction>) => {
+export const login = (email: string, password: string, cb: () => void, error: () => void) => (dispatch: Dispatch<UserAction>) => {
   axios.post('/api/users/login', {
     email,
     password
@@ -30,7 +30,10 @@ export const logIn = (email: string, password: string, cb: () => void) => (dispa
       message.success(data.message)
       cb()
     })
-    .catch(catchError)
+    .catch(e => {
+      catchError(e)
+      error()
+    })
 }
 
 export const auth = (token: string) => (dispatch: Dispatch<UserAction>) => {
@@ -40,7 +43,7 @@ export const auth = (token: string) => (dispatch: Dispatch<UserAction>) => {
     .then(({ data }) => dispatch(setUser(data)))
     .catch(e => {
       console.log(e.response.data.message)
-      dispatch(logOut())
+      dispatch(logout())
     })
     .finally(() => dispatch(setReady()))
 }

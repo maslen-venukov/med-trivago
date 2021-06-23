@@ -12,14 +12,13 @@ import errorsRouter from './routes/errors'
 import servicesRouter from './routes/services'
 import hospitalsRouter from './routes/hospitals'
 import registerLinksRouter from './routes/registerLinks'
-import Hospital from './models/Hospital'
+// import Hospital from './models/Hospital'
 
-const PORT = process.env.PORT || 5000
-const MONGO_URI = process.env.MONGO_URI
+const { PORT, MONGO_URI, CLIENT_URL } = process.env
 
 const app = express()
 
-app.use(cors())
+app.use(cors({ origin: CLIENT_URL }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

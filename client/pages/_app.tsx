@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppProps } from 'next/app'
-
 import axios from 'axios'
+import moment from 'moment'
 
 import ConfigProvider from 'antd/lib/config-provider'
 import locale from 'antd/lib/locale/ru_RU'
+
+import 'moment/locale/ru'
+moment.locale('ru')
 
 import { wrapper } from '../store'
 

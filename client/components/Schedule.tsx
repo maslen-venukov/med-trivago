@@ -5,14 +5,10 @@ import Typography from 'antd/lib/typography'
 
 import getPeriod from '../utils/getPeriod'
 
-import { ISchedule } from '../types'
+import { IWeekSchedule } from '../types'
 
 interface IScheduleProps {
-  schedule?: {
-    weekdays: ISchedule
-    saturday?: ISchedule
-    sunday?: ISchedule
-  }
+  schedule?: IWeekSchedule
 }
 
 const Schedule: React.FC<IScheduleProps> = ({ children, schedule }) => {

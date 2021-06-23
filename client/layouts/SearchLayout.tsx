@@ -12,12 +12,13 @@ interface ISearchLayoutProps {
   categories: ICategory[]
   error: string
   title: string
+  keywords: string[]
 }
 
-const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, error, title }) => {
+const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, error, title, keywords }) => {
   return (
     <>
-      <Head title={title} />
+      <Head title={title} keywords={keywords} />
       <Layout className="layout">
         <Header />
         <Layout className="layout container">

@@ -120,7 +120,7 @@ const Services: React.FC = () => {
           >
             <Select onChange={() => {}}>
               <Select.Option value="" disabled>
-                <span style={{ color: "#bfbfbf"}}>Категория</span>
+                <span style={{ color: '#bfbfbf' }}>Категория</span>
               </Select.Option>
               {categories.map(category => (
                 <Select.Option key={category._id} value={category._id}>{category.name}</Select.Option>
