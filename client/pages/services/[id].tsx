@@ -17,7 +17,7 @@ import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 import MainLayout from '../../layouts/MainLayout'
 
 import NotFound from '../../components/NotFound'
-import Schedule from '../../components/Schedule'
+import Schedule from '../../components/services/Schedule'
 import TimeModal from '../../components/services/TimeModal'
 import AppointmentModal, { IAppointmentFormValues } from '../../components/services/AppointmentModal'
 
@@ -81,6 +81,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO доделать запись
   // TODO переделать авторизацию на куки
   // TODO добавить сокеты для записи
+  // TODO пагинация на странице поиска
   // TODO сделать страницу с записями
   // TODO разбить компоненты на папки
   // TODO возможно переделать lazyInput на хуки

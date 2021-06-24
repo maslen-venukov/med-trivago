@@ -8,7 +8,7 @@ import Tooltip from 'antd/lib/tooltip'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 
-import { IService } from '../types/services'
+import { IService } from '../../types/services'
 
 const Service: React.FC<IService> = ({ _id, name, price, hospital }) => {
   const rate = Number(price.toString()[0])
@@ -20,15 +20,19 @@ const Service: React.FC<IService> = ({ _id, name, price, hospital }) => {
           <Typography.Title level={4}>
             {name} — <Typography.Text type="success">{price} ₽</Typography.Text>
           </Typography.Title>
+
           <Typography.Title level={5}>
             {hospital.name}
           </Typography.Title>
+
           <Typography.Paragraph>
             <HomeTwoTone className="icon" /> {hospital.address}
           </Typography.Paragraph>
+
           <Typography.Paragraph className="services__phone">
             <PhoneTwoTone className="icon mirrored" /> {hospital.phone}
           </Typography.Paragraph>
+
           <Tooltip title={rate} placement="right">
             <span className="services__rate">
               <Rate disabled defaultValue={rate} />

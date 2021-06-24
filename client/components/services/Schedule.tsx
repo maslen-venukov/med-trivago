@@ -3,9 +3,9 @@ import React from 'react'
 import Popover from 'antd/lib/popover'
 import Typography from 'antd/lib/typography'
 
-import getPeriod from '../utils/getPeriod'
+import getPeriod from '../../utils/getPeriod'
 
-import { IWeekSchedule } from '../types'
+import { IWeekSchedule } from '../../types'
 
 interface IScheduleProps {
   schedule?: IWeekSchedule

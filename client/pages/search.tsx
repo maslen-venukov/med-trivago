@@ -9,7 +9,7 @@ import Select from 'antd/lib/select'
 
 import SearchLayout from '../layouts/SearchLayout'
 
-import Service from '../components/Service'
+import Service from '../components/services/Service'
 
 import { setSort } from '../store/actions/search'
 

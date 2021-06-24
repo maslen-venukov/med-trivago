@@ -12,7 +12,7 @@ import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import Schedule from '../../components/Schedule'
+import Schedule from '../../components/services/Schedule'
 
 import { fetchHospitals, fetchRemoveHospital } from '../../store/actions/hospitals'
 
