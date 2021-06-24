@@ -42,7 +42,7 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
   useEffect(() => {
     const p = (router.query.p || '') as Sort
     dispatch(setSort({ ...sort, p }))
-  }, [])
+  }, [dispatch])
 
   const getTitle = () => {
     const { q } = router.query

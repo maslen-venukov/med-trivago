@@ -12,23 +12,21 @@ moment.locale('ru')
 
 import { wrapper } from '../store'
 
-import { auth, setReady } from '../store/actions/user'
+import { auth } from '../store/actions/user'
 
 import { API_URL } from '../constants'
 
 import '../styles/index.sass'
 
 axios.defaults.baseURL = API_URL
+axios.defaults.withCredentials = true
 
 const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    token
-      ? dispatch(auth(token))
-      : dispatch(setReady())
-  }, [])
+    dispatch(auth())
+  }, [dispatch])
 
   return (
     <ConfigProvider locale={locale}>

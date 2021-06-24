@@ -1,20 +1,17 @@
 import { IUserState, UserAction, UserActionTypes } from '../../types/user'
 
 const initialState: IUserState = {
-  token: null,
   user: null,
-  ready: false
+  ready: false,
+  loggedOut: false
 }
 
 const user = (state = initialState, action: UserAction): IUserState => {
   switch(action.type) {
     case UserActionTypes.SET_USER:
-      const { token, user } = action.payload
-      localStorage.setItem('token', token)
       return {
         ...state,
-        token,
-        user
+        user: action.payload
       }
 
     case UserActionTypes.SET_READY:
@@ -23,12 +20,10 @@ const user = (state = initialState, action: UserAction): IUserState => {
         ready: true
       }
 
-    case UserActionTypes.LOG_OUT:
-      localStorage.removeItem('token')
+    case UserActionTypes.SET_LOGGED_OUT:
       return {
         ...state,
-        token: null,
-        user: null
+        loggedOut: action.payload
       }
 
     default:

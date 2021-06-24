@@ -27,22 +27,20 @@ const Invite: React.FC = () => {
   const dispatch = useDispatch()
   const [form] = Form.useForm()
 
-  const { token } = useSelector((state: RootState) => state.user)
   const { registerLinks, loading } = useSelector((state: RootState) => state.registerLinks)
 
   const [sending, setSending] = useState<boolean>(false)
 
   const onInvite = (values: IInviteFormvalues) => {
     setSending(true)
-    token && dispatch(fetchCreateRegisterLink(values.email, token, () => {
+    dispatch(fetchCreateRegisterLink(values.email, () => {
       setSending(false)
     }))
     form.resetFields()
   }
 
-  const onCancel = (id: string) => {
-    token && dispatch(fetchRemoveRegisterLink(id, token))
-  }
+  // TODO проверить...
+  const onCancel = (id: string) => dispatch(fetchRemoveRegisterLink(id))
 
   const renderLink = (link: string) => (
     <Link href={`/register/${link}`}>
@@ -51,8 +49,8 @@ const Invite: React.FC = () => {
   )
 
   useEffect(() => {
-    token && dispatch(fetchRegisterLinks(token))
-  }, [dispatch, token])
+    dispatch(fetchRegisterLinks())
+  }, [dispatch])
 
   return (
     <ProfileLayout title="Добавить исполнителя" className="invite">

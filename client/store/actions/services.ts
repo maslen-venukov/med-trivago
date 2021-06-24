@@ -26,21 +26,17 @@ const removeService = (payload: string): ServicesAction => ({
   payload
 })
 
-export const fetchHospitalServices = (token: string) => (dispatch: Dispatch<ServicesAction>) => {
+export const fetchHospitalServices = () => (dispatch: Dispatch<ServicesAction>) => {
   dispatch(setServicesLoading(true))
-  axios.get('/api/services/hospital', {
-    headers: { Authorization: token }
-  })
+  axios.get('/api/services/hospital')
     .then(({ data }) => dispatch(setServices(data.services)))
     .catch(catchError)
     .finally(() => dispatch(setServicesLoading(false)))
 }
 
-export const fetchAddService = (data: IShortService, token: string) => (dispatch: Dispatch<ServicesAction>) => {
+export const fetchAddService = (data: IShortService) => (dispatch: Dispatch<ServicesAction>) => {
   dispatch(setServicesLoading(true))
-  axios.post('/api/services', data, {
-    headers: { Authorization: token }
-  })
+  axios.post('/api/services', data)
     .then(({ data }) => {
       dispatch(addService(data.service))
       message.success(data.message)
@@ -49,11 +45,9 @@ export const fetchAddService = (data: IShortService, token: string) => (dispatch
     .finally(() => dispatch(setServicesLoading(false)))
 }
 
-export const fetchRemoveService = (id: string, token: string) => (dispatch: Dispatch<ServicesAction>) => {
+export const fetchRemoveService = (id: string) => (dispatch: Dispatch<ServicesAction>) => {
   dispatch(setServicesLoading(true))
-  axios.delete(`/api/services/${id}`, {
-    headers: { Authorization: token }
-  })
+  axios.delete(`/api/services/${id}`)
     .then(({ data }) => {
       dispatch(removeService(id))
       message.success(data.message)

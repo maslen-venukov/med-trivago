@@ -25,7 +25,6 @@ import { IService, IShortService } from '../../types/services'
 const Services: React.FC = () => {
   const dispatch = useDispatch()
 
-  const { token } = useSelector((state: RootState) => state.user)
   const { services, loading } = useSelector((state: RootState) => state.services)
   const { categories } = useSelector((state: RootState) => state.categories)
 
@@ -37,19 +36,17 @@ const Services: React.FC = () => {
   const onCloseDrawer = () => setDrawerVisible(false)
 
   const onAddService = (values: IShortService) => {
-    token && dispatch(fetchAddService(values, token))
+    dispatch(fetchAddService(values))
     onCloseDrawer()
     form.resetFields()
   }
 
-  const onRemove = (id: string) => {
-    token && dispatch(fetchRemoveService(id, token))
-  }
+  const onRemove = (id: string) => dispatch(fetchRemoveService(id))
 
   useEffect(() => {
-    token && dispatch(fetchHospitalServices(token))
+    dispatch(fetchHospitalServices())
     dispatch(fetchCategories())
-  }, [dispatch, token])
+  }, [dispatch])
 
   return (
     <ProfileLayout title="Услуги">

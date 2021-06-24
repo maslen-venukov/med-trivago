@@ -25,7 +25,7 @@ import { Roles } from '../../types'
 const Executors = () => {
   const dispatch = useDispatch()
 
-  const { user, token } = useSelector((state: RootState) => state.user)
+  const { user } = useSelector((state: RootState) => state.user)
   const { hospitals, loading } = useSelector((state: RootState) => state.hospitals)
 
   const [executor, setExecutor] = useState<string | null>(null)
@@ -44,13 +44,11 @@ const Executors = () => {
     setServiceList(null)
   }
 
-  const onRemove = (id: string) => {
-    token && dispatch(fetchRemoveHospital(id, token))
-  }
+  const onRemove = (id: string) => dispatch(fetchRemoveHospital(id))
 
   useEffect(() => {
-    token && user?.role === Roles.Admin && dispatch(fetchHospitals(token))
-  }, [dispatch, token, user])
+    user?.role === Roles.Admin && dispatch(fetchHospitals())
+  }, [user, dispatch])
 
   return (
     <ProfileLayout title="Список исполнителей" className="executors">

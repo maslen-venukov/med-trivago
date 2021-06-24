@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
+import { cookieOptions } from '../core/cookie'
+
 import User, { IUser, IUserRequest } from '../models/User'
 
 import register from '../services/register'
@@ -35,8 +37,8 @@ class Controller {
 
       return res
         .status(HTTPStatusCodes.Created)
+        .cookie('token', token, cookieOptions)
         .json({
-          token,
           user: data,
           message: 'Регистрация выполнена успешно'
         })
@@ -70,11 +72,12 @@ class Controller {
 
       const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
 
-      return res.json({
-        token,
-        user: data,
-        message: 'Авторизация выполнена успешно'
-      })
+      return res
+        .cookie('token', token, cookieOptions)
+        .json({
+          user: data,
+          message: 'Авторизация выполнена успешно'
+        })
     } catch (e) {
       console.log(e)
       await createError(e)
@@ -95,10 +98,24 @@ class Controller {
 
       const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
 
-      return res.json({
-        token,
-        user: data
-      })
+      return res
+        .cookie('token', token, cookieOptions)
+        .json({ user: data })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async logout(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      return res
+        .cookie('token', '', {
+          httpOnly: true,
+          expires: new Date(0)
+        })
+        .json({ message: 'Вы вышли из учетной записи' })
     } catch (e) {
       console.log(e)
       await createError(e)

@@ -24,11 +24,9 @@ const removeHospital = (payload: string): HospitalsAction => ({
   payload
 })
 
-export const fetchHospitals = (token: string) => (dispatch: Dispatch<HospitalsAction>) => {
+export const fetchHospitals = () => (dispatch: Dispatch<HospitalsAction>) => {
   dispatch(setHospitalsLoading(true))
-  axios.get('/api/hospitals', {
-    headers: { Authorization: token }
-  })
+  axios.get('/api/hospitals')
     .then(({ data }) => dispatch(setHospitals(data.hospitals)))
     .catch(catchError)
     .finally(() => dispatch(setHospitalsLoading(false)))
@@ -37,18 +35,15 @@ export const fetchHospitals = (token: string) => (dispatch: Dispatch<HospitalsAc
 export const registerHospital = (data: IRegisterHospitalData, cb: () => void) => (dispatch: Dispatch<HospitalsAction | UserAction>) => {
   axios.post('/api/hospitals', data)
     .then(({ data }) => {
-      const { token, user } = data
-      dispatch(setUser({ token, user }))
+      dispatch(setUser(data.user))
       message.success('Регистрация выполнена успешно')
       cb()
     })
     .catch(catchError)
 }
 
-export const fetchRemoveHospital = (id: string, token: string) => (dispatch: Dispatch<HospitalsAction>) => {
-  axios.delete(`/api/hospitals/${id}`, {
-    headers: { Authorization: token }
-  })
+export const fetchRemoveHospital = (id: string) => (dispatch: Dispatch<HospitalsAction>) => {
+  axios.delete(`/api/hospitals/${id}`)
     .then(({ data }) => {
       dispatch(removeHospital(id))
       message.success(data.message)

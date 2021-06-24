@@ -43,7 +43,7 @@ const Header: React.FC = () => {
     if(q && typeof q === 'string') {
       dispatch(setQuery(q))
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <Layout.Header className="header">

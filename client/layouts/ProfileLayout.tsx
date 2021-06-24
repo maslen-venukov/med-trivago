@@ -34,7 +34,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const { user, ready } = useSelector((state: RootState) => state.user)
+  const { user, ready, loggedOut } = useSelector((state: RootState) => state.user)
 
   const [rights, setRights] = useState<boolean>(false)
 
@@ -46,7 +46,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital }
   ]
 
-  const onLogout = () => dispatch(logout())
+  const onLogout = () => dispatch(logout(router))
 
   const linksToRender = links
     .filter(link => link.role === user?.role || !link.role)
@@ -59,11 +59,11 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     ))
 
   useEffect(() => {
-    if(ready && !user) {
+    if(ready && !user && !loggedOut) {
       router.push('/login')
       message.warning('Пожалуйста авторизуйтесь')
     }
-  }, [ready, user, router])
+  }, [ready, user, loggedOut, router])
 
   useEffect(() => {
     const link = links.find(link => link.route === router.pathname)

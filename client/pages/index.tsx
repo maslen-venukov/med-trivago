@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
 import message from 'antd/lib/message'
 
 import MainLayout from '../layouts/MainLayout'
 
+import { setLoggedOut } from '../store/actions/user'
+
+import { RootState } from '../store/reducers'
 import { ICategory } from '../types/categories'
 
 interface IIndexProps {
@@ -14,6 +18,14 @@ interface IIndexProps {
 }
 
 const Index: React.FC<IIndexProps> = ({ categories, error }) => {
+  const dispatch = useDispatch()
+
+  const { loggedOut } = useSelector((state: RootState) => state.user)
+
+  useEffect(() => {
+    loggedOut && dispatch(setLoggedOut(false))
+  }, [loggedOut, dispatch])
+
   useEffect(() => {
     error && message.error(error)
   }, [error])

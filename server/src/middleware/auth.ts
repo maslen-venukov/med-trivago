@@ -9,7 +9,7 @@ import { HTTPStatusCodes } from '../types'
 
 const auth = (req: IUserRequest, res: Response, next: NextFunction) => {
   try {
-    const token = req.headers.authorization
+    const { token } = req.cookies
 
     if(!token) {
       return errorHandler(res, HTTPStatusCodes.Unauthorized, 'Не удалось авторизоваться')

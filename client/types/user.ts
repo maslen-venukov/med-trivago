@@ -1,7 +1,7 @@
 export enum UserActionTypes {
   SET_USER = 'SET_USER',
-  LOG_OUT = 'LOG_OUT',
-  SET_READY = 'SET_READY'
+  SET_READY = 'SET_READY',
+  SET_LOGGED_OUT = 'SET_LOGGED_OUT'
 }
 
 export interface IUser {
@@ -11,25 +11,23 @@ export interface IUser {
 }
 
 export interface IUserState {
-  token: string | null
   user: IUser | null
   ready: boolean
+  loggedOut: boolean
 }
 
 interface ISetUser {
   type: UserActionTypes.SET_USER,
-  payload: {
-    token: string
-    user: IUser
-  }
-}
-
-interface ILogOut {
-  type: UserActionTypes.LOG_OUT
+  payload: IUser | null
 }
 
 interface ISetReady {
   type: UserActionTypes.SET_READY
 }
 
-export type UserAction = ISetUser | ILogOut | ISetReady
+interface ISetLoggedOut {
+  type: UserActionTypes.SET_LOGGED_OUT,
+  payload: boolean
+}
+
+export type UserAction = ISetUser | ISetReady | ISetLoggedOut

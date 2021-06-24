@@ -60,7 +60,7 @@ const Filters: React.FC<IFiltersProps> = ({ categories, error }) => {
   useEffect(() => {
     const filters = { cat, minp, maxp } as IFilters
     dispatch(setFilters(filters))
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     setMounted(true)

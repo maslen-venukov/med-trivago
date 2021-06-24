@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
+import { cookieOptions } from '../core/cookie'
+
 import User, { IUserRequest } from '../models/User'
 import Hospital from '../models/Hospital'
 import Category from '../models/Category'
@@ -59,8 +61,8 @@ class Controller {
 
       return res
         .status(HTTPStatusCodes.Created)
+        .cookie('token', token, cookieOptions)
         .json({
-          token,
           user: data,
           hospital,
           message: 'Регистрация выполнена успешно'

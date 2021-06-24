@@ -5,18 +5,20 @@ import message from 'antd/lib/message'
 import catchError from '../../utils/catchError'
 
 import { IUser, UserAction, UserActionTypes } from '../../types/user'
+import { NextRouter } from 'next/router'
 
-export const setUser = (payload: { token: string, user: IUser }): UserAction => ({
+export const setUser = (payload: IUser | null): UserAction => ({
   type: UserActionTypes.SET_USER,
   payload
 })
 
-export const logout = (): UserAction => ({
-  type: UserActionTypes.LOG_OUT
+const setReady = (): UserAction => ({
+  type: UserActionTypes.SET_READY
 })
 
-export const setReady = (): UserAction => ({
-  type: UserActionTypes.SET_READY
+export const setLoggedOut = (payload: boolean): UserAction => ({
+  type: UserActionTypes.SET_LOGGED_OUT,
+  payload
 })
 
 export const login = (email: string, password: string, cb: () => void, error: () => void) => (dispatch: Dispatch<UserAction>) => {
@@ -25,8 +27,8 @@ export const login = (email: string, password: string, cb: () => void, error: ()
     password
   })
     .then(({ data }) => {
-      const { token, user } = data
-      dispatch(setUser({ token, user }))
+      console.log(data)
+      dispatch(setUser(data.user))
       message.success(data.message)
       cb()
     })
@@ -36,14 +38,20 @@ export const login = (email: string, password: string, cb: () => void, error: ()
     })
 }
 
-export const auth = (token: string) => (dispatch: Dispatch<UserAction>) => {
-  axios.get('/api/users/auth', {
-    headers: { Authorization: token }
-  })
-    .then(({ data }) => dispatch(setUser(data)))
-    .catch(e => {
-      console.log(e.response.data.message)
-      dispatch(logout())
+export const logout = (router: NextRouter) => (dispatch: Dispatch<UserAction>) => {
+  axios.post('/api/users/logout')
+    .then(({ data }) => {
+      router.push('/')
+      message.success(data.message)
+      dispatch(setLoggedOut(true))
+      dispatch(setUser(null))
     })
+    .catch(catchError)
+}
+
+export const auth = () => (dispatch: Dispatch<UserAction>) => {
+  axios.get('/api/users/auth')
+    .then(({ data }) => dispatch(setUser(data.user)))
+    .catch(e => console.log(e.response.data.message))
     .finally(() => dispatch(setReady()))
 }

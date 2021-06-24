@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -18,7 +19,8 @@ const { PORT, MONGO_URI, CLIENT_URL } = process.env
 
 const app = express()
 
-app.use(cors({ origin: CLIENT_URL }))
+app.use(cors({ origin: CLIENT_URL, credentials: true }))
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
