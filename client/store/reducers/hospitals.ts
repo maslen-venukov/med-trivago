@@ -2,6 +2,7 @@ import { IHospitalsState, HospitalsAction, HospitalsActionTypes } from '../../ty
 
 const initialState: IHospitalsState = {
   hospitals: [],
+  currentHospital: null,
   loading: false
 }
 
@@ -11,6 +12,12 @@ const hospitals = (state = initialState, action: HospitalsAction): IHospitalsSta
       return {
         ...state,
         hospitals: action.payload
+      }
+
+    case HospitalsActionTypes.SET_CURRENT_HOSPITAL:
+      return {
+        ...state,
+        currentHospital: action.payload
       }
 
     case HospitalsActionTypes.SET_HOSPITALS_LOADING:

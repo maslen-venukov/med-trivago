@@ -116,6 +116,22 @@ class Controller {
     }
   }
 
+  async getByUser(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const hospital = await Hospital.findOne({ user: req.user._id })
+
+      if(!hospital) {
+        return errorHandler(res, 404, 'Медицинское учреждение не найдено')
+      }
+
+      return res.json({ hospital })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params

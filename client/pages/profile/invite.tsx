@@ -39,7 +39,6 @@ const Invite: React.FC = () => {
     form.resetFields()
   }
 
-  // TODO проверить...
   const onCancel = (id: string) => dispatch(fetchRemoveRegisterLink(id))
 
   const renderLink = (link: string) => (

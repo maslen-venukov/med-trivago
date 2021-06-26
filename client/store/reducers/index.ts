@@ -6,6 +6,7 @@ import categories from './categories'
 import hospitals from './hospitals'
 import registerLinks from './registerLinks'
 import services from './services'
+import socket from './socket'
 
 const rootReducer = combineReducers({
   user,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   categories,
   hospitals,
   registerLinks,
-  services
+  services,
+  socket
 })
 
 export type RootState = ReturnType<typeof rootReducer>

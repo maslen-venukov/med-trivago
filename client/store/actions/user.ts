@@ -27,7 +27,6 @@ export const login = (email: string, password: string, cb: () => void, error: ()
     password
   })
     .then(({ data }) => {
-      console.log(data)
       dispatch(setUser(data.user))
       message.success(data.message)
       cb()

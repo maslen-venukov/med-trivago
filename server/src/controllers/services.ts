@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 
-import Service, { IService } from '../models/Service'
+import Service from '../models/Service'
 import Category from '../models/Category'
 import Hospital from '../models/Hospital'
-import User, { IUserRequest } from '../models/User'
+import { IUserRequest } from '../models/User'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import isValidObjectId from '../utils/isValidObjectId'
 
-import { HTTPStatusCodes, Roles } from '../types'
+import { HTTPStatusCodes } from '../types'
 
 type NameFilter = RegExp | null
 
@@ -96,7 +96,7 @@ class Controller {
         return acc
       }, {})
 
-      const services: IService[] = await Service.find(find).sort(sort)
+      const services = await Service.find(find).sort(sort)
 
       const hospitalIds = [...new Set(services.map(service => service.hospital.toString()))]
       const hospitals = await Hospital.find({ _id: hospitalIds })
@@ -145,6 +145,7 @@ class Controller {
         category: category.name,
         schedule,
         hospital: {
+          _id: hospital._id,
           name: hospital.name,
           address: hospital.address,
           phone: hospital.phone,
@@ -166,7 +167,7 @@ class Controller {
 
       const services = await Service.find({ hospital: hospital._id }).sort({ _id: -1 })
 
-      const categoriesIds = [...new Set(services.map(service => service.category.toString()))].filter(id => id)
+      const categoriesIds = [...new Set(services.map(service => service.category.toString()))]
       const categories = await Category.find({ _id: categoriesIds })
 
       const result = services.map(service => {

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Layout from 'antd/lib/layout'
 import Menu from 'antd/lib/menu'
 import Button from 'antd/lib/button'
+import Badge from 'antd/lib/badge'
 import message from 'antd/lib/message'
 
 import MainLayout from './MainLayout'
@@ -18,11 +19,13 @@ import { logout } from '../store/actions/user'
 
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
+import { resetNotifications } from '../store/actions/socket'
 
 interface ILink {
   label: string
   route: string
   role?: string
+  notifications?: number
 }
 
 interface IProfileLayoutProps {
@@ -35,6 +38,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   const router = useRouter()
 
   const { user, ready, loggedOut } = useSelector((state: RootState) => state.user)
+  const { notifications } = useSelector((state: RootState) => state.socket)
 
   const [rights, setRights] = useState<boolean>(false)
 
@@ -43,17 +47,23 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     { label: 'Список исполнителей', route: '/profile/executors', role: Roles.Admin },
     { label: 'Добавить исполнителя', route: '/profile/invite', role: Roles.Admin },
     { label: 'Услуги', route: '/profile/services', role: Roles.Hospital },
-    { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital }
+    { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital, notifications }
   ]
 
   const onLogout = () => dispatch(logout(router))
+
+  const onLinkClick = (notifications?: number) => notifications && dispatch(resetNotifications())
 
   const linksToRender = links
     .filter(link => link.role === user?.role || !link.role)
     .map(link => (
       <Menu.Item key={link.route}>
         <Link href={link.route}>
-          <a>{link.label}</a>
+          <a onClick={() => onLinkClick(link.notifications)}>
+            <Badge count={link.notifications} size="small" offset={[8, 0]}>
+              {link.label}
+            </Badge>
+          </a>
         </Link>
       </Menu.Item>
     ))

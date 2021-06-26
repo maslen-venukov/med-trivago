@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useDispatch, useSelector } from 'react-redux'
+import { Socket } from 'socket.io-client'
 import axios from 'axios'
 import moment, { Moment } from 'moment'
 
@@ -21,13 +24,19 @@ import Schedule from '../../components/services/Schedule'
 import TimeModal from '../../components/services/TimeModal'
 import AppointmentModal, { IAppointmentFormValues } from '../../components/services/AppointmentModal'
 
+import { setSocket } from '../../store/actions/socket'
+import { fetchCreateAppointment } from '../../store/actions/appointments'
+
 import getPeriod from '../../utils/getPeriod'
 import getPhoneHref from '../../utils/getPhoneHref'
 import getAppointmentHours from '../../utils/getAppointmentHours'
+import connectSocket from '../../utils/connectSocket'
 
 import { IService } from '../../types/services'
 import { IHospital } from '../../types/hospitals'
+import { IAppointment } from '../../types/appointments'
 import { IAppointmentHour, IWeekSchedule } from '../../types'
+import { RootState } from '../../store/reducers'
 
 interface IServiceProps extends IService {
   error: string
@@ -36,6 +45,11 @@ interface IServiceProps extends IService {
 }
 
 const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, error }) => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const { socket } = useSelector((state: RootState) => state.socket)
+
   const [appointmentModalVisible, setAppointmentModalVisible] = useState<boolean>(false)
   const [timeModalVisible, setTimeModalVisible] = useState<boolean>(false)
   const [date, setDate] = useState<string>('')
@@ -75,16 +89,36 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   const onCloseAppointmentModal = () => onChangeAppointmentModal(false, '')
 
   const onAppoint = (values: IAppointmentFormValues) => {
-    console.log(values)
+    const data = ({
+      ...values,
+      date: new Date(`${date.split('.').reverse().join('-')} ${time}`),
+      service: router.query.id
+    }) as IAppointment
+
+    const fetchData = (socket: Socket) => fetchCreateAppointment(data, hospital._id, socket)
+
+    if(socket) {
+      fetchData(socket)
+    } else {
+      const newSocket = connectSocket()
+      dispatch(setSocket(newSocket))
+      fetchData(newSocket)
+    }
   }
 
+  useEffect(() => {
+    console.log(socket)
+  }, [socket])
+
   // TODO доделать запись
-  // TODO переделать авторизацию на куки
-  // TODO добавить сокеты для записи
+  // TODO сделать вывод записей для больницы
+  // TODO рефакторинг
   // TODO пагинация на странице поиска
   // TODO сделать страницу с записями
   // TODO разбить компоненты на папки
   // TODO возможно переделать lazyInput на хуки
+  // TODO сделать удаление услуг (если есть записи по ней - deleted: true, если нет - удалить полностью)
+  // TODO по удалению больницы удалять и записи на прием (а может и нет)
 
   const rate = Number(price?.toString()[0])
 

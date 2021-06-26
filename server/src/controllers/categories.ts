@@ -13,6 +13,11 @@ class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { name } = req.body
+
+      if(!name) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Введите название категории')
+      }
+
       const category = await Category.create({ name })
 
       return res.status(HTTPStatusCodes.Created).json({ message: 'Категория успешно создана', category })
@@ -42,6 +47,10 @@ class Controller {
       }
 
       const { name } = req.body
+
+      if(!name) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Введите название категории')
+      }
 
       const category = await Category.findByIdAndUpdate(id, { name }, { new: true })
       if(!category) {

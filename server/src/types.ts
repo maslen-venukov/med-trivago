@@ -12,3 +12,9 @@ export enum Roles {
   Hospital = 'HOSPITAL',
   User = 'USER'
 }
+
+export enum SocketActions {
+  JOIN = 'JOIN',
+  APPOINT = 'APPOINT',
+  WATCH = 'WATCH'
+}

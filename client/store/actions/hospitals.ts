@@ -14,6 +14,11 @@ export const setHospitals = (payload: IHospital[]): HospitalsAction => ({
   payload
 })
 
+export const setCurrentHospital = (payload: IHospital): HospitalsAction => ({
+  type: HospitalsActionTypes.SET_CURRENT_HOSPITAL,
+  payload
+})
+
 const setHospitalsLoading = (payload: boolean): HospitalsAction => ({
   type: HospitalsActionTypes.SET_HOSPITALS_LOADING,
   payload
@@ -30,6 +35,12 @@ export const fetchHospitals = () => (dispatch: Dispatch<HospitalsAction>) => {
     .then(({ data }) => dispatch(setHospitals(data.hospitals)))
     .catch(catchError)
     .finally(() => dispatch(setHospitalsLoading(false)))
+}
+
+export const fetchCurrentHospital = () => (dispatch: Dispatch<HospitalsAction>) => {
+  axios.get('/api/hospitals/user')
+    .then(({ data }) => dispatch(setCurrentHospital(data.hospital)))
+    .catch(catchError)
 }
 
 export const registerHospital = (data: IRegisterHospitalData, cb: () => void) => (dispatch: Dispatch<HospitalsAction | UserAction>) => {

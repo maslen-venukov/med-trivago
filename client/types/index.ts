@@ -23,3 +23,9 @@ export enum Colors {
   Accent = '#1890ff',
   Red = '#f5222d'
 }
+
+export enum SocketActions {
+  JOIN = 'JOIN',
+  APPOINT = 'APPOINT',
+  WATCH = 'WATCH'
+}
