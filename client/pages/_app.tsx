@@ -7,7 +7,6 @@ import moment from 'moment'
 
 import ConfigProvider from 'antd/lib/config-provider'
 import locale from 'antd/lib/locale/ru_RU'
-import notification from 'antd/lib/notification'
 
 import 'moment/locale/ru'
 moment.locale('ru')
@@ -17,16 +16,18 @@ import { API_URL } from '../constants'
 import { wrapper } from '../store'
 
 import { fetchCurrentHospital } from '../store/actions/hospitals'
-import { decrementNotifications, incrementNotifications, setSocket } from '../store/actions/socket'
+import { incrementNotifications, setSocket } from '../store/actions/socket'
+import { addAppointment } from '../store/actions/appointments'
 import { auth } from '../store/actions/user'
 
 import connectSocket from '../utils/connectSocket'
-import renderDate from '../utils/renderDate'
+import appointmentNotification from '../utils/appointmentNotification'
 
 import { RootState } from '../store/reducers'
 import { Roles, SocketActions } from '../types'
 
 import '../styles/index.sass'
+import { IAppointment } from '../types/appointments'
 
 axios.defaults.baseURL = API_URL
 axios.defaults.withCredentials = true
@@ -55,20 +56,11 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   }, [socket, currentHospital])
 
   useEffect(() => {
-    socket?.on(SocketActions.WATCH, data => {
-      notification.open({
-        key: data._id,
-        message: 'Новая запись на прием',
-        description: `${data.service.name} — ${renderDate(data.date)}`,
-        className: 'cursor-pointer',
-        duration: 0,
-        onClick: () => {
-          router.push('/profile/appointment')
-          notification.close(data._id)
-          dispatch(decrementNotifications())
-        }
-      })
+    socket?.on(SocketActions.WATCH, (data: IAppointment) => {
+      console.log(data)
+      dispatch(appointmentNotification(data, router))
       dispatch(incrementNotifications())
+      dispatch(addAppointment(data))
     })
   }, [socket])
 

@@ -106,10 +106,7 @@ const Invite: React.FC = () => {
               okText="Да"
               cancelText="Нет"
             >
-              <Typography.Text
-                type="danger"
-                className="cursor-pointer"
-              >
+              <Typography.Text type="danger" className="cursor-pointer">
                 Отменить
               </Typography.Text>
             </Popconfirm>

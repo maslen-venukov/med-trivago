@@ -57,7 +57,7 @@ const Services: React.FC = () => {
         title={() => <Button onClick={onOpenDrawer} type="primary">Добавить услугу</Button>}
       >
         <Column title="Название" dataIndex="name" key="name" />
-        <Column title="Стоимость" dataIndex="price" key="price" render={(text: string) => `${text} ₽`} />
+        <Column title="Стоимость" dataIndex="price" key="price" render={(value: string) => `${value} ₽`} />
         <Column title="Категория" dataIndex="category" key="category" />
         <Column title="Дата создания" dataIndex="createdAt" key="createdAt" render={renderDate} />
         <Column
@@ -70,10 +70,7 @@ const Services: React.FC = () => {
               okText="Да"
               cancelText="Нет"
             >
-              <Typography.Text
-                type="danger"
-                className="cursor-pointer"
-              >
+              <Typography.Text type="danger" className="cursor-pointer">
                 Удалить
               </Typography.Text>
             </Popconfirm>

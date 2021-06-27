@@ -14,7 +14,7 @@ interface IAppointmentModalProps extends ModalProps, FormProps<IAppointmentFormV
   title: string
 }
 
-const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, width, onCancel, onFinish }) => {
+const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, width, form, onCancel, onFinish }) => {
   return (
     <Modal
       title={title}
@@ -23,7 +23,11 @@ const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, wi
       width={width}
       onCancel={onCancel}
     >
-      <Form layout="vertical" onFinish={onFinish}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+      >
         <Form.Item
           label="Ваше имя"
           name="name"

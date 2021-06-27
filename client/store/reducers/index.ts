@@ -6,6 +6,7 @@ import categories from './categories'
 import hospitals from './hospitals'
 import registerLinks from './registerLinks'
 import services from './services'
+import appointments from './appointments'
 import socket from './socket'
 
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   hospitals,
   registerLinks,
   services,
+  appointments,
   socket
 })
 

@@ -88,10 +88,7 @@ const Executors = () => {
               okText="Да"
               cancelText="Нет"
             >
-              <Typography.Text
-                type="danger"
-                className="cursor-pointer"
-              >
+              <Typography.Text type="danger" className="cursor-pointer">
                 Удалить
               </Typography.Text>
             </Popconfirm>

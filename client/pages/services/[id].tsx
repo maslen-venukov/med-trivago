@@ -13,6 +13,7 @@ import Typography from 'antd/lib/typography'
 import Rate from 'antd/lib/rate'
 import Tooltip from 'antd/lib/tooltip'
 import Calendar from 'antd/lib/calendar'
+import Form from 'antd/lib/form'
 import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
@@ -25,7 +26,7 @@ import TimeModal from '../../components/services/TimeModal'
 import AppointmentModal, { IAppointmentFormValues } from '../../components/services/AppointmentModal'
 
 import { setSocket } from '../../store/actions/socket'
-import { fetchCreateAppointment } from '../../store/actions/appointments'
+import { fetchAppointedDates, fetchCreateAppointment } from '../../store/actions/appointments'
 
 import getPeriod from '../../utils/getPeriod'
 import getPhoneHref from '../../utils/getPhoneHref'
@@ -49,12 +50,15 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   const router = useRouter()
 
   const { socket } = useSelector((state: RootState) => state.socket)
+  const { appointedDates } = useSelector((state: RootState) => state.appointments)
 
   const [appointmentModalVisible, setAppointmentModalVisible] = useState<boolean>(false)
   const [timeModalVisible, setTimeModalVisible] = useState<boolean>(false)
   const [date, setDate] = useState<string>('')
   const [time, setTime] = useState<string>('')
   const [appointmentHours, setAppointmentHours] = useState<IAppointmentHour[]>([])
+
+  const [form] = Form.useForm()
 
   const modalWidth = 525
 
@@ -82,7 +86,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     setTime(time)
   }
 
-  const onOpenTimeModal = (date: Moment) => onChangeTimeModal(true, date.format('DD.MM.YYYY'), getAppointmentHours(date, schedule))
+  const onOpenTimeModal = (date: Moment) => onChangeTimeModal(true, date.format('DD.MM.YYYY'), getAppointmentHours(date, schedule, appointedDates))
   const onCloseTimeModal = () => onChangeTimeModal(false, '', [])
 
   const onOpenAppointmentModal = (time: string) => onChangeAppointmentModal(true, time)
@@ -95,7 +99,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
       service: router.query.id
     }) as IAppointment
 
-    const fetchData = (socket: Socket) => fetchCreateAppointment(data, hospital._id, socket)
+    const fetchData = (socket: Socket) => dispatch(fetchCreateAppointment(data, hospital._id, socket))
 
     if(socket) {
       fetchData(socket)
@@ -104,11 +108,11 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
       dispatch(setSocket(newSocket))
       fetchData(newSocket)
     }
-  }
 
-  useEffect(() => {
-    console.log(socket)
-  }, [socket])
+    onCloseAppointmentModal()
+    onCloseTimeModal()
+    form.resetFields()
+  }
 
   // TODO доделать запись
   // TODO сделать вывод записей для больницы
@@ -121,6 +125,13 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO по удалению больницы удалять и записи на прием (а может и нет)
 
   const rate = Number(price?.toString()[0])
+
+  useEffect(() => {
+    const serviceId = router.query.id
+    if(serviceId && typeof serviceId === 'string') {
+      dispatch(fetchAppointedDates(serviceId))
+    }
+  }, [dispatch])
 
   return (
     <MainLayout title={name} keywords={[name, hospital.name, hospital.address, hospital.phone]}>
@@ -176,10 +187,10 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             />
 
             <AppointmentModal
-              title={`${time} ${date}`}
+              title={`${time}, ${date}`}
               visible={appointmentModalVisible}
-              footer={null}
               width={modalWidth}
+              form={form}
               onCancel={onCloseAppointmentModal}
               onFinish={onAppoint}
             />
