@@ -5,15 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
 import List from 'antd/lib/list'
-import Select from 'antd/lib/select'
 
 import SearchLayout from '../layouts/SearchLayout'
 
 import Service from '../components/services/Service'
 
 import { setSort } from '../store/actions/search'
-
-import pushQueryToUrl from '../utils/pushQueryToUrl'
 
 import { ICategory } from '../types/categories'
 import { IService } from '../types/services'
@@ -30,13 +27,11 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const { q, filters, sort } = useSelector((state: RootState) => state.search)
+  const { sort } = useSelector((state: RootState) => state.search)
 
-  const onChange = (value: Sort) => {
-    const p = value
-    const data = { q, ...filters, ...sort, p }
-    pushQueryToUrl(router, data)
-    dispatch(setSort({ ...sort, p }))
+  const getTitle = () => {
+    const { q } = router.query
+    return typeof q === 'string' ? q : ''
   }
 
   useEffect(() => {
@@ -44,20 +39,13 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
     dispatch(setSort({ ...sort, p }))
   }, [dispatch])
 
-  const getTitle = () => {
-    const { q } = router.query
-    return typeof q === 'string' ? q : ''
-  }
-
   return (
-    <SearchLayout categories={categories} error={error} title={getTitle()} keywords={[getTitle()]}>
-      <div className="sort">
-        <Select defaultValue="" value={sort.p} onChange={onChange} className="sort__select">
-          <Select.Option value="">По умолчанию</Select.Option>
-          <Select.Option value="asc">Дешевле</Select.Option>
-          <Select.Option value="desc">Дороже</Select.Option>
-        </Select>
-      </div>
+    <SearchLayout
+      categories={categories}
+      error={error}
+      title={getTitle()}
+      keywords={[getTitle()]}
+    >
       <List
         className="services"
         bordered

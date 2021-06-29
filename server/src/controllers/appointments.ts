@@ -71,9 +71,6 @@ class Controller {
   async getAppointedDates(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { serviceId } = req.params
-      if(!isValidObjectId(serviceId)) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
-      }
 
       const appointments = await Appointment.find({ service: serviceId })
 

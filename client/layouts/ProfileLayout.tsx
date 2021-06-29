@@ -8,7 +8,7 @@ import Menu from 'antd/lib/menu'
 import Button from 'antd/lib/button'
 import Badge from 'antd/lib/badge'
 import Row from 'antd/lib/row'
-import Typography from 'antd/lib/typography'
+import Col from 'antd/lib/col'
 import message from 'antd/lib/message'
 
 import MainLayout from './MainLayout'
@@ -22,6 +22,7 @@ import { logout } from '../store/actions/user'
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
 import { resetNotifications } from '../store/actions/socket'
+import { Typography } from 'antd'
 
 interface ILink {
   label: string
@@ -104,15 +105,22 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
         <Layout>
           <Layout.Header className="profile__header">
             <div className="container profile__container">
-              <Row align="middle">
-                {user.role === Roles.Hospital && (
-                  <Link href="/profile/info">
-                    <a>{currentHospital?.name}</a>
-                  </Link>
-                )}
-                <Button onClick={onLogout} danger type="primary" className="profile__logout">
-                  Выйти
-                </Button>
+              <Row justify="space-between" align="middle">
+                <Col>
+                  {user.role === Roles.Hospital && (
+                    <Link href="/profile/info">
+                      <a>{currentHospital?.name}</a>
+                    </Link>
+                  )}
+                  {user.role === Roles.Admin && (
+                    <Typography.Link>Панель администратора</Typography.Link>
+                  )}
+                </Col>
+                <Col>
+                  <Button onClick={onLogout} danger type="primary">
+                    Выйти
+                  </Button>
+                </Col>
               </Row>
             </div>
           </Layout.Header>

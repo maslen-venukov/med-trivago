@@ -125,9 +125,6 @@ class Controller {
   async getById(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params
-      if(!isValidObjectId(id)) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
-      }
 
       const service = await Service.findById(id)
       if(!service) {
@@ -188,9 +185,6 @@ class Controller {
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params
-      if(!isValidObjectId(id)) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
-      }
 
       const hospital = await Hospital.findOne({ user: req.user._id })
 

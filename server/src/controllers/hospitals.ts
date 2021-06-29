@@ -135,9 +135,6 @@ class Controller {
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params
-      if(!isValidObjectId(id)) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
-      }
 
       const hospital = await Hospital.findByIdAndDelete(id)
       if(!hospital) {

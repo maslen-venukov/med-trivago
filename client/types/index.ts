@@ -21,7 +21,8 @@ export enum Roles {
 
 export enum Colors {
   Accent = '#1890ff',
-  Red = '#f5222d'
+  Red = '#f5222d',
+  Green = '#52c41a'
 }
 
 export enum SocketActions {

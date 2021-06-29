@@ -4,6 +4,7 @@ import controller from '../controllers/services'
 
 import auth from '../middleware/auth'
 import role from '../middleware/role'
+import objectId from '../middleware/objectId'
 
 import { Roles } from '../types'
 
@@ -12,7 +13,7 @@ const router = Router()
 router.post('/', auth, role(Roles.Hospital), controller.create)
 router.get('/', controller.getAll)
 router.get('/hospital', auth, role(Roles.Hospital), controller.getByHospital)
-router.get('/:id', controller.getById)
-router.delete('/:id', auth, role(Roles.Hospital), controller.remove)
+router.get('/:id', objectId(), controller.getById)
+router.delete('/:id', auth, role(Roles.Hospital), objectId(), controller.remove)
 
 export default router

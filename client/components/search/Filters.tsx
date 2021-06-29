@@ -9,14 +9,14 @@ import Input from 'antd/lib/input'
 import InputNumber from 'antd/lib/input-number'
 import Button from 'antd/lib/button'
 
-import { setFilters } from '../store/actions/search'
+import { setFilters } from '../../store/actions/search'
 
-import pushQueryToUrl from '../utils/pushQueryToUrl'
-import lazyInput from '../utils/lazyInput'
+import pushQueryToUrl from '../../utils/pushQueryToUrl'
+import lazyInput from '../../utils/lazyInput'
 
-import { RootState } from '../store/reducers'
-import { ICategory } from '../types/categories'
-import { IFilters } from '../types/search'
+import { RootState } from '../../store/reducers'
+import { ICategory } from '../../types/categories'
+import { IFilters } from '../../types/search'
 
 interface IFiltersProps {
   categories: ICategory[]
@@ -67,7 +67,7 @@ const Filters: React.FC<IFiltersProps> = ({ categories, error }) => {
   }, [])
 
   return (
-    <Layout.Sider className="sider">
+    <Layout.Sider className="filters">
       <Form onFinish={onShow} layout="vertical" initialValues={initialValues}>
         <Form.Item label="Категория" name="cat">
           {!error ? (

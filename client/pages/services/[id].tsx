@@ -10,7 +10,6 @@ import moment, { Moment } from 'moment'
 import Row from 'antd/lib/row'
 import Col from 'antd/lib/col'
 import Typography from 'antd/lib/typography'
-import Rate from 'antd/lib/rate'
 import Tooltip from 'antd/lib/tooltip'
 import Calendar from 'antd/lib/calendar'
 import Form from 'antd/lib/form'
@@ -126,8 +125,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO сделать удаление услуг (если есть записи по ней - deleted: true, если нет - удалить полностью)
   // TODO по удалению больницы удалять и записи на прием (а может и нет)
 
-  const rate = Number(price?.toString()[0])
-
   useEffect(() => {
     const serviceId = router.query.id
     if(serviceId && typeof serviceId === 'string') {
@@ -159,14 +156,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
                 <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
               </Link>
             </Typography.Paragraph>
-
-            <div className="service__rate">
-              <Tooltip title={rate} placement="right">
-                <span>
-                  <Rate disabled defaultValue={rate} />
-                </span>
-              </Tooltip>
-            </div>
 
             <div className="service__calendar">
               <Calendar

@@ -11,9 +11,14 @@
 .sort
   display: flex
   justify-content: flex-end
-  margin-bottom: $size * 2
   &__select
-    min-width: 140px
+    width: 140px
+
+.filters
+  background-color: #fff
+
+.search-header
+  margin-bottom: $size * 2
 
 .services
   margin-bottom: $size * 2
@@ -22,8 +27,6 @@
     color: inherit
   &__phone.ant-typography
     margin-bottom: $size * .5
-  &__rate .ant-rate-star
-    cursor: pointer
 
 .service
   &__title.ant-typography
@@ -35,8 +38,6 @@
       margin: 0
   &__phone a
     color: inherit
-  &__rate
-    margin-bottom: $size * 3
   &__calendar
     max-width: 500px
     border: 1px solid #f0f0f0
@@ -45,6 +46,7 @@
     .ant-picker-calendar-mode-switch
       display: none
   &__appointment-hour
+    cursor: pointer
     margin-bottom: $size
   &__trigger
     position: absolute
@@ -87,9 +89,9 @@
     align-items: center
     background-color: #fff
     padding: 0 $size * 2
-  &__logout
-    display: block
-    margin-left: auto
+  // &__logout
+  //   display: block
+  //   margin-left: auto
   &__container
     max-width: 1200px
   &__content

@@ -30,7 +30,7 @@ class Controller {
 
   async getAll(req: Request, res: Response): Promise<Response> {
     try {
-      const categories: ICategory[] = await Category.find().sort({ _id: -1 })
+      const categories: ICategory[] = await Category.find().sort('name')
       return res.json({ categories })
     } catch (e) {
       console.log(e)
@@ -42,10 +42,6 @@ class Controller {
   async update(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params
-      if(!isValidObjectId(id)) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
-      }
-
       const { name } = req.body
 
       if(!name) {
@@ -68,9 +64,6 @@ class Controller {
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params
-      if(!isValidObjectId(id)) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
-      }
 
       await Category.deleteOne({ _id: id })
 

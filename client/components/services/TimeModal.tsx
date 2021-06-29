@@ -19,7 +19,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, width, onCancel,
   const FreeTimeTag: React.FC<ITimeTagProps> = ({ hour }) => (
     <Tag
       color={Colors.Accent}
-      className="service__appointment-hour cursor-pointer"
+      className="service__appointment-hour"
       onClick={() => onOpenAppointmentModal(hour.label)}
     >
       {hour.label}
