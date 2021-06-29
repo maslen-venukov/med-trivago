@@ -7,6 +7,8 @@ import Layout from 'antd/lib/layout'
 import Menu from 'antd/lib/menu'
 import Button from 'antd/lib/button'
 import Badge from 'antd/lib/badge'
+import Row from 'antd/lib/row'
+import Typography from 'antd/lib/typography'
 import message from 'antd/lib/message'
 
 import MainLayout from './MainLayout'
@@ -38,6 +40,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   const router = useRouter()
 
   const { user, ready, loggedOut } = useSelector((state: RootState) => state.user)
+  const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { notifications } = useSelector((state: RootState) => state.socket)
 
   const [rights, setRights] = useState<boolean>(false)
@@ -46,6 +49,9 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     { label: 'Главная', route: '/' },
     { label: 'Список исполнителей', route: '/profile/executors', role: Roles.Admin },
     { label: 'Добавить исполнителя', route: '/profile/invite', role: Roles.Admin },
+    { label: 'Категории', route: '/profile/categories', role: Roles.Admin },
+    { label: 'Информация', route: '/profile/info', role: Roles.Hospital },
+    { label: 'Активные категории', route: '/profile/active-categories', role: Roles.Hospital },
     { label: 'Услуги', route: '/profile/services', role: Roles.Hospital },
     { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital, notifications }
   ]
@@ -98,9 +104,16 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
         <Layout>
           <Layout.Header className="profile__header">
             <div className="container profile__container">
-              <Button onClick={onLogout} danger type="primary" className="profile__logout">
-                Выйти
-              </Button>
+              <Row align="middle">
+                {user.role === Roles.Hospital && (
+                  <Link href="/profile/info">
+                    <a>{currentHospital?.name}</a>
+                  </Link>
+                )}
+                <Button onClick={onLogout} danger type="primary" className="profile__logout">
+                  Выйти
+                </Button>
+              </Row>
             </div>
           </Layout.Header>
           <Layout.Content className={`container profile__container profile__content ${className}`}>

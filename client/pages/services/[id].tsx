@@ -114,8 +114,10 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
+  // TODO сделать crud на категории на клиенте
+  // TODO сделать так, чтобы можно было добавить только те услуги, которые есть в serviceList
+  // TODO id middleware
   // TODO доделать запись
-  // TODO сделать вывод записей для больницы
   // TODO рефакторинг
   // TODO пагинация на странице поиска
   // TODO сделать страницу с записями

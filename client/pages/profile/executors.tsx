@@ -55,6 +55,7 @@ const Executors = () => {
       <Table
         dataSource={hospitals}
         loading={loading}
+        size="middle"
         rowKey={record => record._id}
       >
         <Column title="Название" dataIndex="name" key="name" />

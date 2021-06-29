@@ -8,6 +8,7 @@ import Typography from 'antd/lib/typography'
 import Space from 'antd/lib/space'
 import Divider from 'antd/lib/divider'
 import Drawer from 'antd/lib/drawer'
+import Button from 'antd/lib/button'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
@@ -35,7 +36,9 @@ const Appointment: React.FC = () => {
       <Table
         dataSource={appointments}
         loading={loading}
+        size="middle"
         rowKey={record => record._id || Math.random()}
+        title={() => <Button onClick={() => setDrawerVisible(true)} type="primary">Добавить запись</Button>}
       >
         <Column title="Имя" dataIndex="name" key="name" />
         <Column title="Телефон" dataIndex="phone" key="phone" />
@@ -66,15 +69,15 @@ const Appointment: React.FC = () => {
       </Table>
 
       <Drawer
-        title="Basic Drawer"
+        title="Заголовок"
         placement="right"
         closable={false}
         onClose={() => setDrawerVisible(false)}
         visible={drawerVisible}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>Контент...</p>
+        <p>Контент...</p>
+        <p>Контент...</p>
       </Drawer>
     </ProfileLayout>
   )

@@ -53,6 +53,7 @@ const Services: React.FC = () => {
       <Table
         dataSource={services}
         loading={loading}
+        size="middle"
         rowKey={record => record._id}
         title={() => <Button onClick={onOpenDrawer} type="primary">Добавить услугу</Button>}
       >

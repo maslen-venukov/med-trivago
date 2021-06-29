@@ -91,11 +91,12 @@ const Invite: React.FC = () => {
       <Table
         dataSource={registerLinks}
         loading={loading}
+        size="middle"
         rowKey={record => record._id}
       >
         <Column title="Ссылка" dataIndex="link" key="link" render={renderLink} />
         <Column title="Email" dataIndex="email" key="email" />
-        <Column title="Отправлено" dataIndex="createdAt" key="createdAt" render={renderDate} />
+        <Column title="Дата отправки" dataIndex="createdAt" key="createdAt" render={renderDate} />
         <Column
           title="Действия"
           key="action"

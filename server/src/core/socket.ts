@@ -13,7 +13,7 @@ const socket = (server: http.Server) => {
 
     socket.on(SocketActions.JOIN, hospitalId => {
       socket.join(hospitalId)
-      console.log('joined', hospitalId)
+      console.log('hospital joined', hospitalId)
     })
 
     socket.on(SocketActions.APPOINT, async ({ hospitalId, data }) => {
