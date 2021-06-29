@@ -17,7 +17,7 @@ import PhoneOutlined from '@ant-design/icons/PhoneOutlined'
 
 import MainLayout from '../../layouts/MainLayout'
 
-import NotFound from '../../components/NotFound'
+import NotFound from '../../components/app/NotFound'
 
 import { registerHospital } from '../../store/actions/hospitals'
 

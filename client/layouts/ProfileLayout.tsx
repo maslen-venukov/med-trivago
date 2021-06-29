@@ -13,9 +13,9 @@ import message from 'antd/lib/message'
 
 import MainLayout from './MainLayout'
 
-import Loading from '../components/Loading'
-import NotFound from '../components/NotFound'
-import Head from '../components/Head'
+import Loading from '../components/app/Loading'
+import NotFound from '../components/app/NotFound'
+import Head from '../components/app/Head'
 
 import { logout } from '../store/actions/user'
 

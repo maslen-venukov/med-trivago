@@ -8,11 +8,11 @@ import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 import SearchOutlined from '@ant-design/icons/SearchOutlined'
 
-import { setQuery } from '../store/actions/search'
+import { setQuery } from '../../store/actions/search'
 
-import pushQueryToUrl from '../utils/pushQueryToUrl'
+import pushQueryToUrl from '../../utils/pushQueryToUrl'
 
-import { RootState } from '../store/reducers'
+import { RootState } from '../../store/reducers'
 
 const Header: React.FC = () => {
   const dispatch = useDispatch()

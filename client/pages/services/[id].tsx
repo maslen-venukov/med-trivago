@@ -19,7 +19,7 @@ import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 
 import MainLayout from '../../layouts/MainLayout'
 
-import NotFound from '../../components/NotFound'
+import NotFound from '../../components/app/NotFound'
 import Schedule from '../../components/services/Schedule'
 import TimeModal from '../../components/services/TimeModal'
 import AppointmentModal, { IAppointmentFormValues } from '../../components/services/AppointmentModal'
@@ -115,13 +115,10 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
   // TODO сделать crud на категории на клиенте
   // TODO сделать так, чтобы можно было добавить только те услуги, которые есть в serviceList
-  // TODO id middleware
   // TODO доделать запись
   // TODO рефакторинг
   // TODO пагинация на странице поиска
   // TODO сделать страницу с записями
-  // TODO разбить компоненты на папки
-  // TODO возможно переделать lazyInput на хуки
   // TODO сделать удаление услуг (если есть записи по ней - deleted: true, если нет - удалить полностью)
   // TODO по удалению больницы удалять и записи на прием (а может и нет)
 

@@ -8,8 +8,8 @@ import Tag from 'antd/lib/tag'
 import Col from 'antd/lib/col'
 import CloseOutlined from '@ant-design/icons/CloseOutlined'
 
-import Header from '../components/Header'
-import Head from '../components/Head'
+import Header from '../components/search/Header'
+import Head from '../components/app/Head'
 import Filters from '../components/search/Filters'
 import SortComponent from '../components/search/Sort'
 
@@ -59,7 +59,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
           <div className="container">
             <Row justify="space-between" align="middle" className="search-header">
               <Col flex="1">
-                {categories.map(category => (
+                {!error && categories.map(category => (
                   <Tag
                     key={category._id}
                     color={filters.cat === category.name ? Colors.Green : Colors.Accent}
@@ -84,7 +84,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
 
             <Row gutter={16}>
               <Col>
-                <Filters categories={categories} error={error} />
+                <Filters />
               </Col>
               <Col flex="1">
                 <Layout.Content>

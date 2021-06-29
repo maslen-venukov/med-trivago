@@ -2,7 +2,7 @@ import React from 'react'
 
 import MainLayout from '../layouts/MainLayout'
 
-import NotFound from '../components/NotFound'
+import NotFound from '../components/app/NotFound'
 
 const Error404 = () => {
   return (

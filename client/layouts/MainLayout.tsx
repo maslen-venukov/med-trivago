@@ -2,8 +2,8 @@ import React from 'react'
 
 import Layout from 'antd/lib/layout'
 
-import Header from '../components/Header'
-import Head from '../components/Head'
+import Header from '../components/search/Header'
+import Head from '../components/app/Head'
 
 interface IMainLayoutProps {
   title?: string
