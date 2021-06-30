@@ -4,7 +4,6 @@ import { IUserRequest } from '../models/User'
 import Category, { ICategory } from '../models/Category'
 
 import errorHandler from '../utils/errorHandler'
-import isValidObjectId from '../utils/isValidObjectId'
 import createError from '../utils/createError'
 
 import { HTTPStatusCodes } from '../types'

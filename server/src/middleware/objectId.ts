@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express'
+import mongoose from 'mongoose'
 
 import { IUserRequest } from '../models/User'
 
 import errorHandler from '../utils/errorHandler'
-import isValidObjectId from '../utils/isValidObjectId'
 
 import { HTTPStatusCodes } from '../types'
 
@@ -12,7 +12,7 @@ const objectId = (paramName = 'id') => {
     try {
       const id = req.params[paramName]
 
-      if(!isValidObjectId(id)) {
+      if(!mongoose.Types.ObjectId.isValid(id)) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Некорректный ID')
       }
 

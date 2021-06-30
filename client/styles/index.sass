@@ -88,10 +88,6 @@
     display: flex
     align-items: center
     background-color: #fff
-    padding: 0 $size * 2
-  // &__logout
-  //   display: block
-  //   margin-left: auto
   &__container
     max-width: 1200px
   &__content
@@ -103,3 +99,9 @@
   &__form
     max-width: 300px
     margin-bottom: $size * 3
+
+.active-categories
+  &__table
+    th.ant-table-cell .ant-checkbox-wrapper
+      opacity: 0
+      visibility: hidden

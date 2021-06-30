@@ -9,7 +9,6 @@ import createError from '../utils/createError'
 import sendEmail from '../utils/sendEmail'
 
 import { HTTPStatusCodes } from '../types'
-import isValidObjectId from '../utils/isValidObjectId'
 
 class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {

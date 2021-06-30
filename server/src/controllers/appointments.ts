@@ -7,7 +7,6 @@ import Appointment from '../models/Appointment'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
-import isValidObjectId from '../utils/isValidObjectId'
 
 import { HTTPStatusCodes } from '../types'
 

@@ -70,8 +70,6 @@ const Appointment: React.FC = () => {
 
       <Drawer
         title="Заголовок"
-        placement="right"
-        closable={false}
         onClose={() => setDrawerVisible(false)}
         visible={drawerVisible}
       >

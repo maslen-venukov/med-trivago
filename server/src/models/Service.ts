@@ -9,13 +9,15 @@ export interface IService {
   price: number
   hospital: string
   category: string
+  deleted: boolean
 }
 
 const schema = new Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true, min: 0 },
   hospital: { type: ObjectId, ref: 'Hospitals', required: true },
-  category: { type: ObjectId, ref: 'Categories', required: true }
+  category: { type: ObjectId, ref: 'Categories', required: true },
+  deleted: { type: Boolean, default: false }
 }, {
   timestamps: true
 })

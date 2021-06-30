@@ -26,6 +26,7 @@ const Services: React.FC = () => {
   const dispatch = useDispatch()
 
   const { services, loading } = useSelector((state: RootState) => state.services)
+  const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { categories } = useSelector((state: RootState) => state.categories)
 
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
@@ -52,7 +53,7 @@ const Services: React.FC = () => {
     <ProfileLayout title="Услуги">
       <Table
         dataSource={services}
-        loading={loading}
+        loading={loading && !!currentHospital}
         size="middle"
         rowKey={record => record._id}
         title={() => <Button onClick={onOpenDrawer} type="primary">Добавить услугу</Button>}
@@ -60,7 +61,7 @@ const Services: React.FC = () => {
         <Column title="Название" dataIndex="name" key="name" />
         <Column title="Стоимость" dataIndex="price" key="price" render={(value: string) => `${value} ₽`} />
         <Column title="Категория" dataIndex="category" key="category" />
-        <Column title="Дата создания" dataIndex="createdAt" key="createdAt" render={renderDate} />
+        <Column title="Дата добавления" dataIndex="createdAt" key="createdAt" render={renderDate} />
         <Column
           title="Действия"
           key="action"
@@ -81,7 +82,6 @@ const Services: React.FC = () => {
 
       <Drawer
         title="Добавление услуги"
-        placement="right"
         onClose={onCloseDrawer}
         visible={drawerVisible}
         width={400}
@@ -117,9 +117,12 @@ const Services: React.FC = () => {
               <Select.Option value="" disabled>
                 <span style={{ color: '#bfbfbf' }}>Категория</span>
               </Select.Option>
-              {categories.map(category => (
-                <Select.Option key={category._id} value={category._id}>{category.name}</Select.Option>
-              ))}
+              {currentHospital?.serviceList.map(list => {
+                const category = categories.find(category => category._id === list.category)
+                return category && (
+                  <Select.Option key={category._id} value={category._id}>{category.name}</Select.Option>
+                )
+              })}
             </Select>
           </Form.Item>
 

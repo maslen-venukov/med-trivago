@@ -113,13 +113,12 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
+  // TODO сделать мигающее сообщение при записи и поле seen у записей
   // TODO сделать crud на категории на клиенте
   // TODO сделать так, чтобы можно было добавить только те услуги, которые есть в serviceList
   // TODO доделать запись
   // TODO рефакторинг
   // TODO пагинация на странице поиска
-  // TODO сделать страницу с записями
-  // TODO сделать удаление услуг (если есть записи по ней - deleted: true, если нет - удалить полностью)
   // TODO по удалению больницы удалять и записи на прием (а может и нет)
 
   useEffect(() => {
@@ -130,7 +129,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   }, [dispatch])
 
   return (
-    <MainLayout title={name} keywords={[name, hospital.name, hospital.address, hospital.phone]}>
+    <MainLayout title={name} keywords={!error ? [name, hospital.name, hospital.address, hospital.phone] : []}>
       {!error ? (
         <Row className="service">
           <Col xs={18}>

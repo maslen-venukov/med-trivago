@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 
+import { IUserRequest } from '../models/User'
 import Service from '../models/Service'
 import Category from '../models/Category'
 import Hospital from '../models/Hospital'
-import { IUserRequest } from '../models/User'
+import Appointment from '../models/Appointment'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
-import isValidObjectId from '../utils/isValidObjectId'
 
 import { HTTPStatusCodes } from '../types'
 
@@ -96,10 +96,10 @@ class Controller {
         return acc
       }, {})
 
-      const services = await Service.find(find).sort(sort)
+      const services = await Service.find({ ...find, deleted: { $ne: true }}).sort(sort)
 
-      const hospitalIds = [...new Set(services.map(service => service.hospital.toString()))]
-      const hospitals = await Hospital.find({ _id: hospitalIds })
+      const hospitalsIds = [...new Set(services.map(service => service.hospital.toString()))]
+      const hospitals = await Hospital.find({ _id: hospitalsIds })
 
       const result = services.map(service => {
         const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
@@ -126,7 +126,7 @@ class Controller {
     try {
       const { id } = req.params
 
-      const service = await Service.findById(id)
+      const service = await Service.findOne({ _id: id, deleted: { $ne: true } })
       if(!service) {
         return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
       }
@@ -162,7 +162,7 @@ class Controller {
     try {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const services = await Service.find({ hospital: hospital._id }).sort({ _id: -1 })
+      const services = await Service.find({ hospital: hospital._id, deleted: { $ne: true } }).sort({ _id: -1 })
 
       const categoriesIds = [...new Set(services.map(service => service.category.toString()))]
       const categories = await Category.find({ _id: categoriesIds })
@@ -187,10 +187,23 @@ class Controller {
       const { id } = req.params
 
       const hospital = await Hospital.findOne({ user: req.user._id })
+      const service = await Service.findById(id)
 
-      const service = await Service.findOneAndDelete({ _id: id, hospital: hospital._id })
       if(!service) {
         return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
+
+      if(hospital._id.toString() !== service.hospital.toString()) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const appointments = await Appointment.find({ service: id })
+
+      if(appointments.length) {
+        service.deleted = true
+        await service.save()
+      } else {
+        await service.deleteOne()
       }
 
       return res.json({ message: 'Услуга успешно удалена' })

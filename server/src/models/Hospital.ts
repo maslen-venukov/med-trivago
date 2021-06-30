@@ -8,6 +8,7 @@ interface ISchedule {
 }
 
 interface IServiceList {
+  _doc?: IServiceList
   _id?: string
   category: string
   schedule: {
@@ -18,6 +19,7 @@ interface IServiceList {
 }
 
 interface IHospital {
+  _doc?: IHospital
   _id?: string
   name: string
   address: string
