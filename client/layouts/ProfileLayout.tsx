@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import Layout from 'antd/lib/layout'
 import Menu from 'antd/lib/menu'
 import Button from 'antd/lib/button'
-import Badge from 'antd/lib/badge'
 import Row from 'antd/lib/row'
 import Col from 'antd/lib/col'
+import Typography from 'antd/lib/typography'
 import message from 'antd/lib/message'
 
 import MainLayout from './MainLayout'
@@ -21,12 +21,10 @@ import { logout } from '../store/actions/user'
 
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
-import { resetNotifications } from '../store/actions/socket'
-import { Typography } from 'antd'
 
 interface ILink {
   label: string
-  route: string
+  href: string
   role?: string
   notifications?: number
 }
@@ -47,30 +45,24 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   const [rights, setRights] = useState<boolean>(false)
 
   const links: ILink[] = [
-    { label: 'Главная', route: '/' },
-    { label: 'Список исполнителей', route: '/profile/executors', role: Roles.Admin },
-    { label: 'Добавить исполнителя', route: '/profile/invite', role: Roles.Admin },
-    { label: 'Категории', route: '/profile/categories', role: Roles.Admin },
-    { label: 'Информация', route: '/profile/info', role: Roles.Hospital },
-    { label: 'Активные категории', route: '/profile/active-categories', role: Roles.Hospital },
-    { label: 'Услуги', route: '/profile/services', role: Roles.Hospital },
-    { label: 'Запись', route: '/profile/appointment', role: Roles.Hospital, notifications }
+    { label: 'Главная', href: '/' },
+    { label: 'Список исполнителей', href: '/profile/executors', role: Roles.Admin },
+    { label: 'Добавить исполнителя', href: '/profile/invite', role: Roles.Admin },
+    { label: 'Категории', href: '/profile/categories', role: Roles.Admin },
+    { label: 'Информация', href: '/profile/info', role: Roles.Hospital },
+    { label: 'Активные категории', href: '/profile/active-categories', role: Roles.Hospital },
+    { label: 'Услуги', href: '/profile/services', role: Roles.Hospital },
+    { label: 'Запись', href: '/profile/appointment', role: Roles.Hospital, notifications }
   ]
 
   const onLogout = () => dispatch(logout(router))
 
-  const onLinkClick = (notifications?: number) => notifications && dispatch(resetNotifications())
-
   const linksToRender = links
     .filter(link => link.role === user?.role || !link.role)
     .map(link => (
-      <Menu.Item key={link.route}>
-        <Link href={link.route}>
-          <a onClick={() => onLinkClick(link.notifications)}>
-            <Badge count={link.notifications} size="small" offset={[8, 0]}>
-              {link.label}
-            </Badge>
-          </a>
+      <Menu.Item key={link.href}>
+        <Link href={link.href}>
+          <a>{link.label} {link.notifications ? `(${link.notifications})` : ''}</a>
         </Link>
       </Menu.Item>
     ))
@@ -83,7 +75,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   }, [ready, user, loggedOut, router])
 
   useEffect(() => {
-    const link = links.find(link => link.route === router.pathname)
+    const link = links.find(link => link.href === router.pathname)
     const rights = link ? link.role === user?.role : true
     setRights(rights)
   }, [router, user])

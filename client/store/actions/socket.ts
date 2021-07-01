@@ -14,7 +14,3 @@ export const incrementNotifications = (): SocketAction => ({
 export const decrementNotifications = (): SocketAction => ({
   type: SocketActionTypes.DECREMENT_NOTIFICATIONS
 })
-
-export const resetNotifications = (): SocketAction => ({
-  type: SocketActionTypes.RESET_NOTIFICATIONS
-})

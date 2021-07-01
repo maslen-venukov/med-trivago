@@ -91,6 +91,8 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   const onOpenAppointmentModal = (time: string) => onChangeAppointmentModal(true, time)
   const onCloseAppointmentModal = () => onChangeAppointmentModal(false, '')
 
+  const fetchData = (data: IAppointment, socket: Socket) => dispatch(fetchCreateAppointment(data, hospital._id, socket))
+
   const onAppoint = (values: IAppointmentFormValues) => {
     const data = ({
       ...values,
@@ -98,14 +100,12 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
       service: router.query.id
     }) as IAppointment
 
-    const fetchData = (socket: Socket) => dispatch(fetchCreateAppointment(data, hospital._id, socket))
-
     if(socket) {
-      fetchData(socket)
+      fetchData(data, socket)
     } else {
       const newSocket = connectSocket()
       dispatch(setSocket(newSocket))
-      fetchData(newSocket)
+      fetchData(data, newSocket)
     }
 
     onCloseAppointmentModal()

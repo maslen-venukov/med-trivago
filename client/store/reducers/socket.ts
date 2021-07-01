@@ -25,12 +25,6 @@ const socket = (state = initialState, action: SocketAction): ISocketState => {
         notifications: --state.notifications
       }
 
-    case SocketActionTypes.RESET_NOTIFICATIONS:
-      return {
-        ...state,
-        notifications: 0
-      }
-
     default:
       return state
   }

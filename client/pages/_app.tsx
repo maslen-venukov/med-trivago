@@ -55,12 +55,14 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
     currentHospital && socket?.emit(SocketActions.JOIN, currentHospital._id)
   }, [socket, currentHospital])
 
+
   useEffect(() => {
     socket?.on(SocketActions.WATCH, (data: IAppointment) => {
-      console.log(data)
       dispatch(appointmentNotification(data, router))
       dispatch(incrementNotifications())
       dispatch(addAppointment(data))
+      const audio = new window.Audio('/notification/sound.mp3')
+      audio.play()
     })
   }, [socket])
 

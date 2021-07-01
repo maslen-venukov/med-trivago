@@ -9,6 +9,7 @@ import Space from 'antd/lib/space'
 import Divider from 'antd/lib/divider'
 import Drawer from 'antd/lib/drawer'
 import Button from 'antd/lib/button'
+import notification from 'antd/lib/notification'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 

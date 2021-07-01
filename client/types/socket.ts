@@ -8,8 +8,7 @@ export interface ISocketState {
 export enum SocketActionTypes {
   SET_SOCKET = 'SET_SOCKET',
   INCREMENT_NOTIFICATIONS = 'INCREMENT_NOTIFICATIONS',
-  DECREMENT_NOTIFICATIONS = 'DECREMENT_NOTIFICATIONS',
-  RESET_NOTIFICATIONS = 'RESET_NOTIFICATIONS'
+  DECREMENT_NOTIFICATIONS = 'DECREMENT_NOTIFICATIONS'
 }
 
 interface ISetSocket {
@@ -25,8 +24,4 @@ interface IDecrementNotifications {
   type: SocketActionTypes.DECREMENT_NOTIFICATIONS
 }
 
-interface IResetNotifications {
-  type: SocketActionTypes.RESET_NOTIFICATIONS
-}
-
-export type SocketAction = ISetSocket | IIncrementNotifications | IDecrementNotifications | IResetNotifications
+export type SocketAction = ISetSocket | IIncrementNotifications | IDecrementNotifications

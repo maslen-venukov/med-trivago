@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const useLazyInput = (timeout = 250) => {
-  const [timer, setTimer] = useState(0)
+  const [timer, setTimer] = useState<number>(0)
 
   const lazy = (cb: () => void) => {
     if(timer) {
