@@ -11,7 +11,7 @@ import LockOutlined from '@ant-design/icons/LockOutlined'
 
 import MainLayout from '../layouts/MainLayout'
 
-import { login } from '../store/actions/user'
+import { login } from '../api/user'
 
 interface ILoginFormValues {
   email: string

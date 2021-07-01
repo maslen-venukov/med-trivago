@@ -17,7 +17,7 @@ import Loading from '../components/app/Loading'
 import NotFound from '../components/app/NotFound'
 import Head from '../components/app/Head'
 
-import { logout } from '../store/actions/user'
+import { logout } from '../api/user'
 
 import { RootState } from '../store/reducers'
 import { Roles } from '../types'
