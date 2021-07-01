@@ -9,11 +9,10 @@ import Space from 'antd/lib/space'
 import Divider from 'antd/lib/divider'
 import Drawer from 'antd/lib/drawer'
 import Button from 'antd/lib/button'
-import notification from 'antd/lib/notification'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import { fetchAppointments } from '../../store/actions/appointments'
+import { fetchAppointments } from '../../api/appointments'
 
 import renderDate from '../../utils/renderDate'
 

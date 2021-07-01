@@ -16,8 +16,8 @@ import ProfileLayout from '../../layouts/ProfileLayout'
 
 import WeekendDaySchedule from '../../components/categories/WeekendDaySchedule'
 
-import { fetchCategories } from '../../store/actions/categories'
-import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital } from '../../store/actions/hospitals'
+import { fetchCategories } from '../../api/categories'
+import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital } from '../../api/hospitals'
 
 import { RootState } from '../../store/reducers'
 import { ICategory } from '../../types/categories'

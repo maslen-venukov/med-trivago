@@ -15,7 +15,7 @@ import { API_URL } from '../constants'
 
 import { wrapper } from '../store'
 
-import { fetchCurrentHospital } from '../store/actions/hospitals'
+import { fetchCurrentHospital } from '../api/hospitals'
 import { incrementNotifications, setSocket } from '../store/actions/socket'
 import { addAppointment } from '../store/actions/appointments'
 import { auth } from '../store/actions/user'

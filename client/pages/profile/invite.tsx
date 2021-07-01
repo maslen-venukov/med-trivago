@@ -12,7 +12,7 @@ import Popconfirm from 'antd/lib/popconfirm'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import { fetchCreateRegisterLink, fetchRegisterLinks, fetchRemoveRegisterLink } from '../../store/actions/registerLinks'
+import { fetchCreateRegisterLink, fetchRegisterLinks, fetchRemoveRegisterLink } from '../../api/registerLinks'
 
 import renderDate from '../../utils/renderDate'
 

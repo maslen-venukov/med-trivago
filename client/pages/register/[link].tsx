@@ -19,7 +19,7 @@ import MainLayout from '../../layouts/MainLayout'
 
 import NotFound from '../../components/app/NotFound'
 
-import { registerHospital } from '../../store/actions/hospitals'
+import { registerHospital } from '../../api/hospitals'
 
 import { IRegisterHospitalData } from '../../types/hospitals'
 

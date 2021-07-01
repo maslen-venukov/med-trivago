@@ -14,7 +14,7 @@ import ProfileLayout from '../../layouts/ProfileLayout'
 
 import Schedule from '../../components/services/Schedule'
 
-import { fetchHospitals, fetchRemoveHospital } from '../../store/actions/hospitals'
+import { fetchHospitals, fetchRemoveHospital } from '../../api/hospitals'
 
 import getPeriod from '../../utils/getPeriod'
 

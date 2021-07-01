@@ -14,8 +14,8 @@ import Select from 'antd/lib/select'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import { fetchAddService, fetchHospitalServices, fetchRemoveService } from '../../store/actions/services'
-import { fetchCategories } from '../../store/actions/categories'
+import { fetchAddService, fetchHospitalServices, fetchRemoveService } from '../../api/services'
+import { fetchCategories } from '../../api/categories'
 
 import renderDate from '../../utils/renderDate'
 

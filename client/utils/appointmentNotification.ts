@@ -1,4 +1,4 @@
-import { Dispatch } from 'react'
+import { Dispatch } from 'redux'
 import { NextRouter } from 'next/router'
 import notification from 'antd/lib/notification'
 
