@@ -15,6 +15,16 @@ export const addAppointment = (payload: IAppointment): AppointmentsAction => ({
   payload
 })
 
+export const removeAppointment = (payload: string): AppointmentsAction => ({
+  type: AppointmentsActionTypes.REMOVE_APPOINTMENT,
+  payload
+})
+
+export const updateAppointment = (payload: IAppointment): AppointmentsAction => ({
+  type: AppointmentsActionTypes.UPDATE_APPOINTMENT,
+  payload
+})
+
 export const setAppointmentDates = (payload: Date[]): AppointmentsAction => ({
   type: AppointmentsActionTypes.SET_APPOINTED_DATES,
   payload

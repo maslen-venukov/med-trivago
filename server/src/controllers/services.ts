@@ -8,6 +8,7 @@ import Appointment from '../models/Appointment'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
+import getUniqueIds from '../utils/getUniqueIds'
 
 import { HTTPStatusCodes } from '../types'
 
@@ -47,6 +48,11 @@ class Controller {
       }
 
       const hospital = await Hospital.findOne({ user: req.user._id })
+
+      const activeCategory = hospital.serviceList.some(list => list.category.toString() === categoryId)
+      if(!activeCategory) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Категория не активна')
+      }
 
       const service = await Service.create({
         name,
@@ -98,7 +104,7 @@ class Controller {
 
       const services = await Service.find({ ...find, deleted: { $ne: true }}).sort(sort)
 
-      const hospitalsIds = [...new Set(services.map(service => service.hospital.toString()))]
+      const hospitalsIds = getUniqueIds(services, 'hospital')
       const hospitals = await Hospital.find({ _id: hospitalsIds })
 
       const result = services.map(service => {
@@ -164,7 +170,7 @@ class Controller {
 
       const services = await Service.find({ hospital: hospital._id, deleted: { $ne: true } }).sort({ _id: -1 })
 
-      const categoriesIds = [...new Set(services.map(service => service.category.toString()))]
+      const categoriesIds = getUniqueIds(services, 'category')
       const categories = await Category.find({ _id: categoriesIds })
 
       const result = services.map(service => {

@@ -6,6 +6,7 @@ export interface IAppointment {
   date: Date
   phone: string
   service: string | IShortService
+  deleted?: boolean
 }
 
 export interface IAppointmentsState {
@@ -18,6 +19,8 @@ export enum AppointmentsActionTypes {
   SET_APPOINTMENTS = 'SET_APPOINTMENTS',
   SET_APPOINTMENTS_LOADING = 'SET_APPOINTMENTS_LOADING',
   ADD_APPOINTMENT = 'ADD_APPOINTMENT',
+  REMOVE_APPOINTMENT = 'REMOVE_APPOINTMENT',
+  UPDATE_APPOINTMENT = 'UPDATE_APPOINTMENT',
   SET_APPOINTED_DATES = 'SET_APPOINTED_DATES',
   ADD_APPOINTED_DATE = 'ADD_APPOINTED_DATE'
 }
@@ -37,6 +40,16 @@ interface IAddAppointment {
   payload: IAppointment
 }
 
+interface IRemoveAppointment {
+  type: AppointmentsActionTypes.REMOVE_APPOINTMENT,
+  payload: string
+}
+
+interface IUpdateAppointment {
+  type: AppointmentsActionTypes.UPDATE_APPOINTMENT,
+  payload: IAppointment
+}
+
 interface ISetAppointedDates {
   type: AppointmentsActionTypes.SET_APPOINTED_DATES,
   payload: Date[]
@@ -47,4 +60,11 @@ interface IAddAppointedDate {
   payload: Date
 }
 
-export type AppointmentsAction = ISetAppointments | ISetAppointmentsLoading | IAddAppointment | ISetAppointedDates | IAddAppointedDate
+export type AppointmentsAction =
+  ISetAppointments
+  | ISetAppointmentsLoading
+  | IAddAppointment
+  | IRemoveAppointment
+  | IUpdateAppointment
+  | ISetAppointedDates
+  | IAddAppointedDate

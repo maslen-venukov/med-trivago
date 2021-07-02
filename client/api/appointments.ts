@@ -3,7 +3,14 @@ import { Socket } from 'socket.io-client'
 import axios from 'axios'
 import message from 'antd/lib/message'
 
-import { addAppointedDate, setAppointmentDates, setAppointments, setAppointmentsLoading } from '../store/actions/appointments'
+import {
+  addAppointedDate,
+  removeAppointment,
+  setAppointmentDates,
+  setAppointments,
+  setAppointmentsLoading,
+  updateAppointment
+} from '../store/actions/appointments'
 
 import catchError from '../utils/catchError'
 
@@ -30,6 +37,24 @@ export const fetchCreateAppointment = (data: IAppointment, hospitalId: string, s
       message.success(data.message)
       dispatch(addAppointedDate(data.appointment.date))
       socket.emit(SocketActions.APPOINT, { hospitalId, data: data.appointment })
+    })
+    .catch(catchError)
+}
+
+export const fetchRemoveAppointment = (id: string) => (dispatch: Dispatch<AppointmentsAction>) => {
+  axios.delete(`/api/appointments/${id}`)
+    .then(({ data }) => {
+      message.success(data.message)
+      dispatch(removeAppointment(id))
+    })
+    .catch(catchError)
+}
+
+export const fetchUpdateAppointment = (id: string, data: IAppointment) => (dispatch: Dispatch<AppointmentsAction>) => {
+  axios.put(`/api/appointments/${id}`, data)
+    .then(({ data }) => {
+      message.success(data.message)
+      dispatch(updateAppointment(data.appointment))
     })
     .catch(catchError)
 }

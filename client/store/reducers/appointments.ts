@@ -26,6 +26,18 @@ const appointments = (state = initialState, action: AppointmentsAction): IAppoin
         appointments: [action.payload, ...state.appointments]
       }
 
+    case AppointmentsActionTypes.REMOVE_APPOINTMENT:
+      return {
+        ...state,
+        appointments: state.appointments.filter(appointment => appointment._id !== action.payload)
+      }
+
+    case AppointmentsActionTypes.UPDATE_APPOINTMENT:
+      return {
+        ...state,
+        appointments: state.appointments.map(appointment => appointment._id === action.payload._id ? action.payload : appointment)
+      }
+
     case AppointmentsActionTypes.SET_APPOINTED_DATES:
       return {
         ...state,

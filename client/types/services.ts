@@ -6,6 +6,7 @@ export interface IService {
   price: number
   category: string
   schedule?: IWeekSchedule
+  deleted?: boolean
   hospital: {
     name: string
     address: string
@@ -15,6 +16,7 @@ export interface IService {
 }
 
 export interface IShortService {
+  _id?: string
   name: string
   price: number
   category: string

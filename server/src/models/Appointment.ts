@@ -9,13 +9,15 @@ export interface IAppointment {
   phone: string
   date: Date
   service: string
+  deleted: boolean
 }
 
 const schema = new Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   date: { type: Date, required: true },
-  service: { type: ObjectId, ref: 'Services', required: true }
+  service: { type: ObjectId, ref: 'Services', required: true },
+  deleted: { type: Boolean, default: false }
 }, {
   timestamps: true
 })

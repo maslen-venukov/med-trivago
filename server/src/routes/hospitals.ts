@@ -11,8 +11,6 @@ import { Roles } from '../types'
 const router = Router()
 
 router.post('/', controller.create)
-router.post('/service-lists', auth, role(Roles.Hospital), controller.addServiceList)
-router.delete('/service-lists/:categoryId', auth, role(Roles.Hospital), objectId('categoryId'), controller.removeServiceList)
 router.get('/', auth, role(Roles.Admin), controller.getAll)
 router.get('/user', auth, role(Roles.Hospital), controller.getByUser)
 router.put('/', auth, role(Roles.Hospital), controller.update)

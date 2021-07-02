@@ -15,6 +15,7 @@ import register from '../services/register'
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import updateData from '../utils/updateData'
+import getUniqueIds from '../utils/getUniqueIds'
 
 import { HTTPStatusCodes, Roles } from '../types'
 
@@ -152,63 +153,6 @@ class Controller {
     }
   }
 
-  async addServiceList(req: IUserRequest, res: Response): Promise<Response> {
-    try {
-      const { schedule, category } = req.body
-      if(!schedule || !category) {
-        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
-      }
-
-      const hospital = await Hospital.findOne({ user: req.user._id })
-      const services = await Service.find({ hospital: hospital._id, deleted: { $ne: true } })
-
-      hospital.serviceList.push({ schedule, category })
-      await hospital.save()
-
-      const result = {
-        ...hospital._doc,
-        serviceList: hospital.serviceList.map(list => ({
-          ...list._doc,
-          services: services.filter(service => list.category.toString() === service.category.toString())
-        }))
-      }
-
-      return res.json({ message: 'Расписание успешно сохранено', hospital: result })
-    } catch (e) {
-      console.log(e)
-      await createError(e)
-      return errorHandler(res)
-    }
-  }
-
-  async removeServiceList(req: IUserRequest, res: Response): Promise<Response> {
-    try {
-      const { categoryId } = req.params
-
-      const hospital = await Hospital.findOne({ user: req.user._id })
-      const services = await Service.find({ hospital: hospital._id, deleted: { $ne: true } })
-      const servicesIds = [...new Set(services.map(service => service._id.toString()))]
-
-      hospital.serviceList = hospital.serviceList.filter(list => list.category.toString() !== categoryId)
-      await hospital.save()
-
-      await Service.updateMany({ _id: servicesIds }, { deleted: true })
-
-      const result = {
-        ...hospital._doc,
-        serviceList: hospital.serviceList.map(list => ({
-          ...list._doc,
-          services: services.filter(service => list.category.toString() === service.category.toString())
-        }))
-      }
-      return res.json({ hospital: result })
-    } catch (e) {
-      console.log(e)
-      await createError(e)
-      return errorHandler(res)
-    }
-  }
-
   async remove(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params
@@ -219,7 +163,7 @@ class Controller {
       }
 
       const services = await Service.find({ hospital: hospital._id })
-      const servicesIds = [...new Set(services.map(service => service._id.toString()))]
+      const servicesIds = getUniqueIds(services)
 
       await Service.deleteMany({ hospital: id })
       await Appointment.deleteMany({ service: { $in: servicesIds } })

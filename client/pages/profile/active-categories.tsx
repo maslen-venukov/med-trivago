@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Moment } from 'moment'
+// import moment from 'moment'
 
 import Table from 'antd/lib/table'
 import Column from 'antd/lib/table/Column'
-import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox'
+import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import Typography from 'antd/lib/typography'
-import Drawer from 'antd/lib/drawer'
+// import Drawer from 'antd/lib/drawer'
 import Modal from 'antd/lib/modal/Modal'
 import Form from 'antd/lib/form'
 import Button from 'antd/lib/button'
@@ -15,6 +16,7 @@ import TimePicker from 'antd/lib/time-picker'
 import ProfileLayout from '../../layouts/ProfileLayout'
 
 import WeekendDaySchedule from '../../components/categories/WeekendDaySchedule'
+import ToggleActiveCheckbox from '../../components/categories/ToggleActiveCheckbox'
 
 import { fetchCategories } from '../../api/categories'
 import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital } from '../../api/hospitals'
@@ -44,7 +46,8 @@ const ActiveCategories: React.FC = () => {
   const { categories, loading } = useSelector((state: RootState) => state.categories)
 
   const [modalVisible, setModalVisible] = useState<boolean>(false)
-  const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
+  // const [initialValues, setInitialValues] = useState<IAddCategoryFormValues>({})
+  // const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
   const [category, setCategory] = useState<string | null>(null)
   const [weekend, setWeekend] = useState<IWeekendState>({ saturday: false, sunday: false })
 
@@ -56,7 +59,7 @@ const ActiveCategories: React.FC = () => {
       setCategory(value)
       setModalVisible(true)
     } else {
-      dispatch(fetchRemoveActiveCategory(value))
+      // dispatch(fetchRemoveActiveCategory(value))
     }
   }
 
@@ -97,6 +100,38 @@ const ActiveCategories: React.FC = () => {
     onCloseModal()
   }
 
+  // const onOpenEditForm = (categoryId: string) => {
+    // console.log(categoryId)
+    // const schedule = currentHospital?.serviceList.find(list => list.category === categoryId)?.schedule
+    // const data = schedule && Object.keys(schedule).reduce((acc, key) => {
+    //   const parse = (date: string) => moment(new Date(`${date} 2021`))
+    //   return acc = {
+    //     ...acc,
+    //     [key]: [parse(schedule[key].start), parse(schedule[key].end)]
+    //   }
+    // }, {})
+    // if(!data.saturday) {
+    //   data.saturdayWeekend = true
+    // }
+    // if(!data.saturday) {
+    //   data.saturdayWeekend = true
+    // }
+  //   const days = ['weekdays', 'saturday', 'sunday']
+  //   const data = days.reduce((acc, day) => {
+  //     const parse = (date: string) => moment(new Date(`${date} 2021`))
+  //     if(schedule[day]) {
+  //       return acc = { ...acc, [day]: [parse(schedule[day].start), parse(schedule[day].end)] }
+  //     } else {
+  //       return acc = { ...acc, [`${day}Weekend`]: false }
+  //     }
+  //   }, {})
+  //   setInitialValues(data)
+  //   console.log(data)
+  //   setModalVisible(true)
+  // }
+
+  // TODO сделать изменение расписания
+
   useEffect(() => {
     dispatch(fetchCategories())
     dispatch(fetchCurrentHospital())
@@ -113,13 +148,18 @@ const ActiveCategories: React.FC = () => {
         rowKey={record => record._id}
         className="active-categories__table"
       >
-        <Column width="32px" dataIndex="active" key="active" render={(_, record: ICategory) => (
-          <Checkbox
-            value={record._id}
-            checked={checkActive(record._id)}
-            onChange={onSelectActive}
-          />
-        )} />
+        <Column
+          width="32px"
+          dataIndex="active"
+          key="active"
+          render={(_, record: ICategory) => (
+            <ToggleActiveCheckbox
+              checked={checkActive(record._id)}
+              value={record._id}
+              onChange={onSelectActive}
+              onRemove={() => dispatch(fetchRemoveActiveCategory(record._id))}
+            />
+          )} />
         <Column title="Название" dataIndex="name" key="name" />
         <Column
           title="Количество услуг"
@@ -132,7 +172,7 @@ const ActiveCategories: React.FC = () => {
           dataIndex="services"
           key="services"
           render={(_, record: ICategory) => checkActive(record._id) && (
-            <Typography.Link onClick={() => setDrawerVisible(true)} className="cursor-pointer">
+            <Typography.Link onClick={() => setModalVisible(true)} className="cursor-pointer">
               Изменить
             </Typography.Link>
           )}
@@ -145,7 +185,7 @@ const ActiveCategories: React.FC = () => {
         onCancel={onCloseModal}
         footer={null}
       >
-        <Form form={form} layout="vertical" onFinish={onAddCategory}>
+        <Form form={form} layout="vertical" /*initialValues={initialValues}*/ onFinish={onAddCategory}>
           <Form.Item
             label="Будние"
             name="weekdays"
@@ -178,15 +218,14 @@ const ActiveCategories: React.FC = () => {
         </Form>
       </Modal>
 
-      <Drawer
+      {/* <Drawer
         title="Basic Drawer"
         onClose={() => setDrawerVisible(false)}
         visible={drawerVisible}
+        width="400"
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Drawer>
+        <p>контент</p>
+      </Drawer> */}
     </ProfileLayout>
   )
 }

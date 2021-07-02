@@ -111,11 +111,11 @@ const Services: React.FC = () => {
           <Form.Item
             label="Категория"
             name="category"
-            rules={[{ required: true, message: 'Пожалуйста введите стоимость!' }]}
+            rules={[{ required: true, message: 'Пожалуйста выберите категорию!' }]}
           >
-            <Select onChange={() => {}}>
+            <Select>
               <Select.Option value="" disabled>
-                <span style={{ color: '#bfbfbf' }}>Категория</span>
+                <span className="placeholder">Категория</span>
               </Select.Option>
               {currentHospital?.serviceList.map(list => {
                 const category = categories.find(category => category._id === list.category)

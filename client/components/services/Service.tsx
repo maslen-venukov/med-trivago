@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 import List from 'antd/lib/list'
 import Typography from 'antd/lib/typography'
-import Tooltip from 'antd/lib/tooltip'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 

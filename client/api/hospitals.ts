@@ -44,7 +44,7 @@ export const fetchRemoveHospital = (id: string) => (dispatch: Dispatch<Hospitals
 }
 
 export const fetchAddActiveCategory = (data: IAddCategoryData) => (dispatch: Dispatch<HospitalsAction>) => {
-  axios.post('/api/hospitals/service-lists', data)
+  axios.post('/api/service-lists', data)
     .then(({ data }) => {
       dispatch(setCurrentHospital(data.hospital))
       message.success(data.message)
@@ -53,7 +53,7 @@ export const fetchAddActiveCategory = (data: IAddCategoryData) => (dispatch: Dis
 }
 
 export const fetchRemoveActiveCategory = (categoryId: string) => (dispatch: Dispatch<HospitalsAction>) => {
-  axios.delete(`/api/hospitals/service-lists/${categoryId}`)
+  axios.delete(`/api/service-lists/${categoryId}`)
     .then(({ data }) => dispatch(setCurrentHospital(data.hospital)))
     .catch(catchError)
 }

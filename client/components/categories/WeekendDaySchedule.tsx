@@ -30,9 +30,9 @@ const WeekendDaySchedule: React.FC<IWeekendDayScheduleProps> = ({ label, name, m
         <TimePicker.RangePicker disabled={state[name]} format="HH:mm" minuteStep={30} />
       </Form.Item>
 
-      <Form.Item name={`${name}Weekend`}>
+      <Form.Item name={`${name}Weekend`} valuePropName="checked">
         <Checkbox
-          checked={state[name]}
+          checked={state[name] || false}
           onChange={onChange}
         >
           Выходной
