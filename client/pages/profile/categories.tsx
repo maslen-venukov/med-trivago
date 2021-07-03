@@ -12,13 +12,16 @@ import Form from 'antd/lib/form'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
+import CategoriesDrawer from '../../components/categories/CategoriesDrawer'
+
 import { fetchCategories, fetchCreateCategory, fetchRemoveCategory, fetchUpdateCategory } from '../../api/categories'
+
+import useDrawers from '../../hooks/useDrawers'
 
 import renderDate from '../../utils/renderDate'
 
 import { RootState } from '../../store/reducers'
 import { ICategory } from '../../types/categories'
-import CategoriesDrawer from '../../components/categories/CategoriesDrawer'
 
 interface ICategoriesFormValues {
   name: string
@@ -30,31 +33,15 @@ const Categories: React.FC = () => {
 
   const { categories, loading } = useSelector((state: RootState) => state.categories)
 
-  const [createDrawerVisible, setCreateDrawerVisible] = useState<boolean>(false)
-  const [editDrawerVisible, setEditDrawerVisible] = useState<boolean>(false)
-  const [id, setId] = useState<string | null>(null)
-
-  const onOpenCreateDrawer = () => setCreateDrawerVisible(true)
-
-  const onCloseCreateDrawer = () => {
-    setCreateDrawerVisible(false)
-    form.resetFields()
-  }
-
-  const onChangeEditDrawer = (id: string | null, visible: boolean) => {
-    setId(id)
-    setEditDrawerVisible(visible)
-  }
-
-  const onOpenEditDrawer = (record: ICategory) => {
-    onChangeEditDrawer(record._id, true)
-    form.setFieldsValue({ name: record.name })
-  }
-
-  const onCloseEditDrawer = () => {
-    onChangeEditDrawer(null, false)
-    form.resetFields()
-  }
+  const {
+    createDrawerVisible,
+    updateDrawerVisible,
+    id,
+    onOpenCreateDrawer,
+    onCloseCreateDrawer,
+    onOpenUpdateDrawer,
+    onCloseUpdateDrawer
+  } = useDrawers(form)
 
   const onCreate = (values: ICategoriesFormValues) => {
     dispatch(fetchCreateCategory(values.name))
@@ -63,7 +50,7 @@ const Categories: React.FC = () => {
 
   const onUpdate = (values: ICategoriesFormValues) => {
     id && dispatch(fetchUpdateCategory(id, values.name))
-    onCloseEditDrawer()
+    onCloseUpdateDrawer()
   }
 
   const onRemove = (id: string) => dispatch(fetchRemoveCategory(id))
@@ -88,7 +75,7 @@ const Categories: React.FC = () => {
           key="action"
           render={(_, record: ICategory) => (
             <Space split={<Divider type="vertical" />}>
-              <Typography.Link onClick={() => onOpenEditDrawer(record)}>
+              <Typography.Link onClick={() => onOpenUpdateDrawer(record._id, { name: record.name })}>
                 Изменить
               </Typography.Link>
 
@@ -118,11 +105,11 @@ const Categories: React.FC = () => {
 
       <CategoriesDrawer
         title="Изменение категории"
-        visible={editDrawerVisible}
+        visible={updateDrawerVisible}
         form={form}
         submitText="Сохранить"
         onFinish={onUpdate}
-        onClose={onCloseEditDrawer}
+        onClose={onCloseUpdateDrawer}
       />
     </ProfileLayout>
   )

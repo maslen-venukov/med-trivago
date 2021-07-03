@@ -10,8 +10,13 @@ export const setServicesLoading = (payload: boolean): ServicesAction => ({
   payload
 })
 
-export const addService = (payload: IService): ServicesAction => ({
-  type: ServicesActionTypes.ADD_SERVICE,
+export const createService = (payload: IService): ServicesAction => ({
+  type: ServicesActionTypes.CREATE_SERVICE,
+  payload
+})
+
+export const updateService = (payload: IService): ServicesAction => ({
+  type: ServicesActionTypes.UPDATE_SERVICE,
   payload
 })
 

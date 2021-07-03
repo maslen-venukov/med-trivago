@@ -6,16 +6,18 @@ import Column from 'antd/lib/table/Column'
 import Popconfirm from 'antd/lib/popconfirm'
 import Typography from 'antd/lib/typography'
 import Button from 'antd/lib/button'
-import Drawer from 'antd/lib/drawer'
 import Form from 'antd/lib/form'
-import Input from 'antd/lib/input'
-import InputNumber from 'antd/lib/input-number'
-import Select from 'antd/lib/select'
+import Space from 'antd/lib/space'
+import Divider from 'antd/lib/divider'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import { fetchAddService, fetchHospitalServices, fetchRemoveService } from '../../api/services'
+import ServicesDrawer from '../../components/services/ServicesDrawer'
+
+import { fetchCreateService, fetchHospitalServices, fetchRemoveService, fetchUpdateService } from '../../api/services'
 import { fetchCategories } from '../../api/categories'
+
+import useDrawers from '../../hooks/useDrawers'
 
 import renderDate from '../../utils/renderDate'
 
@@ -24,22 +26,39 @@ import { IService, IShortService } from '../../types/services'
 
 const Services: React.FC = () => {
   const dispatch = useDispatch()
+  const [form] = Form.useForm()
 
   const { services, loading } = useSelector((state: RootState) => state.services)
   const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { categories } = useSelector((state: RootState) => state.categories)
 
-  const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
+  const {
+    createDrawerVisible,
+    updateDrawerVisible,
+    id,
+    onOpenCreateDrawer,
+    onCloseCreateDrawer,
+    onOpenUpdateDrawer,
+    onCloseUpdateDrawer
+  } = useDrawers(form)
 
-  const [form] = Form.useForm()
+  const getServiceData = (data: IService | IShortService) => {
+    // const category = categories.find(category => category.name === data.category)?._id || ''
+    const { name, price, category } = data
+    return { name, price, category }
+  }
 
-  const onOpenDrawer = () => setDrawerVisible(true)
-  const onCloseDrawer = () => setDrawerVisible(false)
-
-  const onAddService = (values: IShortService) => {
-    dispatch(fetchAddService(values))
-    onCloseDrawer()
+  const onCreate = (values: IShortService) => {
+    dispatch(fetchCreateService(values))
+    onCloseCreateDrawer()
     form.resetFields()
+  }
+
+  const onUpdate = (values: IShortService) => {
+    // console.log(values.category)
+    // console.log(categories.find(category => category.name === values.category)?._id)
+    id && dispatch(fetchUpdateService(id, getServiceData(values)))
+    onCloseUpdateDrawer()
   }
 
   const onRemove = (id: string) => dispatch(fetchRemoveService(id))
@@ -56,7 +75,7 @@ const Services: React.FC = () => {
         loading={loading && !!currentHospital}
         size="middle"
         rowKey={record => record._id}
-        title={() => <Button onClick={onOpenDrawer} type="primary">Добавить услугу</Button>}
+        title={() => <Button onClick={onOpenCreateDrawer} type="primary">Добавить услугу</Button>}
       >
         <Column title="Название" dataIndex="name" key="name" />
         <Column title="Стоимость" dataIndex="price" key="price" render={(value: string) => `${value} ₽`} />
@@ -66,6 +85,11 @@ const Services: React.FC = () => {
           title="Действия"
           key="action"
           render={(_, record: IService) => (
+            <Space split={<Divider type="vertical" />}>
+            <Typography.Link onClick={() => onOpenUpdateDrawer(record._id, getServiceData(record))}>
+              Изменить
+            </Typography.Link>
+
             <Popconfirm
               title="Вы действительно хотите удалить услугу?"
               onConfirm={() => onRemove(record._id)}
@@ -76,63 +100,29 @@ const Services: React.FC = () => {
                 Удалить
               </Typography.Text>
             </Popconfirm>
+          </Space>
           )}
         />
       </Table>
 
-      <Drawer
+      <ServicesDrawer
         title="Добавление услуги"
-        onClose={onCloseDrawer}
-        visible={drawerVisible}
-        width={400}
-      >
-        <Form
-          onFinish={onAddService}
-          initialValues={{ category: '' }}
-          layout="vertical"
-          form={form}
-        >
-          <Form.Item
-            label="Название"
-            name="name"
-            rules={[{ required: true, message: 'Пожалуйста введите название!' }]}
-          >
-            <Input placeholder="Название" />
-          </Form.Item>
+        initialValues={{ category: '' }}
+        visible={createDrawerVisible}
+        submitText="Добавить"
+        form={form}
+        onFinish={onCreate}
+        onClose={onCloseCreateDrawer}
+      />
 
-          <Form.Item
-            label="Стоимость"
-            name="price"
-            rules={[{ required: true, message: 'Пожалуйста введите стоимость!' }]}
-          >
-            <InputNumber placeholder="Стоимость" />
-          </Form.Item>
-
-          <Form.Item
-            label="Категория"
-            name="category"
-            rules={[{ required: true, message: 'Пожалуйста выберите категорию!' }]}
-          >
-            <Select>
-              <Select.Option value="" disabled>
-                <span className="placeholder">Категория</span>
-              </Select.Option>
-              {currentHospital?.serviceList.map(list => {
-                const category = categories.find(category => category._id === list.category)
-                return category && (
-                  <Select.Option key={category._id} value={category._id}>{category.name}</Select.Option>
-                )
-              })}
-            </Select>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Добавить
-            </Button>
-          </Form.Item>
-        </Form>
-      </Drawer>
+      <ServicesDrawer
+        title="Изменение услуги"
+        visible={updateDrawerVisible}
+        submitText="Сохранить"
+        form={form}
+        onFinish={onUpdate}
+        onClose={onCloseUpdateDrawer}
+      />
     </ProfileLayout>
   )
 }

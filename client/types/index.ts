@@ -1,3 +1,6 @@
+import { DrawerProps } from 'antd/lib/drawer'
+import { FormProps } from 'antd/lib/form'
+
 export interface ISchedule {
   start: string
   end: string
@@ -12,6 +15,11 @@ export interface IWeekSchedule {
 export interface IAppointmentHour {
   label: string
   appointed: boolean
+}
+
+export interface ICustomDrawerProps extends DrawerProps, FormProps {
+  title: string
+  submitText: string
 }
 
 export enum Roles {

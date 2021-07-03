@@ -11,6 +11,7 @@ import createError from '../utils/createError'
 import getUniqueIds from '../utils/getUniqueIds'
 
 import { HTTPStatusCodes } from '../types'
+import updateData from '../utils/updateData'
 
 type NameFilter = RegExp | null
 
@@ -49,7 +50,7 @@ class Controller {
 
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const activeCategory = hospital.serviceList.some(list => list.category.toString() === categoryId)
+      const activeCategory = hospital.serviceList.find(list => list.category.toString() === categoryId)
       if(!activeCategory) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Категория не активна')
       }
@@ -168,7 +169,10 @@ class Controller {
     try {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const services = await Service.find({ hospital: hospital._id, deleted: { $ne: true } }).sort({ _id: -1 })
+      const services = await Service
+        .find({ hospital: hospital._id, deleted: { $ne: true } })
+        .collation({ locale: 'ru' })
+        .sort('name')
 
       const categoriesIds = getUniqueIds(services, 'category')
       const categories = await Category.find({ _id: categoriesIds })
@@ -181,6 +185,44 @@ class Controller {
       })
 
       return res.json({ services: result })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async update(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params
+
+      const service = await Service.findById(id)
+      if(!service) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
+
+      const hospital = await Hospital.findOne({ user: req.user._id })
+      if(hospital._id.toString() !== service.hospital.toString()) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
+
+      const { name, price, category } = req.body
+
+      const serviceList = hospital.serviceList.find(list => list.category.toString() === category)
+      if(!(category && serviceList)) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Категория не активна')
+      }
+
+      updateData(service, { name, price, category })
+      await service.save()
+
+      const serviceCategory = await Category.findById(service.category)
+      const result = {
+        ...service._doc,
+        category: serviceCategory.name
+      }
+
+      return res.json({ message: 'Услуга успешно обновлена', service: result })
     } catch (e) {
       console.log(e)
       await createError(e)
@@ -203,9 +245,9 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 
-      const appointments = await Appointment.find({ service: id })
+      const appointmentsCount = await Appointment.countDocuments({ service: id })
 
-      if(appointments.length) {
+      if(appointmentsCount) {
         service.deleted = true
         await service.save()
       } else {

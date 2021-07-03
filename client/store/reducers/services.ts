@@ -1,5 +1,8 @@
 import { IServicesState, ServicesAction, ServicesActionTypes } from '../../types/services'
 
+import sortByName from '../../utils/sortByName'
+import updateState from '../../utils/updateState'
+
 const initialState: IServicesState = {
   services: [],
   loading: false
@@ -19,10 +22,18 @@ const services = (state = initialState, action: ServicesAction): IServicesState 
         loading: action.payload
       }
 
-    case ServicesActionTypes.ADD_SERVICE:
+    case ServicesActionTypes.CREATE_SERVICE:
       return {
         ...state,
-        services: [action.payload, ...state.services]
+        services: [action.payload, ...state.services].sort(sortByName)
+      }
+
+    case ServicesActionTypes.UPDATE_SERVICE:
+      return {
+        ...state,
+        services: state.services
+          .map(service => updateState(service, action.payload))
+          .sort(sortByName)
       }
 
     case ServicesActionTypes.REMOVE_SERVICE:

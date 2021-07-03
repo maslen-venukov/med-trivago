@@ -30,7 +30,8 @@ export interface IServicesState {
 export enum ServicesActionTypes {
   SET_SERVICES = 'SET_SERVICES',
   SET_SERVICES_LOADING = 'SET_SERVICES_LOADING',
-  ADD_SERVICE = 'ADD_SERVICE',
+  CREATE_SERVICE = 'CREATE_SERVICE',
+  UPDATE_SERVICE = 'UPDATE_SERVICE',
   REMOVE_SERVICE = 'REMOVE_SERVICE'
 }
 
@@ -44,8 +45,13 @@ interface ISetIServicesLoading {
   payload: boolean
 }
 
-interface IAddService {
-  type: ServicesActionTypes.ADD_SERVICE,
+interface ICreateService {
+  type: ServicesActionTypes.CREATE_SERVICE,
+  payload: IService
+}
+
+interface IUpdateService {
+  type: ServicesActionTypes.UPDATE_SERVICE,
   payload: IService
 }
 
@@ -54,4 +60,4 @@ interface IRemoveService {
   payload: string
 }
 
-export type ServicesAction = ISetIServices | ISetIServicesLoading | IAddService | IRemoveService
+export type ServicesAction = ISetIServices | ISetIServicesLoading | ICreateService | IUpdateService | IRemoveService

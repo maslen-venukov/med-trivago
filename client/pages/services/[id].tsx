@@ -112,13 +112,12 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
-  // TODO сделать crud на категории на клиенте
-  // TODO crus на услуги
+  // TODO добавить фильтры, сортировки на таблицы
+  // TODO не выводить прошедшие записи в таблицу
   // TODO возможно сделать поле seen у новых записей
   // TODO доделать запись
   // TODO поменять поиск + пагинация
   // TODO мб по удалению больницы удалять и записи на прием (а может и нет)
-  // TODO добавить фильтры, сортировки на таблицы
 
   useEffect(() => {
     const serviceId = router.query.id

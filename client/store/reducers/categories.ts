@@ -1,4 +1,7 @@
-import { ICategoriesState, CategoriesAction, CategoriesActionTypes, ICategory } from '../../types/categories'
+import { ICategoriesState, CategoriesAction, CategoriesActionTypes } from '../../types/categories'
+
+import sortByName from '../../utils/sortByName'
+import updateState from '../../utils/updateState'
 
 const initialState: ICategoriesState = {
   categories: [],
@@ -6,8 +9,6 @@ const initialState: ICategoriesState = {
 }
 
 const categories = (state = initialState, action: CategoriesAction): ICategoriesState => {
-  const sortByName = (a: ICategory, b: ICategory) => a.name.localeCompare(b.name, 'ru')
-
   switch(action.type) {
     case CategoriesActionTypes.SET_CATEGORIES:
       return {
@@ -31,7 +32,7 @@ const categories = (state = initialState, action: CategoriesAction): ICategories
       return {
         ...state,
         categories: state.categories
-          .map(category => category._id === action.payload._id ? action.payload : category)
+          .map(category => updateState(category, action.payload))
           .sort(sortByName)
       }
 
