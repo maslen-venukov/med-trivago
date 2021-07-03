@@ -43,7 +43,7 @@ const Invite: React.FC = () => {
 
   const renderLink = (link: string) => (
     <Link href={`/register/${link}`}>
-      <a>{link}</a>
+      <a target="_blank" rel="noreferrer">{link}</a>
     </Link>
   )
 

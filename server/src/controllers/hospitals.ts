@@ -38,7 +38,7 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
       }
 
-      const existingHospital = await Hospital.findOne().or([{ name }, { address }, { phone }])
+      const existingHospital = await Hospital.findOne({ $or: [{ name }, { phone }] })
       if(existingHospital) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Медицинское учреждение с такими данными уже зарегистрировано')
       }

@@ -14,7 +14,7 @@ export enum Roles {
 }
 
 export enum SocketActions {
-  JOIN = 'JOIN',
-  APPOINT = 'APPOINT',
-  WATCH = 'WATCH'
+  Join = 'JOIN',
+  Appoint = 'APPOINT',
+  Watch = 'WATCH'
 }

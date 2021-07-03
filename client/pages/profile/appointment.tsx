@@ -96,6 +96,10 @@ const Appointment: React.FC = () => {
           key="action"
           render={(_, record: IAppointment) => (
             <Space split={<Divider type="vertical" />}>
+              <Typography.Link onClick={() => onOpenDrawer(record)}>
+                Изменить
+              </Typography.Link>
+
               <Popconfirm
                 title="Вы действительно хотите удалить запись?"
                 onConfirm={() => onRemove(record._id || '')}
@@ -106,10 +110,6 @@ const Appointment: React.FC = () => {
                   Удалить
                 </Typography.Text>
               </Popconfirm>
-
-              <Typography.Link onClick={() => onOpenDrawer(record)}>
-                Изменить
-              </Typography.Link>
             </Space>
           )}
         />

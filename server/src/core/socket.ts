@@ -11,13 +11,13 @@ const socket = (server: http.Server) => {
   io.on('connection', socket => {
     console.log('user connected', socket.id)
 
-    socket.on(SocketActions.JOIN, hospitalId => {
+    socket.on(SocketActions.Join, hospitalId => {
       socket.join(hospitalId)
       console.log('hospital joined', hospitalId)
     })
 
-    socket.on(SocketActions.APPOINT, async ({ hospitalId, data }) => {
-      socket.broadcast.to(hospitalId).emit(SocketActions.WATCH, data)
+    socket.on(SocketActions.Appoint, async ({ hospitalId, data }) => {
+      socket.broadcast.to(hospitalId).emit(SocketActions.Watch, data)
     })
 
     socket.on('disconnect', () => {

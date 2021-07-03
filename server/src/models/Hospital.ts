@@ -36,7 +36,7 @@ const schedule = {
 
 const schema = new Schema({
   name: { type: String, required: true, unique: true },
-  address: { type: String, required: true, unique: true },
+  address: { type: String, required: true },
   schedule: {
     start: { type: String, required: true },
     end: { type: String, required: true }

@@ -52,12 +52,12 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   }, [user])
 
   useEffect(() => {
-    currentHospital && socket?.emit(SocketActions.JOIN, currentHospital._id)
+    currentHospital && socket?.emit(SocketActions.Join, currentHospital._id)
   }, [socket, currentHospital])
 
 
   useEffect(() => {
-    socket?.on(SocketActions.WATCH, (data: IAppointment) => {
+    socket?.on(SocketActions.Watch, (data: IAppointment) => {
       dispatch(appointmentNotification(data, router))
       dispatch(incrementNotifications())
       dispatch(addAppointment(data))

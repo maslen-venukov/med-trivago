@@ -36,7 +36,7 @@ export const fetchCreateAppointment = (data: IAppointment, hospitalId: string, s
     .then(({ data }) => {
       message.success(data.message)
       dispatch(addAppointedDate(data.appointment.date))
-      socket.emit(SocketActions.APPOINT, { hospitalId, data: data.appointment })
+      socket.emit(SocketActions.Appoint, { hospitalId, data: data.appointment })
     })
     .catch(catchError)
 }
