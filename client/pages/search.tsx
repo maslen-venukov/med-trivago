@@ -10,7 +10,7 @@ import SearchLayout from '../layouts/SearchLayout'
 
 import Service from '../components/services/Service'
 
-import { setSort } from '../store/actions/search'
+import { setFilters, setQuery, setSort } from '../store/actions/search'
 
 import { ICategory } from '../types/categories'
 import { IService } from '../types/services'
@@ -37,6 +37,11 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
   useEffect(() => {
     const p = (router.query.p || '') as Sort
     dispatch(setSort({ ...sort, p }))
+    return () => {
+      dispatch(setQuery(''))
+      dispatch(setFilters({ cat: '', minp: '', maxp: '' }))
+      dispatch(setSort({ p: '' }))
+    }
   }, [dispatch])
 
   return (

@@ -26,6 +26,8 @@ import AppointmentModal, { IAppointmentFormValues } from '../../components/servi
 import { setSocket } from '../../store/actions/socket'
 import { fetchAppointedDates, fetchCreateAppointment } from '../../api/appointments'
 
+import { setAppointedDates } from '../../store/actions/appointments'
+
 import getPeriod from '../../utils/getPeriod'
 import getPhoneHref from '../../utils/getPhoneHref'
 import getAppointmentHours from '../../utils/getAppointmentHours'
@@ -33,7 +35,7 @@ import connectSocket from '../../utils/connectSocket'
 
 import { IService } from '../../types/services'
 import { IHospital } from '../../types/hospitals'
-import { IAppointment } from '../../types/appointments'
+import { IShortAppointment } from '../../types/appointments'
 import { IAppointmentHour, IWeekSchedule } from '../../types'
 import { RootState } from '../../store/reducers'
 
@@ -90,14 +92,15 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   const onOpenAppointmentModal = (time: string) => onChangeAppointmentModal(true, time)
   const onCloseAppointmentModal = () => onChangeAppointmentModal(false, '')
 
-  const fetchData = (data: IAppointment, socket: Socket) => dispatch(fetchCreateAppointment(data, hospital._id, socket))
+  const fetchData = (data: IShortAppointment, socket: Socket) => dispatch(fetchCreateAppointment(data, hospital._id, socket))
 
   const onAppoint = (values: IAppointmentFormValues) => {
+    const serviceId = router.query.id
     const data = ({
       ...values,
       date: new Date(`${date.split('.').reverse().join('-')} ${time}`),
-      service: router.query.id
-    }) as IAppointment
+      service: (typeof serviceId === 'string' && serviceId) || ''
+    })
 
     if(socket) {
       fetchData(data, socket)
@@ -124,6 +127,9 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     const serviceId = router.query.id
     if(serviceId && typeof serviceId === 'string') {
       dispatch(fetchAppointedDates(serviceId))
+    }
+    return () => {
+      dispatch(setAppointedDates([]))
     }
   }, [dispatch])
 

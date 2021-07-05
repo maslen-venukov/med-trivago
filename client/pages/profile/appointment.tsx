@@ -19,6 +19,10 @@ import ProfileLayout from '../../layouts/ProfileLayout'
 
 import { fetchAppointments, fetchRemoveAppointment, fetchUpdateAppointment } from '../../api/appointments'
 
+import { setAppointments } from '../../store/actions/appointments'
+
+import useSearch from '../../hooks/useSearch'
+
 import renderDate from '../../utils/renderDate'
 
 import { RootState } from '../../store/reducers'
@@ -41,6 +45,8 @@ const Appointment: React.FC = () => {
 
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
   const [appointmentId, setAppointmentId] = useState<string | null>(null)
+
+  const getColumnSearchProps = useSearch()
 
   const services = currentHospital?.serviceList.map(list => list.services.flat()).flat()
 
@@ -77,6 +83,9 @@ const Appointment: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchAppointments())
+    return () => {
+      dispatch(setAppointments([]))
+    }
   }, [dispatch])
 
   return (
@@ -87,10 +96,25 @@ const Appointment: React.FC = () => {
         size="middle"
         rowKey={record => record._id || Math.random()}
       >
-        <Column title="Имя" dataIndex="name" key="name" />
-        <Column title="Телефон" dataIndex="phone" key="phone" />
+        <Column title="Имя" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
+        <Column title="Телефон" dataIndex="phone" key="phone" {...getColumnSearchProps('phone')} />
         <Column title="Дата" dataIndex="date" key="date" render={renderDate} />
-        <Column title="Услуга" dataIndex="service" key="service" render={(value: IShortService) => value.name} />
+        <Column
+          title="Услуга"
+          dataIndex="service"
+          key="service"
+          render={(value: IShortService) => value.name}
+          filters={appointments
+            .map(appointment => ({
+              text: appointment.service.name,
+              value: appointment.service._id
+            }))
+            .filter((service, index, arr) => (
+              index === arr.findIndex(el => el.value === service.value)
+            ))
+          }
+          onFilter={(value, record: IAppointment) => value === record.service._id}
+        />
         <Column
           title="Действия"
           key="action"

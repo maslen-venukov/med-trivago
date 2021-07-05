@@ -1,5 +1,7 @@
 import { IAppointmentsState, AppointmentsAction, AppointmentsActionTypes } from '../../types/appointments'
 
+import updateState from '../../utils/updateState'
+
 const initialState: IAppointmentsState = {
   appointments: [],
   appointedDates: [],
@@ -35,7 +37,7 @@ const appointments = (state = initialState, action: AppointmentsAction): IAppoin
     case AppointmentsActionTypes.UPDATE_APPOINTMENT:
       return {
         ...state,
-        appointments: state.appointments.map(appointment => appointment._id === action.payload._id ? action.payload : appointment)
+        appointments: state.appointments.map(appointment => updateState(appointment, action.payload))
       }
 
     case AppointmentsActionTypes.SET_APPOINTED_DATES:

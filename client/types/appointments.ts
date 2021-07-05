@@ -1,12 +1,19 @@
-import { IShortService } from './services'
+import { IService } from './services'
 
 export interface IAppointment {
-  _id?: string
+  _id: string
   name: string
   date: Date
   phone: string
-  service: string | IShortService
-  deleted?: boolean
+  service: IService
+  deleted: boolean
+}
+
+export interface IShortAppointment {
+  name: string
+  date: Date
+  phone: string
+  service: string
 }
 
 export interface IAppointmentsState {

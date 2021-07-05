@@ -16,6 +16,8 @@ import ActiveCategoriesModal from '../../components/categories/ActiveCategoriesM
 import { fetchCategories } from '../../api/categories'
 import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital, fetchUpdateActiveCategory } from '../../api/hospitals'
 
+import { setCategories } from '../../store/actions/categories'
+
 import getActiveCategorySchedule from '../../utils/getActiveCategorySchedule'
 import getActiveCategoryFormData from '../../utils/getActiveCategoryFormData'
 
@@ -52,6 +54,8 @@ const ActiveCategories: React.FC = () => {
 
   const checkActive = (id: string) => activeCategories?.includes(id)
 
+  const getServicesLength = (record: ICategory) => currentHospital?.serviceList.find(list => list.category === record._id)?.services.length || ''
+
   const onOpenModal = (setModalVisible: (visible: boolean) => void, categoryId: string) => {
     setModalVisible(true)
     setCategoryId(categoryId)
@@ -65,7 +69,16 @@ const ActiveCategories: React.FC = () => {
     setTimeout(form.resetFields, 300)
   }
 
-  const onSelectActive = (e: CheckboxChangeEvent) => {
+  const onFinish = (
+    values: IActiveCategoryFormValues,
+    fetchActiveCategory: (id: string, data: { schedule: IWeekSchedule }
+  ) => void) => {
+    const schedule = getActiveCategorySchedule(values, weekend)
+    dispatch(fetchActiveCategory(categoryId || '', { schedule }))
+    onCloseModal()
+  }
+
+  const onOpenAddModal = (e: CheckboxChangeEvent) => {
     const { value, checked } = e.target
     if(checked) {
       onOpenModal(setAddModalVisible, value)
@@ -80,29 +93,16 @@ const ActiveCategories: React.FC = () => {
     form.setFieldsValue(data)
   }
 
-  const onFinish = (values: IActiveCategoryFormValues, fetchActiveCategory: (id: string, data: { schedule: IWeekSchedule }) => void) => {
-    const schedule = getActiveCategorySchedule(values, weekend)
-    dispatch(fetchActiveCategory(categoryId || '', { schedule }))
-    onCloseModal()
-  }
+  const onAdd = (values: IActiveCategoryFormValues) => onFinish(values, fetchAddActiveCategory)
 
-  const onAdd = (values: IActiveCategoryFormValues) => {
-    // const schedule = getActiveCategorySchedule(values, weekend)
-    // dispatch(fetchAddActiveCategory(categoryId || '', { schedule }))
-    // onCloseModal()
-    onFinish(values, fetchAddActiveCategory)
-  }
-
-  const onUpdate = (values: IActiveCategoryFormValues) => {
-    // const schedule = getActiveCategorySchedule(values, weekend)
-    // dispatch(fetchUpdateActiveCategory(categoryId || '', { schedule }))
-    // onCloseModal()
-    onFinish(values, fetchUpdateActiveCategory)
-  }
+  const onUpdate = (values: IActiveCategoryFormValues) => onFinish(values, fetchUpdateActiveCategory)
 
   useEffect(() => {
     dispatch(fetchCategories())
     dispatch(fetchCurrentHospital())
+    return () => {
+      dispatch(setCategories([]))
+    }
   }, [dispatch])
 
   return (
@@ -124,16 +124,18 @@ const ActiveCategories: React.FC = () => {
             <ToggleActiveCheckbox
               checked={checkActive(record._id)}
               value={record._id}
-              onChange={onSelectActive}
+              onChange={onOpenAddModal}
               onRemove={() => dispatch(fetchRemoveActiveCategory(record._id))}
             />
-          )} />
+          )}
+        />
         <Column title="Название" dataIndex="name" key="name" />
         <Column
           title="Количество услуг"
           dataIndex="services"
           key="services"
-          render={(_, record: ICategory) => currentHospital?.serviceList.find(list => list.category === record._id)?.services.length}
+          render={(_, record: ICategory) => getServicesLength(record)}
+          sorter={(a, b) => Number(getServicesLength(a)) - Number(getServicesLength(b))}
         />
         <Column
           title="Раписание"

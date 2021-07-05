@@ -15,22 +15,29 @@ import ProfileLayout from '../../layouts/ProfileLayout'
 import Schedule from '../../components/services/Schedule'
 
 import { fetchHospitals, fetchRemoveHospital } from '../../api/hospitals'
+import { fetchCategories } from '../../api/categories'
+
+import { setHospitals } from '../../store/actions/hospitals'
+import { setCategories } from '../../store/actions/categories'
+
+import useSearch from '../../hooks/useSearch'
 
 import getPeriod from '../../utils/getPeriod'
 
 import { RootState } from '../../store/reducers'
 import { IHospital, IServiceList } from '../../types/hospitals'
-import { Roles } from '../../types'
 
 const Executors = () => {
   const dispatch = useDispatch()
 
-  const { user } = useSelector((state: RootState) => state.user)
+  const { categories } = useSelector((state: RootState) => state.categories)
   const { hospitals, loading } = useSelector((state: RootState) => state.hospitals)
 
   const [executor, setExecutor] = useState<string | null>(null)
   const [serviceList, setServiceList] = useState<IServiceList | null>(null)
   const [modalVisible, setModalVisible] = useState<boolean>(false)
+
+  const getColumnSearchProps = useSearch()
 
   const onOpenModal = (executor: string, services: IServiceList) => {
     setExecutor(executor)
@@ -47,8 +54,13 @@ const Executors = () => {
   const onRemove = (id: string) => dispatch(fetchRemoveHospital(id))
 
   useEffect(() => {
-    user?.role === Roles.Admin && dispatch(fetchHospitals())
-  }, [user, dispatch])
+    dispatch(fetchHospitals())
+    dispatch(fetchCategories())
+    return () => {
+      dispatch(setHospitals([]))
+      dispatch(setCategories([]))
+    }
+  }, [dispatch])
 
   return (
     <ProfileLayout title="Список исполнителей" className="executors">
@@ -58,9 +70,9 @@ const Executors = () => {
         size="middle"
         rowKey={record => record._id}
       >
-        <Column title="Название" dataIndex="name" key="name" />
-        <Column title="Адрес" dataIndex="address" key="address" />
-        <Column title="Телефон" dataIndex="phone" key="phone" />
+        <Column title="Название" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
+        <Column title="Адрес" dataIndex="address" key="address" {...getColumnSearchProps('address')} />
+        <Column title="Телефон" dataIndex="phone" key="phone" {...getColumnSearchProps('phone')} />
         <Column title="График работы" dataIndex="schedule" key="schedule" render={getPeriod} />
         <Column
           title="Услуги"
@@ -78,6 +90,11 @@ const Executors = () => {
               </Tag>
             ))
           )}
+          filters={categories.map(category => ({ text: category.name, value: category._id }))}
+          onFilter={(value, record) => {
+            const category = categories.find(category => category._id === value)
+            return !!record.serviceList.find(list => list.category === category?.name)
+          }}
         />
         <Column
           title="Действия"

@@ -18,7 +18,7 @@ const appointmentNotification = (data: IAppointment, router: NextRouter) => (dis
     duration: 0,
     onClick: () => {
       router.push('/profile/appointment')
-      notification.close(data._id || '')
+      notification.close(data._id)
       dispatch(decrementNotifications())
     },
     onClose: () => {

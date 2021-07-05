@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Table from 'antd/lib/table'
@@ -17,6 +17,10 @@ import ServicesDrawer from '../../components/services/ServicesDrawer'
 import { fetchCreateService, fetchHospitalServices, fetchRemoveService, fetchUpdateService } from '../../api/services'
 import { fetchCategories } from '../../api/categories'
 
+import { setServices } from '../../store/actions/services'
+import { setCategories } from '../../store/actions/categories'
+
+import useSearch from '../../hooks/useSearch'
 import useDrawers from '../../hooks/useDrawers'
 
 import renderDate from '../../utils/renderDate'
@@ -29,9 +33,10 @@ const Services: React.FC = () => {
   const [form] = Form.useForm()
 
   const { services, loading } = useSelector((state: RootState) => state.services)
-  const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { categories } = useSelector((state: RootState) => state.categories)
+  const { currentHospital } = useSelector((state: RootState) => state.hospitals)
 
+  const getColumnSearchProps = useSearch()
   const {
     createDrawerVisible,
     updateDrawerVisible,
@@ -43,7 +48,6 @@ const Services: React.FC = () => {
   } = useDrawers(form)
 
   const getServiceData = (data: IService | IShortService) => {
-    // const category = categories.find(category => category.name === data.category)?._id || ''
     const { name, price, category } = data
     return { name, price, category }
   }
@@ -55,8 +59,6 @@ const Services: React.FC = () => {
   }
 
   const onUpdate = (values: IShortService) => {
-    // console.log(values.category)
-    // console.log(categories.find(category => category.name === values.category)?._id)
     id && dispatch(fetchUpdateService(id, getServiceData(values)))
     onCloseUpdateDrawer()
   }
@@ -66,6 +68,10 @@ const Services: React.FC = () => {
   useEffect(() => {
     dispatch(fetchHospitalServices())
     dispatch(fetchCategories())
+    return () => {
+      dispatch(setServices([]))
+      dispatch(setCategories([]))
+    }
   }, [dispatch])
 
   return (
@@ -77,9 +83,30 @@ const Services: React.FC = () => {
         rowKey={record => record._id}
         title={() => <Button onClick={onOpenCreateDrawer} type="primary">Добавить услугу</Button>}
       >
-        <Column title="Название" dataIndex="name" key="name" />
-        <Column title="Стоимость" dataIndex="price" key="price" render={(value: string) => `${value} ₽`} />
-        <Column title="Категория" dataIndex="category" key="category" />
+        <Column title="Название" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
+        <Column
+          title="Стоимость"
+          dataIndex="price"
+          key="price"
+          render={(value: string) => `${value} ₽`}
+          sorter={(a: IService, b: IService) => a.price - b.price}
+        />
+        <Column
+          title="Категория"
+          dataIndex="category"
+          key="category"
+          filters={currentHospital?.serviceList.map(list => {
+            const category = categories.find(category => list.category === category._id)
+            return {
+              text: category?.name || '',
+              value: category?._id || ''
+            }
+          })}
+          onFilter={(value, record: IService) => {
+            const category = categories.find(category => category._id === value)
+            return category?.name === record.category
+          }}
+        />
         <Column title="Дата добавления" dataIndex="createdAt" key="createdAt" render={renderDate} />
         <Column
           title="Действия"

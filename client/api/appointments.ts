@@ -6,7 +6,7 @@ import message from 'antd/lib/message'
 import {
   addAppointedDate,
   removeAppointment,
-  setAppointmentDates,
+  setAppointedDates,
   setAppointments,
   setAppointmentsLoading,
   updateAppointment
@@ -14,7 +14,7 @@ import {
 
 import catchError from '../utils/catchError'
 
-import { AppointmentsAction, IAppointment } from '../types/appointments'
+import { AppointmentsAction, IShortAppointment } from '../types/appointments'
 import { SocketActions } from '../types'
 
 export const fetchAppointments = () => (dispatch: Dispatch<AppointmentsAction>) => {
@@ -27,11 +27,11 @@ export const fetchAppointments = () => (dispatch: Dispatch<AppointmentsAction>) 
 
 export const fetchAppointedDates = (serviceId: string) => (dispatch: Dispatch<AppointmentsAction>) => {
   axios.get(`api/appointments/appointed-dates/${serviceId}`)
-    .then(({ data }) => dispatch(setAppointmentDates(data.appointedDates)))
+    .then(({ data }) => dispatch(setAppointedDates(data.appointedDates)))
     .catch(catchError)
 }
 
-export const fetchCreateAppointment = (data: IAppointment, hospitalId: string, socket: Socket) => (dispatch: Dispatch<AppointmentsAction>) => {
+export const fetchCreateAppointment = (data: IShortAppointment, hospitalId: string, socket: Socket) => (dispatch: Dispatch<AppointmentsAction>) => {
   axios.post('/api/appointments', data)
     .then(({ data }) => {
       message.success(data.message)
@@ -50,7 +50,7 @@ export const fetchRemoveAppointment = (id: string) => (dispatch: Dispatch<Appoin
     .catch(catchError)
 }
 
-export const fetchUpdateAppointment = (id: string, data: IAppointment) => (dispatch: Dispatch<AppointmentsAction>) => {
+export const fetchUpdateAppointment = (id: string, data: IShortAppointment) => (dispatch: Dispatch<AppointmentsAction>) => {
   axios.put(`/api/appointments/${id}`, data)
     .then(({ data }) => {
       message.success(data.message)

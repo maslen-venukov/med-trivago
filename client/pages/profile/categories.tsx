@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Table from 'antd/lib/table'
@@ -16,6 +16,9 @@ import CategoriesDrawer from '../../components/categories/CategoriesDrawer'
 
 import { fetchCategories, fetchCreateCategory, fetchRemoveCategory, fetchUpdateCategory } from '../../api/categories'
 
+import { setCategories } from '../../store/actions/categories'
+
+import useSearch from '../../hooks/useSearch'
 import useDrawers from '../../hooks/useDrawers'
 
 import renderDate from '../../utils/renderDate'
@@ -33,6 +36,7 @@ const Categories: React.FC = () => {
 
   const { categories, loading } = useSelector((state: RootState) => state.categories)
 
+  const getColumnSearchProps = useSearch()
   const {
     createDrawerVisible,
     updateDrawerVisible,
@@ -57,6 +61,9 @@ const Categories: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchCategories())
+    return () => {
+      dispatch(setCategories([]))
+    }
   }, [dispatch])
 
   return (
@@ -68,7 +75,7 @@ const Categories: React.FC = () => {
         rowKey={record => record._id}
         title={() => <Button onClick={onOpenCreateDrawer} type="primary">Добавить категорию</Button>}
       >
-        <Column title="Имя" dataIndex="name" key="name" />
+        <Column title="Имя" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
         <Column title="Дата добавления" dataIndex="createdAt" key="createdAt" render={renderDate} />
         <Column
           title="Действия"

@@ -6,7 +6,7 @@ export interface IService {
   price: number
   category: string
   schedule?: IWeekSchedule
-  deleted?: boolean
+  deleted: boolean
   hospital: {
     name: string
     address: string

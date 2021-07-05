@@ -25,7 +25,7 @@ export const updateAppointment = (payload: IAppointment): AppointmentsAction => 
   payload
 })
 
-export const setAppointmentDates = (payload: Date[]): AppointmentsAction => ({
+export const setAppointedDates = (payload: Date[]): AppointmentsAction => ({
   type: AppointmentsActionTypes.SET_APPOINTED_DATES,
   payload
 })

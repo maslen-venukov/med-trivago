@@ -14,6 +14,10 @@ import ProfileLayout from '../../layouts/ProfileLayout'
 
 import { fetchCreateRegisterLink, fetchRegisterLinks, fetchRemoveRegisterLink } from '../../api/registerLinks'
 
+import { setRegisterLinks } from '../../store/actions/registerLinks'
+
+import useSearch from '../../hooks/useSearch'
+
 import renderDate from '../../utils/renderDate'
 
 import { RootState } from '../../store/reducers'
@@ -30,6 +34,8 @@ const Invite: React.FC = () => {
   const { registerLinks, loading } = useSelector((state: RootState) => state.registerLinks)
 
   const [sending, setSending] = useState<boolean>(false)
+
+  const getColumnSearchProps = useSearch()
 
   const onInvite = (values: IInviteFormvalues) => {
     setSending(true)
@@ -49,6 +55,9 @@ const Invite: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchRegisterLinks())
+    return () => {
+      dispatch(setRegisterLinks([]))
+    }
   }, [dispatch])
 
   return (
@@ -95,7 +104,7 @@ const Invite: React.FC = () => {
         rowKey={record => record._id}
       >
         <Column title="Ссылка" dataIndex="link" key="link" render={renderLink} />
-        <Column title="Email" dataIndex="email" key="email" />
+        <Column title="Email" dataIndex="email" key="email" {...getColumnSearchProps('email')} />
         <Column title="Дата отправки" dataIndex="createdAt" key="createdAt" render={renderDate} />
         <Column
           title="Действия"
