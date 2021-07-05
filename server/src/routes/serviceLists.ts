@@ -10,8 +10,10 @@ import { Roles } from '../types'
 
 const router = Router()
 
-router.post('/', auth, role(Roles.Hospital), controller.create)
-router.put('/:categoryId', auth, role(Roles.Hospital), objectId('categoryId'), controller.update)
-router.delete('/:categoryId', auth, role(Roles.Hospital), objectId('categoryId'), controller.remove)
+const middleware = [auth, role(Roles.Hospital), objectId('categoryId')]
+
+router.post('/:categoryId', ...middleware, controller.create)
+router.put('/:categoryId', ...middleware, controller.update)
+router.delete('/:categoryId', ...middleware, controller.remove)
 
 export default router

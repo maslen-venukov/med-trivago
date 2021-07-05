@@ -103,7 +103,7 @@ class Controller {
         return acc
       }, {})
 
-      const services = await Service.find({ ...find, deleted: { $ne: true }}).sort(sort)
+      const services = await Service.find({ ...find, deleted: false}).sort(sort)
 
       const hospitalsIds = getUniqueIds(services, 'hospital')
       const hospitals = await Hospital.find({ _id: hospitalsIds })
@@ -133,7 +133,7 @@ class Controller {
     try {
       const { id } = req.params
 
-      const service = await Service.findOne({ _id: id, deleted: { $ne: true } })
+      const service = await Service.findOne({ _id: id, deleted: false })
       if(!service) {
         return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
       }
@@ -170,7 +170,7 @@ class Controller {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
       const services = await Service
-        .find({ hospital: hospital._id, deleted: { $ne: true } })
+        .find({ hospital: hospital._id, deleted: false })
         .collation({ locale: 'ru' })
         .sort('name')
 

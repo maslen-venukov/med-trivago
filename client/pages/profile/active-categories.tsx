@@ -1,42 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Moment } from 'moment'
-// import moment from 'moment'
 
 import Table from 'antd/lib/table'
 import Column from 'antd/lib/table/Column'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import Typography from 'antd/lib/typography'
-// import Drawer from 'antd/lib/drawer'
-import Modal from 'antd/lib/modal/Modal'
 import Form from 'antd/lib/form'
-import Button from 'antd/lib/button'
-import TimePicker from 'antd/lib/time-picker'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
-import WeekendDaySchedule from '../../components/categories/WeekendDaySchedule'
 import ToggleActiveCheckbox from '../../components/categories/ToggleActiveCheckbox'
+import ActiveCategoriesModal from '../../components/categories/ActiveCategoriesModal'
 
 import { fetchCategories } from '../../api/categories'
-import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital } from '../../api/hospitals'
+import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital, fetchUpdateActiveCategory } from '../../api/hospitals'
+
+import getActiveCategorySchedule from '../../utils/getActiveCategorySchedule'
+import getActiveCategoryFormData from '../../utils/getActiveCategoryFormData'
 
 import { RootState } from '../../store/reducers'
 import { ICategory } from '../../types/categories'
-import { IAddCategoryData } from '../../types/hospitals'
+import { IWeekSchedule } from '../../types'
 
 export interface IWeekendState {
   saturday: boolean
   sunday: boolean
 }
 
-interface IAddCategoryFormValues {
+export interface IActiveCategoryFormValues {
   weekdays: [Moment, Moment]
-  saturday: [Moment, Moment]
-  sunday: [Moment, Moment]
+  saturday?: [Moment, Moment]
+  sunday?: [Moment, Moment]
+  saturdayWeekend: boolean
+  sundayWeekend: boolean
 }
-
-export type Day = 'saturday' | 'sunday'
 
 const ActiveCategories: React.FC = () => {
   const dispatch = useDispatch()
@@ -45,92 +43,62 @@ const ActiveCategories: React.FC = () => {
   const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { categories, loading } = useSelector((state: RootState) => state.categories)
 
-  const [modalVisible, setModalVisible] = useState<boolean>(false)
-  // const [initialValues, setInitialValues] = useState<IAddCategoryFormValues>({})
-  // const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
-  const [category, setCategory] = useState<string | null>(null)
+  const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
+  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false)
+  const [categoryId, setCategoryId] = useState<string | null>(null)
   const [weekend, setWeekend] = useState<IWeekendState>({ saturday: false, sunday: false })
 
   const activeCategories = currentHospital?.serviceList.map(list => list.category)
 
-  const onSelectActive = (e: CheckboxChangeEvent) => {
-    const { value, checked } = e.target
-    if(checked) {
-      setCategory(value)
-      setModalVisible(true)
-    } else {
-      // dispatch(fetchRemoveActiveCategory(value))
-    }
+  const checkActive = (id: string) => activeCategories?.includes(id)
+
+  const onOpenModal = (setModalVisible: (visible: boolean) => void, categoryId: string) => {
+    setModalVisible(true)
+    setCategoryId(categoryId)
   }
 
   const onCloseModal = () => {
-    setModalVisible(false)
-    setCategory(null)
-    form.resetFields()
+    setAddModalVisible(false)
+    setUpdateModalVisible(false)
+    setCategoryId(null)
     setWeekend({ saturday: false, sunday: false })
+    setTimeout(form.resetFields, 300)
   }
 
-  const checkActive = (id: string) => activeCategories?.includes(id)
-
-  const onAddCategory = (values: IAddCategoryFormValues) => {
-    const format = 'HH:mm'
-    const days: Day[] = ['saturday', 'sunday']
-
-    const data: IAddCategoryData = {
-      schedule: {
-        weekdays: {
-          start: values.weekdays[0].format(format),
-          end: values.weekdays[1].format(format)
-        }
-      },
-      category: category || ''
+  const onSelectActive = (e: CheckboxChangeEvent) => {
+    const { value, checked } = e.target
+    if(checked) {
+      onOpenModal(setAddModalVisible, value)
     }
+  }
 
-    days.forEach((day => {
-      if(!weekend[day]) {
-        const daySchedule = {
-          start: values[day][0].format(format),
-          end: values[day][1].format(format)
-        }
-        data.schedule[day] = daySchedule
-      }
-    }))
+  const onOpenEditModal = (record: ICategory) => {
+    const schedule = currentHospital?.serviceList.find(list => list.category === record._id)?.schedule
+    const data = getActiveCategoryFormData(schedule)
+    onOpenModal(setUpdateModalVisible, record._id)
+    setWeekend({ saturday: !schedule?.saturday, sunday: !schedule?.sunday })
+    form.setFieldsValue(data)
+  }
 
-    dispatch(fetchAddActiveCategory(data))
+  const onFinish = (values: IActiveCategoryFormValues, fetchActiveCategory: (id: string, data: { schedule: IWeekSchedule }) => void) => {
+    const schedule = getActiveCategorySchedule(values, weekend)
+    dispatch(fetchActiveCategory(categoryId || '', { schedule }))
     onCloseModal()
   }
 
-  // const onOpenEditForm = (categoryId: string) => {
-    // console.log(categoryId)
-    // const schedule = currentHospital?.serviceList.find(list => list.category === categoryId)?.schedule
-    // const data = schedule && Object.keys(schedule).reduce((acc, key) => {
-    //   const parse = (date: string) => moment(new Date(`${date} 2021`))
-    //   return acc = {
-    //     ...acc,
-    //     [key]: [parse(schedule[key].start), parse(schedule[key].end)]
-    //   }
-    // }, {})
-    // if(!data.saturday) {
-    //   data.saturdayWeekend = true
-    // }
-    // if(!data.saturday) {
-    //   data.saturdayWeekend = true
-    // }
-  //   const days = ['weekdays', 'saturday', 'sunday']
-  //   const data = days.reduce((acc, day) => {
-  //     const parse = (date: string) => moment(new Date(`${date} 2021`))
-  //     if(schedule[day]) {
-  //       return acc = { ...acc, [day]: [parse(schedule[day].start), parse(schedule[day].end)] }
-  //     } else {
-  //       return acc = { ...acc, [`${day}Weekend`]: false }
-  //     }
-  //   }, {})
-  //   setInitialValues(data)
-  //   console.log(data)
-  //   setModalVisible(true)
-  // }
+  const onAdd = (values: IActiveCategoryFormValues) => {
+    // const schedule = getActiveCategorySchedule(values, weekend)
+    // dispatch(fetchAddActiveCategory(categoryId || '', { schedule }))
+    // onCloseModal()
+    onFinish(values, fetchAddActiveCategory)
+  }
 
-  // TODO сделать изменение расписания
+  const onUpdate = (values: IActiveCategoryFormValues) => {
+    // const schedule = getActiveCategorySchedule(values, weekend)
+    // dispatch(fetchUpdateActiveCategory(categoryId || '', { schedule }))
+    // onCloseModal()
+    onFinish(values, fetchUpdateActiveCategory)
+  }
 
   useEffect(() => {
     dispatch(fetchCategories())
@@ -172,60 +140,32 @@ const ActiveCategories: React.FC = () => {
           dataIndex="services"
           key="services"
           render={(_, record: ICategory) => checkActive(record._id) && (
-            <Typography.Link onClick={() => setModalVisible(true)} className="cursor-pointer">
+            <Typography.Link onClick={() => onOpenEditModal(record)} className="cursor-pointer">
               Изменить
             </Typography.Link>
           )}
         />
       </Table>
 
-      <Modal
-        title="Расписание"
-        visible={modalVisible}
+      <ActiveCategoriesModal
+        categoryName={categories.find(category => category._id === categoryId)?.name || ''}
+        visible={addModalVisible}
+        form={form}
+        weekend={weekend}
         onCancel={onCloseModal}
-        footer={null}
-      >
-        <Form form={form} layout="vertical" /*initialValues={initialValues}*/ onFinish={onAddCategory}>
-          <Form.Item
-            label="Будние"
-            name="weekdays"
-            rules={[{ required: true, message: 'Пожалуйста введите расписание в будние дни!' }]}
-          >
-            <TimePicker.RangePicker format="HH:mm" minuteStep={30} />
-          </Form.Item>
+        onFinish={onAdd}
+        setWeekend={setWeekend}
+      />
 
-          <WeekendDaySchedule
-            name="saturday"
-            label="Суббота"
-            message="Пожалуйста введите расписание в субботу!"
-            state={weekend}
-            setState={setWeekend}
-          />
-
-          <WeekendDaySchedule
-            label="Воскресенье"
-            name="sunday"
-            message="Пожалуйста введите расписание в воскресенье!"
-            state={weekend}
-            setState={setWeekend}
-          />
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Сохранить
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* <Drawer
-        title="Basic Drawer"
-        onClose={() => setDrawerVisible(false)}
-        visible={drawerVisible}
-        width="400"
-      >
-        <p>контент</p>
-      </Drawer> */}
+      <ActiveCategoriesModal
+        categoryName={categories.find(category => category._id === categoryId)?.name || ''}
+        visible={updateModalVisible}
+        form={form}
+        weekend={weekend}
+        onCancel={onCloseModal}
+        onFinish={onUpdate}
+        setWeekend={setWeekend}
+      />
     </ProfileLayout>
   )
 }

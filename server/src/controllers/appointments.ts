@@ -54,7 +54,7 @@ class Controller {
       const services = await Service.find({ hospital: hospital._id })
       const servicesIds = getUniqueIds(services)
 
-      const appointments = await Appointment.find({ service: { $in: servicesIds }, deleted: { $ne: true } }).sort({ date: -1 })
+      const appointments = await Appointment.find({ service: { $in: servicesIds }, deleted: false }).sort({ date: -1 })
 
       const result = appointments.map(appointment => {
         const service = services.find(service => service._id.toString() === appointment.service.toString())

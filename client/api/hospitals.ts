@@ -7,8 +7,9 @@ import { setUser } from '../store/actions/user'
 
 import catchError from '../utils/catchError'
 
-import { HospitalsAction, IRegisterHospitalData, IAddCategoryData } from '../types/hospitals'
+import { HospitalsAction, IRegisterHospitalData } from '../types/hospitals'
 import { UserAction } from '../types/user'
+import { IWeekSchedule } from '../types'
 
 export const fetchHospitals = () => (dispatch: Dispatch<HospitalsAction>) => {
   dispatch(setHospitalsLoading(true))
@@ -43,8 +44,17 @@ export const fetchRemoveHospital = (id: string) => (dispatch: Dispatch<Hospitals
     .catch(catchError)
 }
 
-export const fetchAddActiveCategory = (data: IAddCategoryData) => (dispatch: Dispatch<HospitalsAction>) => {
-  axios.post('/api/service-lists', data)
+export const fetchAddActiveCategory = (categoryId: string, data: { schedule: IWeekSchedule }) => (dispatch: Dispatch<HospitalsAction>) => {
+  axios.post(`/api/service-lists/${categoryId}`, data)
+    .then(({ data }) => {
+      dispatch(setCurrentHospital(data.hospital))
+      message.success(data.message)
+    })
+    .catch(catchError)
+}
+
+export const fetchUpdateActiveCategory = (categoryId: string, data: { schedule: IWeekSchedule }) => (dispatch: Dispatch<HospitalsAction>) => {
+  axios.put(`/api/service-lists/${categoryId}`, data)
     .then(({ data }) => {
       dispatch(setCurrentHospital(data.hospital))
       message.success(data.message)
@@ -54,6 +64,9 @@ export const fetchAddActiveCategory = (data: IAddCategoryData) => (dispatch: Dis
 
 export const fetchRemoveActiveCategory = (categoryId: string) => (dispatch: Dispatch<HospitalsAction>) => {
   axios.delete(`/api/service-lists/${categoryId}`)
-    .then(({ data }) => dispatch(setCurrentHospital(data.hospital)))
+    .then(({ data }) => {
+      dispatch(setCurrentHospital(data.hospital))
+      message.success(data.message)
+    })
     .catch(catchError)
 }

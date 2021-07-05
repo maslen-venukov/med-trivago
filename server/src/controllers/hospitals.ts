@@ -77,7 +77,7 @@ class Controller {
     try {
       const hospitals = await Hospital.find().sort({ _id: -1 })
       const categories = await Category.find()
-      const services = await Service.find({ deleted: { $ne: true }})
+      const services = await Service.find({ deleted: false})
 
       const result = hospitals.map(hospital => {
         const { _id, name, address, phone, schedule } = hospital
@@ -119,7 +119,7 @@ class Controller {
     try {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const services = await Service.find({ hospital: hospital._id, deleted: { $ne: true } })
+      const services = await Service.find({ hospital: hospital._id, deleted: false })
 
       const result = {
         ...hospital._doc,

@@ -13,15 +13,6 @@ export interface IRegisterHospitalData {
   schedule: [Moment, Moment] | ISchedule
 }
 
-export interface IAddCategoryData {
-  schedule: {
-    weekdays: ISchedule
-    saturday?: ISchedule
-    sunday?: ISchedule
-  }
-  category: string
-}
-
 export interface IServiceList {
   category: string
   schedule: {
@@ -51,8 +42,7 @@ export enum HospitalsActionTypes {
   SET_HOSPITALS = 'SET_HOSPITALS',
   SET_CURRENT_HOSPITAL = 'SET_CURRENT_HOSPITAL',
   SET_HOSPITALS_LOADING = 'SET_HOSPITALS_LOADING',
-  REMOVE_HOSPITAL = 'REMOVE_HOSPITAL',
-  ADD_ACTIVE_CATEGORY = 'ADD_ACTIVE_CATEGORY'
+  REMOVE_HOSPITAL = 'REMOVE_HOSPITAL'
 }
 
 interface ISetHospitals {
