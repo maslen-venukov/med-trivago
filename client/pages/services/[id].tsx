@@ -32,6 +32,7 @@ import getPeriod from '../../utils/getPeriod'
 import getPhoneHref from '../../utils/getPhoneHref'
 import getAppointmentHours from '../../utils/getAppointmentHours'
 import connectSocket from '../../utils/connectSocket'
+import formatPrice from '../../utils/formatPrice'
 
 import { IService } from '../../types/services'
 import { IHospital } from '../../types/hospitals'
@@ -117,8 +118,11 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
   // TODO доделать запись (больница должна добавлять свои записи)
   // TODO поменять поиск + пагинация
-  // TODO страница с информацией
+
   // TODO добавить галочки на согласие
+  // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
+  // TODO уведомление о куки
+
   // TODO ? не выводить прошедшие записи в таблицу
   // TODO ? сделать поле seen у новых записей
   // TODO ? по удалению больницы удалять и записи на прием (а может и нет)
@@ -140,7 +144,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
           <Col xs={18}>
             <Typography.Title level={3} className="service__title">{name}</Typography.Title>
 
-            <Typography.Title level={4} type="success">{price} ₽</Typography.Title>
+            <Typography.Title level={4} type="success">{formatPrice(price)}</Typography.Title>
 
             <Typography.Paragraph>
               <Schedule schedule={schedule}>

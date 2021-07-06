@@ -3,12 +3,13 @@ import moment, { Moment } from 'moment'
 import { IActiveCategoryFormValues } from '../pages/profile/active-categories'
 import { ISchedule, IWeekSchedule } from '../types'
 
+export const parseTime = (date: string) => moment(new Date(`${date} 2021`))
+
 const getActiveCategoryFormData = (schedule?: IWeekSchedule) => {
   const parseWeekDay = (day?: ISchedule): [Moment, Moment] => {
     if(!day) {
       return [moment(), moment()]
     }
-    const parseTime = (date: string) => moment(new Date(`${date} 2021`))
     return [parseTime(day.start), parseTime(day.end)]
   }
 

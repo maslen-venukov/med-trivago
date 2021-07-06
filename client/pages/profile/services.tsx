@@ -24,6 +24,7 @@ import useSearch from '../../hooks/useSearch'
 import useDrawers from '../../hooks/useDrawers'
 
 import renderDate from '../../utils/renderDate'
+import formatPrice from '../../utils/formatPrice'
 
 import { RootState } from '../../store/reducers'
 import { IService, IShortService } from '../../types/services'
@@ -88,7 +89,7 @@ const Services: React.FC = () => {
           title="Стоимость"
           dataIndex="price"
           key="price"
-          render={(value: string) => `${value} ₽`}
+          render={formatPrice}
           sorter={(a: IService, b: IService) => a.price - b.price}
         />
         <Column

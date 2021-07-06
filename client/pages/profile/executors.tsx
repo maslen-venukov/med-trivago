@@ -23,6 +23,7 @@ import { setCategories } from '../../store/actions/categories'
 import useSearch from '../../hooks/useSearch'
 
 import getPeriod from '../../utils/getPeriod'
+import formatPrice from '../../utils/formatPrice'
 
 import { RootState } from '../../store/reducers'
 import { IHospital, IServiceList } from '../../types/hospitals'
@@ -130,7 +131,7 @@ const Executors = () => {
           renderItem={service => (
             <List.Item key={service._id}>
               <Typography.Text>{service.name}</Typography.Text>
-              <Typography.Text type="success">{service.price} ₽</Typography.Text>
+              <Typography.Text type="success">{formatPrice(service.price)}</Typography.Text>
             </List.Item>
           )}
         />

@@ -6,6 +6,8 @@ import Typography from 'antd/lib/typography'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 
+import formatPrice from '../../utils/formatPrice'
+
 import { IService } from '../../types/services'
 
 const Service: React.FC<IService> = ({ _id, name, price, hospital }) => {
@@ -14,7 +16,7 @@ const Service: React.FC<IService> = ({ _id, name, price, hospital }) => {
       <Link href={`/services/${_id}`}>
         <a className="services__link">
           <Typography.Title level={4}>
-            {name} — <Typography.Text type="success">{price} ₽</Typography.Text>
+            {name} — <Typography.Text type="success">{formatPrice(price)}</Typography.Text>
           </Typography.Title>
 
           <Typography.Title level={5}>

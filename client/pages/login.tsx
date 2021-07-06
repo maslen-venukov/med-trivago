@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 
-import Row from 'antd/lib/row'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -34,38 +33,36 @@ const Login: React.FC = () => {
 
   return (
     <MainLayout title="Авторизация">
-      <Row justify="center" align="middle" className="auth">
-        <Form onFinish={onLogin} className="auth__form">
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Пожалуйста введите ваш email!' },
-              { type: 'email', message: 'Некорректный email' }
-            ]}
-          >
-            <Input
-              prefix={<MailOutlined className="auth__icon" />}
-              placeholder="Email"
-            />
-          </Form.Item>
+      <Form onFinish={onLogin} className="form form--login">
+        <Form.Item
+          name="email"
+          rules={[
+            { required: true, message: 'Пожалуйста введите ваш email!' },
+            { type: 'email', message: 'Некорректный email' }
+          ]}
+        >
+          <Input
+            prefix={<MailOutlined className="form__icon" />}
+            placeholder="Email"
+          />
+        </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Пожалуйста введите ваш пароль!' }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined className="auth__icon" />}
-              placeholder="Пароль"
-            />
-          </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Пожалуйста введите ваш пароль!' }]}
+        >
+          <Input.Password
+            prefix={<LockOutlined className="form__icon" />}
+            placeholder="Пароль"
+          />
+        </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loging} className="auth__btn">
-              {loging ? 'Вход...' : 'Войти'}
-            </Button>
-          </Form.Item>
-        </Form>
-      </Row>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loging} className="form__btn">
+            {loging ? 'Вход...' : 'Войти'}
+          </Button>
+        </Form.Item>
+      </Form>
     </MainLayout>
   )
 }

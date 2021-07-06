@@ -9,7 +9,7 @@ import catchError from '../utils/catchError'
 
 import { HospitalsAction, IRegisterHospitalData } from '../types/hospitals'
 import { UserAction } from '../types/user'
-import { IWeekSchedule } from '../types'
+import { ISchedule, IWeekSchedule } from '../types'
 
 export const fetchHospitals = () => (dispatch: Dispatch<HospitalsAction>) => {
   dispatch(setHospitalsLoading(true))
@@ -25,14 +25,21 @@ export const fetchCurrentHospital = () => (dispatch: Dispatch<HospitalsAction>) 
     .catch(catchError)
 }
 
-export const registerHospital = (data: IRegisterHospitalData, cb: () => void) => (dispatch: Dispatch<HospitalsAction | UserAction>) => {
+export const registerHospital = (
+  data: IRegisterHospitalData,
+  cb: () => void,
+  error: () => void
+) => (dispatch: Dispatch<HospitalsAction | UserAction>) => {
   axios.post('/api/hospitals', data)
     .then(({ data }) => {
       dispatch(setUser(data.user))
       message.success('Регистрация выполнена успешно')
       cb()
     })
-    .catch(catchError)
+    .catch(e => {
+      catchError(e)
+      error()
+    })
 }
 
 export const fetchRemoveHospital = (id: string) => (dispatch: Dispatch<HospitalsAction>) => {
@@ -44,7 +51,10 @@ export const fetchRemoveHospital = (id: string) => (dispatch: Dispatch<Hospitals
     .catch(catchError)
 }
 
-export const fetchAddActiveCategory = (categoryId: string, data: { schedule: IWeekSchedule }) => (dispatch: Dispatch<HospitalsAction>) => {
+export const fetchAddActiveCategory = (
+  categoryId: string,
+  data: { schedule: IWeekSchedule }
+) => (dispatch: Dispatch<HospitalsAction>) => {
   axios.post(`/api/service-lists/${categoryId}`, data)
     .then(({ data }) => {
       dispatch(setCurrentHospital(data.hospital))
@@ -53,7 +63,10 @@ export const fetchAddActiveCategory = (categoryId: string, data: { schedule: IWe
     .catch(catchError)
 }
 
-export const fetchUpdateActiveCategory = (categoryId: string, data: { schedule: IWeekSchedule }) => (dispatch: Dispatch<HospitalsAction>) => {
+export const fetchUpdateActiveCategory = (
+  categoryId: string,
+  data: { schedule: IWeekSchedule }
+) => (dispatch: Dispatch<HospitalsAction>) => {
   axios.put(`/api/service-lists/${categoryId}`, data)
     .then(({ data }) => {
       dispatch(setCurrentHospital(data.hospital))
@@ -69,4 +82,17 @@ export const fetchRemoveActiveCategory = (categoryId: string) => (dispatch: Disp
       message.success(data.message)
     })
     .catch(catchError)
+}
+
+export const fetchUpdateHospital = (
+  data: { name: string, address: string, phone: string, schedule: ISchedule }
+) => (dispatch: Dispatch<HospitalsAction>) => {
+  dispatch(setHospitalsLoading(true))
+  axios.put('/api/hospitals', data)
+    .then(({ data }) => {
+      dispatch(setCurrentHospital(data.hospital))
+      message.success(data.message)
+    })
+    .catch(catchError)
+    .finally(() => dispatch(setHospitalsLoading(false)))
 }

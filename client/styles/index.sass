@@ -60,11 +60,20 @@
     border: 0
     cursor: pointer
 
-.auth
+.form
+  width: 100%
+  max-width: 350px
   min-height: 75vh
-  &__form
-    width: 100%
-    max-width: 300px
+  display: flex
+  flex-direction: column
+  justify-content: center
+  margin: 0 auto
+  padding-bottom: $size * 3
+  &--info
+    margin-left: 0
+    min-height: 0
+  &--login
+    max-width: 250px
   &__icon
     color: rgba(#000, .25)
   &__timepicker
