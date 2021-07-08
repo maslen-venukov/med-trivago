@@ -8,7 +8,6 @@ import Appointment from '../models/Appointment'
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import getUniqueIds from '../utils/getUniqueIds'
-import updateData from '../utils/updateData'
 
 import { HTTPStatusCodes } from '../types'
 
@@ -34,9 +33,18 @@ class Controller {
       service.appointedDates.push(new Date(date))
       await service.save()
 
+      const services = await Service.find({ hospital: hospital._id, deleted: false })
+      const currentHospital = {
+        ...hospital._doc,
+        serviceList: hospital.serviceList.map(list => ({
+          ...list._doc,
+          services: services.filter(service => list.category.toString() === service.category.toString())
+        }))
+      }
+
       return res
         .status(HTTPStatusCodes.Created)
-        .json({ message: 'Запись успешно добавлена' })
+        .json({ message: 'Запись успешно добавлена', hospital: currentHospital })
     } catch (e) {
       console.log(e)
       await createError(e)
@@ -44,27 +52,31 @@ class Controller {
     }
   }
 
-  // async getByService(req: IUserRequest, res: Response): Promise<Response> {
-  //   try {
-  //     const service = await Service.findById(req.params.serviceId)
-  //     if(!service) {
-  //       return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
-  //     }
+  async getByService(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const { serviceId } = req.params
 
-  //     const appointments = await Appointment.find({ service: { $in: servicesIds }, deleted: false }).sort({ date: -1 })
+      const service = await Service.findById(serviceId)
+      if(!service) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
 
-  //     const result = appointments.map(appointment => {
-  //       const service = services.find(service => service._id.toString() === appointment.service.toString())
-  //       return { ...appointment._doc, service }
-  //     })
+      const services = await Service.find({ category: service.category, hospital: service.hospital })
+      const byHospital = services.map(service => service.appointedDates).flat()
 
-  //     return res.json({ appointments: result })
-  //   } catch (e) {
-  //     console.log(e)
-  //     await createError(e)
-  //     return errorHandler(res)
-  //   }
-  // }
+      const servicesIds = getUniqueIds(services)
+      const appointments = await Appointment.find({ service: { $in: servicesIds } })
+      const byCustomers = appointments.map(appointment => appointment.date)
+
+      const appointedDates = [...byCustomers, ...byHospital]
+
+      return res.json({ appointedDates })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
 }
 
 export default new Controller()

@@ -79,7 +79,7 @@ const Services: React.FC = () => {
     <ProfileLayout title="Услуги">
       <Table
         dataSource={services}
-        loading={loading && !!currentHospital}
+        loading={!!currentHospital && loading}
         size="middle"
         rowKey={record => record._id}
         title={() => <Button onClick={onOpenCreateDrawer} type="primary">Добавить услугу</Button>}

@@ -15,14 +15,23 @@ import { HTTPStatusCodes } from '../types'
 class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
-      const { name, date, phone, service } = req.body
+      const { name, date, phone, service: serviceId } = req.body
 
-      if(!name || !date || !phone || !service) {
+      if(!name || !date || !phone || !serviceId) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
       }
 
-      const existingAppointment = await Appointment.findOne({ date, service })
+      const service = await Service.findById(serviceId)
+      const services = await Service.find({ category: service.category, hospital: service.hospital })
+      const servicesIds = getUniqueIds(services)
+
+      const existingAppointment = await Appointment.findOne({ date, service: { $in: servicesIds } })
       if(existingAppointment) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
+      }
+
+      const appointmentsByHospital = services.map(service => service.appointedDates).flat().map(service => service.toString())
+      if(appointmentsByHospital.includes(new Date(date).toString())) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
       }
 
@@ -30,12 +39,11 @@ class Controller {
         name,
         date,
         phone,
-        service
+        service: serviceId
       })
 
-      const appointmentService = await Service.findById(service)
 
-      const result = { ...appointment._doc, service: appointmentService }
+      const result = { ...appointment._doc, service }
 
       return res
         .status(HTTPStatusCodes.Created)
@@ -62,26 +70,6 @@ class Controller {
       })
 
       return res.json({ appointments: result })
-    } catch (e) {
-      console.log(e)
-      await createError(e)
-      return errorHandler(res)
-    }
-  }
-
-  async getAppointedDates(req: IUserRequest, res: Response): Promise<Response> {
-    try {
-      const { serviceId } = req.params
-
-      const service = await Service.findById(serviceId)
-      if(!service) {
-        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
-      }
-
-      const appointments = await Appointment.find({ service: serviceId })
-      const appointedDates = [...appointments.map(appointment => appointment.date), ...service.appointedDates]
-
-      return res.json({ appointedDates })
     } catch (e) {
       console.log(e)
       await createError(e)

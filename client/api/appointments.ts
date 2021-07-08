@@ -11,10 +11,12 @@ import {
   setAppointmentsLoading,
   updateAppointment
 } from '../store/actions/appointments'
+import { setCurrentHospital } from '../store/actions/hospitals'
 
 import catchError from '../utils/catchError'
 
 import { AppointmentsAction, IShortAppointment } from '../types/appointments'
+import { HospitalsAction } from '../types/hospitals'
 import { SocketActions } from '../types'
 
 export const fetchAppointments = () => (dispatch: Dispatch<AppointmentsAction>) => {
@@ -23,12 +25,6 @@ export const fetchAppointments = () => (dispatch: Dispatch<AppointmentsAction>) 
     .then(({ data }) => dispatch(setAppointments(data.appointments)))
     .catch(catchError)
     .finally(() => dispatch(setAppointmentsLoading(false)))
-}
-
-export const fetchAppointedDates = (serviceId: string) => (dispatch: Dispatch<AppointmentsAction>) => {
-  axios.get(`api/appointments/appointed-dates/${serviceId}`)
-    .then(({ data }) => dispatch(setAppointedDates(data.appointedDates)))
-    .catch(catchError)
 }
 
 export const fetchCreateAppointment = (data: IShortAppointment, hospitalId: string, socket: Socket) => (dispatch: Dispatch<AppointmentsAction>) => {
@@ -59,10 +55,18 @@ export const fetchUpdateAppointment = (id: string, data: IShortAppointment) => (
     .catch(catchError)
 }
 
-export const fetchCreateAppointDate = (serviceId: string, date: Date, cb: () => void) => {
+export const fetchAppointedDates = (serviceId: string) => (dispatch: Dispatch<AppointmentsAction>) => {
+  axios.get(`api/appointed-dates/${serviceId}`)
+    .then(({ data }) => dispatch(setAppointedDates(data.appointedDates)))
+    .catch(catchError)
+}
+
+export const fetchCreateAppointDate = (serviceId: string, date: Date, cb: () => void) => (dispatch: Dispatch<HospitalsAction>) => {
   axios.post(`/api/appointed-dates/${serviceId}`, { date })
     .then(({ data }) => {
+      console.log(data)
       message.success(data.message)
+      dispatch(setCurrentHospital(data.hospital))
       cb()
     })
     .catch(catchError)

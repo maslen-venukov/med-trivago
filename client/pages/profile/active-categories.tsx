@@ -18,6 +18,8 @@ import { fetchAddActiveCategory, fetchRemoveActiveCategory, fetchCurrentHospital
 
 import { setCategories } from '../../store/actions/categories'
 
+import useSearch from '../../hooks/useSearch'
+
 import getActiveCategorySchedule from '../../utils/getActiveCategorySchedule'
 import getActiveCategoryFormData from '../../utils/getActiveCategoryFormData'
 
@@ -49,6 +51,8 @@ const ActiveCategories: React.FC = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false)
   const [categoryId, setCategoryId] = useState<string | null>(null)
   const [weekend, setWeekend] = useState<IWeekendState>({ saturday: false, sunday: false })
+
+  const getColumnSearchProps = useSearch()
 
   const activeCategories = currentHospital?.serviceList.map(list => list.category)
 
@@ -111,7 +115,7 @@ const ActiveCategories: React.FC = () => {
 
       <Table
         dataSource={categories}
-        loading={loading && !!currentHospital}
+        loading={!!currentHospital && loading}
         size="middle"
         rowKey={record => record._id}
         className="active-categories__table"
@@ -129,7 +133,7 @@ const ActiveCategories: React.FC = () => {
             />
           )}
         />
-        <Column title="Название" dataIndex="name" key="name" />
+        <Column title="Название" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
         <Column
           title="Количество услуг"
           dataIndex="services"

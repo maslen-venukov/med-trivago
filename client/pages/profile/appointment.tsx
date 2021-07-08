@@ -125,6 +125,7 @@ const Appointment: React.FC = () => {
             .filter((service, index, arr) => (
               index === arr.findIndex(el => el.value === service.value)
             ))
+            .sort((a, b) => a.text.localeCompare(b.text, 'ru'))
           }
           onFilter={(value, record: IAppointment) => value === record.service._id}
         />

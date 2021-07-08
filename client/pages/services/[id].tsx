@@ -51,6 +51,7 @@ interface IServiceProps extends IService {
 const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, error }) => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const [form] = Form.useForm()
 
   const { socket } = useSelector((state: RootState) => state.socket)
   const { appointedDates } = useSelector((state: RootState) => state.appointments)
@@ -60,10 +61,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   const [date, setDate] = useState<string>('')
   const [time, setTime] = useState<string>('')
   const [appointmentHours, setAppointmentHours] = useState<IAppointmentHour[]>([])
-
-  const [form] = Form.useForm()
-
-  const modalWidth = 525
 
   const onChangeTimeModal = (visible: boolean, date: string, hours: IAppointmentHour[]) => {
     setTimeModalVisible(visible)
@@ -170,7 +167,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             <TimeModal
               title={date}
               visible={timeModalVisible}
-              width={modalWidth}
               onCancel={onCloseTimeModal}
               appointmentHours={appointmentHours}
               onSelectTime={onOpenAppointmentModal}
@@ -179,7 +175,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             <AppointmentModal
               title={`${time}, ${date}`}
               visible={appointmentModalVisible}
-              width={modalWidth}
               form={form}
               onCancel={onCloseAppointmentModal}
               onFinish={onAppoint}

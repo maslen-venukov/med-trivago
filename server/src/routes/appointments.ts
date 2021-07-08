@@ -12,7 +12,6 @@ const router = Router()
 
 router.post('/', controller.create)
 router.get('/', auth, role(Roles.Hospital), controller.getByHospital)
-router.get('/appointed-dates/:serviceId', objectId('serviceId'), controller.getAppointedDates)
 router.put('/:id', auth, role(Roles.Hospital), objectId(), controller.update)
 router.delete('/:id', auth, role(Roles.Hospital), objectId(), controller.remove)
 

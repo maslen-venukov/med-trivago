@@ -19,7 +19,7 @@ interface ITimeTagProps {
   hour: IAppointmentHour
 }
 
-const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, width, onCancel, appointmentHours, popconfirm, serviceName, date, onSelectTime }) => {
+const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, onCancel, appointmentHours, popconfirm, serviceName, date, onSelectTime }) => {
   const FreeTimeTag: React.FC<ITimeTagProps> = ({ hour }) => popconfirm ? (
     <Popconfirm
       title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
@@ -50,7 +50,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, width, onCancel,
       title={title}
       visible={visible}
       footer={null}
-      width={width}
+      width={525}
       onCancel={onCancel}
     >
       {appointmentHours.map(hour => hour.appointed
