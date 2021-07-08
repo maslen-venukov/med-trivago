@@ -2,7 +2,7 @@ import React from 'react'
 
 import Layout from 'antd/lib/layout'
 
-import Header from '../components/search/Header'
+import Search from '../components/search/Search'
 import Head from '../components/app/Head'
 
 interface IMainLayoutProps {
@@ -11,15 +11,17 @@ interface IMainLayoutProps {
 }
 
 const MainLayout: React.FC<IMainLayoutProps> = ({ children, title, keywords }) => {
+  const phone = '8 (905) 840-44-04'
+  const email = 'ooomk_nv@mail.ru'
+
   return (
     <>
       <Head title={title} keywords={keywords} />
-      <Layout className="layout">
-        <Header />
+      <Layout className="layout container">
+        {/* <Header /> */}
         <Layout.Content>
-          <div className="container">
-            {children}
-          </div>
+          <Search />
+          {children}
         </Layout.Content>
       </Layout>
     </>

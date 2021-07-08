@@ -4,9 +4,13 @@ import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import moment from 'moment'
+import cookie from 'cookie'
 
 import ConfigProvider from 'antd/lib/config-provider'
 import locale from 'antd/lib/locale/ru_RU'
+import notification from 'antd/lib/notification'
+
+import Cookie from '../components/app/Cookie'
 
 import 'moment/locale/ru'
 moment.locale('ru')
@@ -55,7 +59,6 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
     currentHospital && socket?.emit(SocketActions.Join, currentHospital._id)
   }, [socket, currentHospital])
 
-
   useEffect(() => {
     socket?.on(SocketActions.Watch, (data: IAppointment) => {
       dispatch(appointmentNotification(data, router))
@@ -65,6 +68,22 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       audio.play()
     })
   }, [socket])
+
+  useEffect(() => {
+    if(cookie.parse(document.cookie).cookie) {
+      return
+    }
+    document.cookie = cookie.serialize('cookie', 'true', { maxAge: 3600 * 24 * 31 })
+    notification.open({
+      message: 'Мы используем cookie',
+      description: 'Продолжая пользоваться сайтом, вы соглашаетесь с использованием файлов cookie.',
+      icon: <Cookie />,
+      placement: 'bottomLeft',
+      duration: 0,
+      onClick: () => router.push('/cookie'),
+      className: 'cursor-pointer'
+    })
+  }, [])
 
   return (
     <ConfigProvider locale={locale}>

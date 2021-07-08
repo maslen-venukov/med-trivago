@@ -14,6 +14,7 @@ import MainLayout from '../../layouts/MainLayout'
 
 import NotFound from '../../components/app/NotFound'
 import HospitalInfoForm from '../../components/hospitals/HospitalInfoForm'
+import Agreement from '../../components/app/Agreement'
 
 import { registerHospital } from '../../api/hospitals'
 
@@ -113,6 +114,8 @@ const RegisterByLink: React.FC<IRegisterByLinkProps> = ({ link }) => {
               {registration ? 'Регистрация...' : 'Зарегистрироваться'}
             </Button>
           </Form.Item>
+
+          <Agreement />
         </Form>
       ) : <NotFound />}
     </MainLayout>

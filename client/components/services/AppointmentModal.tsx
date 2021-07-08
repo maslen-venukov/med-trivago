@@ -5,6 +5,8 @@ import Form, { FormProps } from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 
+import Agreement from '../app/Agreement'
+
 export interface IAppointmentFormValues {
   name: string
   phone: string
@@ -49,6 +51,8 @@ const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, fo
             Записаться
           </Button>
         </Form.Item>
+
+        <Agreement />
       </Form>
     </Modal>
   )

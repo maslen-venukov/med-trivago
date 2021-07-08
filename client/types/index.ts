@@ -22,6 +22,12 @@ export interface ICustomDrawerProps extends DrawerProps, FormProps {
   submitText: string
 }
 
+export interface IStats {
+  appointments: number
+  services: number
+  hospitals: number
+}
+
 export enum Roles {
   Admin = 'ADMIN',
   Hospital = 'HOSPITAL'

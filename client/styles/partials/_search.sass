@@ -1,18 +1,27 @@
 .search
+  margin-bottom: $size * 2
   .ant-form-item
     margin-right: 0
     &:first-child
       flex: 1
       margin-right: $size
 
+.search-row
+  width: 100%
+  margin: 0 !important
+
 .sort
-  display: flex
-  justify-content: flex-end
+  &__label
+    margin-bottom: $size
   &__select
-    width: 140px
+    width: 100%
+    margin-bottom: $size * 3
 
 .filters
   background-color: #fff
 
-.search-header
-  margin-bottom: $size * 2
+.categories-filter
+  margin-bottom: $size
+  &__tag
+    margin-bottom: $size
+    cursor: pointer

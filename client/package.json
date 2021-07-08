@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@types/cookie": "^0.4.1",
     "antd": "^4.16.2",
     "axios": "^0.21.1",
+    "cookie": "^0.4.1",
     "moment": "^2.29.1",
     "next": "10.2.3",
     "next-redux-wrapper": "^7.0.0",

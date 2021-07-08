@@ -7,6 +7,7 @@ import { Sort } from '../../types/search'
 const SortSelect: React.FC<SelectProps<Sort>> = ({ value, onChange }) => {
   return (
     <div className="sort">
+      <p className="sort__label">Сортировка</p>
       <Select
         defaultValue=""
         value={value}

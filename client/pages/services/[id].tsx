@@ -102,7 +102,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
-  // TODO доделать запись (больница должна добавлять свои записи)
   // TODO поменять поиск + пагинация
 
   // TODO разобраться с link в register
@@ -149,7 +148,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             </Typography.Paragraph>
 
             <Typography.Paragraph className="service__phone">
-              <Link href={`tel:${getPhoneHref(hospital.phone)}`}>
+              <Link href={getPhoneHref(hospital.phone)}>
                 <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
               </Link>
             </Typography.Paragraph>
@@ -179,10 +178,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
               onCancel={onCloseAppointmentModal}
               onFinish={onAppoint}
             />
-          </Col>
-
-          <Col xs={6}>
-            {/* TODO место под рекламу */}
           </Col>
         </Row>
       ) : <NotFound />}

@@ -5,7 +5,7 @@ import Tooltip from 'antd/lib/tooltip'
 import Tag from 'antd/lib/tag'
 import Popconfirm from 'antd/lib/popconfirm'
 
-import { IAppointmentHour } from '../../types'
+import { Colors, IAppointmentHour } from '../../types'
 
 interface ITimeModalProps extends ModalProps {
   appointmentHours: IAppointmentHour[]
@@ -27,19 +27,19 @@ const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, onCancel, appoin
       okText="Да"
       cancelText="Нет"
     >
-      <Tag className="service__appointment-hour">
+      <Tag color={Colors.Accent} className="service__appointment-hour">
         {hour.label}
       </Tag>
     </Popconfirm>
   ) : (
-    <Tag className="service__appointment-hour" onClick={() => onSelectTime(hour.label)}>
+    <Tag color={Colors.Accent} className="service__appointment-hour" onClick={() => onSelectTime(hour.label)}>
       {hour.label}
     </Tag>
   )
 
   const BusyTimeTag: React.FC<ITimeTagProps> = ({ hour }) => (
     <Tooltip title="Данное время занято" placement="right">
-      <Tag className="service__appointment-hour service__appointment-hour--busy">
+      <Tag color={Colors.Red} style={{ cursor: 'default' }} className="service__appointment-hour">
         {hour.label}
       </Tag>
     </Tooltip>

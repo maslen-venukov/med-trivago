@@ -1,21 +1,16 @@
-$size: 8px
-$accent: #1890ff
-$red: #f5222d
-
 .container
   width: 100%
   max-width: 1000px
-  padding: 0 16px
+  padding: 0 $size
   margin: 0 auto
 
 .layout
   min-height: 100vh
   background-color: #fff
+  padding-top: $size * 2
 
 .header
-  display: flex
-  align-items: center
-  background-color: #fff
+  margin-bottom: $size * 2
 
 .icon
   margin-right: 4px
@@ -32,3 +27,6 @@ $red: #f5222d
 
 .placeholder
   color: #bfbfbf
+
+.agreement
+  text-align: center

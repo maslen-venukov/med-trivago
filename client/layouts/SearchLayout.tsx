@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Layout from 'antd/lib/layout'
 import Row from 'antd/lib/row'
-import Tag from 'antd/lib/tag'
 import Col from 'antd/lib/col'
-import CloseOutlined from '@ant-design/icons/CloseOutlined'
+import BackTop from 'antd/lib/back-top'
 
-import Header from '../components/search/Header'
+import Search from '../components/search/Search'
 import Head from '../components/app/Head'
 import Filters from '../components/search/Filters'
 import SortSelect from '../components/search/SortSelect'
+import CategoriesFilter from '../components/search/CategoriesFilter'
+import Header from '../components/app/Header'
 
 import { setFilters, setSort } from '../store/actions/search'
 
@@ -20,7 +21,6 @@ import pushQueryToUrl from '../utils/pushQueryToUrl'
 import { IFilters, ISort, SearchAction, Sort } from '../types/search'
 import { ICategory } from '../types/categories'
 import { RootState } from '../store/reducers'
-import { Colors } from '../types'
 
 interface ISearchLayoutProps {
   categories: ICategory[]
@@ -52,48 +52,28 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
 
   return (
     <>
+      <BackTop />
       <Head title={title} keywords={keywords} />
-      <Layout className="layout">
-        <Header />
-        <Layout className="layout">
-          <div className="container">
-            <Row justify="space-between" align="middle" className="search-header">
-              <Col flex="1">
-                {!error && categories.map(category => (
-                  <Tag
-                    key={category._id}
-                    color={filters.cat === category.name ? Colors.Green : Colors.Accent}
-                    onClick={onCategoryChange}
-                    className="cursor-pointer"
-                  >
-                    {category.name}
-                  </Tag>
-                ))}
-                <Tag
-                  icon={<CloseOutlined />}
-                  onClick={onResetCategory}
-                  className="cursor-pointer"
-                >
-                  Сбросить
-                </Tag>
-              </Col>
-              <Col flex="160px">
-                <SortSelect value={sort.p} onChange={onSortChange} />
-              </Col>
-            </Row>
-
-            <Row gutter={16}>
-              <Col>
-                <Filters />
-              </Col>
-              <Col flex="1">
-                <Layout.Content>
-                  {children}
-                </Layout.Content>
-              </Col>
-            </Row>
-          </div>
-        </Layout>
+      <Layout hasSider={false} className="layout container">
+        {/* <Header /> */}
+        <Layout.Content>
+          <Row gutter={16} className="search-row">
+            <Col flex="1">
+              <Search />
+              <CategoriesFilter
+                categories={categories}
+                error={error}
+                onChange={onCategoryChange}
+                onReset={onResetCategory}
+              />
+              {children}
+            </Col>
+            <Col flex="160px">
+              <SortSelect value={sort.p} onChange={onSortChange} />
+              <Filters />
+            </Col>
+          </Row>
+        </Layout.Content>
       </Layout>
     </>
   )

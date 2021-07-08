@@ -1,3 +1,3 @@
-const getPhoneHref = (str: string) => str.replace(/[^+\d]+/g, '')
+const getPhoneHref = (str: string) => `tel:${str.replace(/[^+\d]+/g, '')}`
 
 export default getPhoneHref

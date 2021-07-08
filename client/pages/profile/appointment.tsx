@@ -106,7 +106,7 @@ const Appointment: React.FC = () => {
           key="phone"
           {...getColumnSearchProps('phone')}
           render={value => (
-            <Link href={`tel:${getPhoneHref(value)}`}>
+            <Link href={getPhoneHref(value)}>
               <a className="appointment__phone">{value}</a>
             </Link>
           )}

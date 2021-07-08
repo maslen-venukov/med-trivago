@@ -111,7 +111,9 @@ const ActiveCategories: React.FC = () => {
 
   return (
     <ProfileLayout title="Активные категории" className="active-categories">
-      <Typography.Title level={5}>Выберите категории, по которым хотите предоставлять услуги</Typography.Title>
+      <Typography.Title level={5} className="active-categories__title">
+        Выберите категории, по которым хотите предоставлять услуги
+      </Typography.Title>
 
       <Table
         dataSource={categories}

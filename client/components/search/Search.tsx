@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Layout from 'antd/lib/layout'
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
@@ -14,7 +13,7 @@ import pushQueryToUrl from '../../utils/pushQueryToUrl'
 
 import { RootState } from '../../store/reducers'
 
-const Header: React.FC = () => {
+const Search: React.FC = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -46,27 +45,23 @@ const Header: React.FC = () => {
   }, [dispatch])
 
   return (
-    <Layout.Header className="header">
-      <div className="container">
-        <div className="search">
-          <Form onFinish={onSearch} layout="inline" initialValues={initialValues}>
-            <Form.Item name="q">
-              <Input
-                placeholder="Поиск по услугам"
-                prefix={<SearchOutlined />}
-                allowClear
-                value={q}
-                onChange={onChange}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">Найти</Button>
-            </Form.Item>
-          </Form>
-        </div>
-      </div>
-    </Layout.Header>
+    <div className="search">
+      <Form onFinish={onSearch} layout="inline" initialValues={initialValues}>
+        <Form.Item name="q">
+          <Input
+            placeholder="Поиск по услугам"
+            prefix={<SearchOutlined />}
+            allowClear
+            value={q}
+            onChange={onChange}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">Найти</Button>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }
 
-export default Header
+export default Search
