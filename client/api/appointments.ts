@@ -58,3 +58,12 @@ export const fetchUpdateAppointment = (id: string, data: IShortAppointment) => (
     })
     .catch(catchError)
 }
+
+export const fetchCreateAppointDate = (serviceId: string, date: Date, cb: () => void) => {
+  axios.post(`/api/appointed-dates/${serviceId}`, { date })
+    .then(({ data }) => {
+      message.success(data.message)
+      cb()
+    })
+    .catch(catchError)
+}

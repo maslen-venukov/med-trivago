@@ -43,7 +43,7 @@ const ActiveCategoriesModal: React.FC<IActiveCategoriesModalProps> = ({ category
           name="weekdays"
           rules={[{ required: true, message: 'Пожалуйста введите расписание в будние дни!' }]}
         >
-          <TimePicker.RangePicker format="HH:mm" minuteStep={30} />
+          <TimePicker.RangePicker inputReadOnly format="HH:mm" minuteStep={30} />
         </Form.Item>
 
         <WeekendDaySchedule

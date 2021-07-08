@@ -99,8 +99,10 @@ class Controller {
       const filters = { name, category, price }
       const find: IFilters = Object.keys(filters).reduce((acc, key) => {
         const value = filters[key]
-        if(value) return { ...acc, [key]: value }
-        return acc
+        if(!value) {
+          return acc
+        }
+        return { ...acc, [key]: value }
       }, {})
 
       const services = await Service.find({ ...find, deleted: false}).sort(sort)

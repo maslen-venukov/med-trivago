@@ -28,6 +28,7 @@ const WeekendDaySchedule: React.FC<IWeekendDayScheduleProps> = ({ label, name, m
         style={{ marginBottom: 8 }}
       >
         <TimePicker.RangePicker
+          inputReadOnly
           disabled={state[name]}
           format="HH:mm"
           minuteStep={30}

@@ -6,6 +6,7 @@ export interface IService {
   price: number
   category: string
   schedule?: IWeekSchedule
+  appointedDates: Date[]
   deleted: boolean
   hospital: {
     name: string

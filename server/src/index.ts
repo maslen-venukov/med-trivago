@@ -18,6 +18,7 @@ import hospitalsRouter from './routes/hospitals'
 import registerLinksRouter from './routes/registerLinks'
 import appointmentsRouter from './routes/appointments'
 import serviceListsRouter from './routes/serviceLists'
+import appointedDatesRouter from './routes/appointedDates'
 
 const { PORT, MONGO_URI } = process.env
 
@@ -37,6 +38,7 @@ app.use('/api/hospitals', hospitalsRouter)
 app.use('/api/register-links', registerLinksRouter)
 app.use('/api/appointments', appointmentsRouter)
 app.use('/api/service-lists', serviceListsRouter)
+app.use('/api/appointed-dates', appointedDatesRouter)
 
 const start = async () => {
   try {

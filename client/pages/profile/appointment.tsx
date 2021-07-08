@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import moment, { Moment } from 'moment'
 
@@ -24,6 +25,8 @@ import { setAppointments } from '../../store/actions/appointments'
 import useSearch from '../../hooks/useSearch'
 
 import renderDate from '../../utils/renderDate'
+import getPhoneHref from '../../utils/getPhoneHref'
+import getServicesFromCurrentHospital from '../../utils/getServicesFromCurrentHospital'
 
 import { RootState } from '../../store/reducers'
 import { IAppointment } from '../../types/appointments'
@@ -48,7 +51,7 @@ const Appointment: React.FC = () => {
 
   const getColumnSearchProps = useSearch()
 
-  const services = currentHospital?.serviceList.map(list => list.services.flat()).flat()
+  const services = getServicesFromCurrentHospital(currentHospital)
 
   const onOpenDrawer = (data: IAppointment) => {
     const service = services?.find(service => typeof data.service !== 'string' && service._id === data.service._id)
@@ -89,15 +92,25 @@ const Appointment: React.FC = () => {
   }, [dispatch])
 
   return (
-    <ProfileLayout title="Запись">
+    <ProfileLayout title="Запись" className="appointment">
       <Table
         dataSource={appointments}
         loading={loading}
         size="middle"
-        rowKey={record => record._id || Math.random()}
+        rowKey={record => record._id}
       >
         <Column title="Имя" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
-        <Column title="Телефон" dataIndex="phone" key="phone" {...getColumnSearchProps('phone')} />
+        <Column
+          title="Телефон"
+          dataIndex="phone"
+          key="phone"
+          {...getColumnSearchProps('phone')}
+          render={value => (
+            <Link href={`tel:${getPhoneHref(value)}`}>
+              <a className="appointment__phone">{value}</a>
+            </Link>
+          )}
+        />
         <Column title="Дата" dataIndex="date" key="date" render={renderDate} />
         <Column
           title="Услуга"

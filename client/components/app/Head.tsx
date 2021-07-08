@@ -40,10 +40,10 @@ const Head: React.FC<IHeadProps> = ({ title, description, keywords, robots = tru
 
   return (
     <NextHead>
-      <title>{flag ? `(${notifications}) Новая запись на прием - ` : ''}{title ? `${title} - ` : ''}Запись на анализы</title>
+      <title>{flag ? `(${notifications}) Новая запись на прием - ` : ''}{title ? `${title} - ` : ''}МеДи - Медицинская диагностика</title>
       <meta name="description" content={description || 'Запись на платные анализы Оренбург, МРТ, УЗИ, ЭКГ'} />
       <meta name="robots" content={robots ? 'all' : 'none'} />
-      <meta name="keywords" content={`запись на анализы, анализы, оренбург, мрт, узи, экг, клиника, больница${keywords ? `, ${keywords.join(', ')}` : ''}`} />
+      <meta name="keywords" content={`меди, медицинская диагностика, запись на анализы, анализы, оренбург, мрт, узи, экг, кт, клиника, больница${keywords ? `, ${keywords.join(', ')}` : ''}`} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="icon" href={flag ? '/notification/icon.ico' : '/favicon.ico'} />
     </NextHead>

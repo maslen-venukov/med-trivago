@@ -51,6 +51,7 @@ const Info: React.FC = () => {
           layout="vertical"
           initialValues={initialValues || {}}
           className="form form--info"
+          onChange={values => console.log(values)}
         >
           <HospitalInfoForm />
           <Form.Item>

@@ -52,7 +52,8 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     { label: 'Информация', href: '/profile/info', role: Roles.Hospital },
     { label: 'Активные категории', href: '/profile/active-categories', role: Roles.Hospital },
     { label: 'Услуги', href: '/profile/services', role: Roles.Hospital },
-    { label: 'Запись', href: '/profile/appointment', role: Roles.Hospital, notifications }
+    { label: 'Запись', href: '/profile/appointment', role: Roles.Hospital, notifications },
+    { label: 'Занятое время', href: '/profile/busy-time', role: Roles.Hospital }
   ]
 
   const onLogout = () => dispatch(logout(router))

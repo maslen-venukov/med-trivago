@@ -1,0 +1,26 @@
+.form
+  width: 100%
+  max-width: 350px
+  min-height: 75vh
+  display: flex
+  flex-direction: column
+  justify-content: center
+  margin: 0 auto
+  padding-bottom: $size * 3
+  &--info
+    margin-left: 0
+    min-height: 0
+  &--login
+    max-width: 300px
+  &__icon
+    color: rgba(#000, .25)
+  &__timepicker
+    padding-left: 29px
+    .ant-picker-suffix
+      position: absolute
+      margin-left: 0
+      left: 11px
+    .ant-picker-active-bar
+      transform: translateX(18px)
+  &__btn
+    width: 100%

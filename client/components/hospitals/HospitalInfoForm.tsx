@@ -48,7 +48,7 @@ const HospitalInfoForm: React.FC = () => {
         label="График работы"
         rules={[{ required: true, message: 'Пожалуйста введите рабочее время!' }]}
       >
-        <TimePicker.RangePicker format="HH:mm" minuteStep={30} className="form__timepicker" />
+        <TimePicker.RangePicker inputReadOnly format="HH:mm" minuteStep={30} className="form__timepicker" />
       </Form.Item>
     </>
   )

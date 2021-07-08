@@ -11,7 +11,7 @@ import CloseOutlined from '@ant-design/icons/CloseOutlined'
 import Header from '../components/search/Header'
 import Head from '../components/app/Head'
 import Filters from '../components/search/Filters'
-import SortComponent from '../components/search/Sort'
+import SortSelect from '../components/search/SortSelect'
 
 import { setFilters, setSort } from '../store/actions/search'
 
@@ -78,7 +78,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
                 </Tag>
               </Col>
               <Col flex="160px">
-                <SortComponent value={sort.p} onChange={onSortChange} />
+                <SortSelect value={sort.p} onChange={onSortChange} />
               </Col>
             </Row>
 

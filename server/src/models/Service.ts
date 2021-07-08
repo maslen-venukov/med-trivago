@@ -9,6 +9,7 @@ export interface IService {
   price: number
   hospital: string
   category: string
+  appointedDates: Date[]
   deleted: boolean
 }
 
@@ -17,6 +18,7 @@ const schema = new Schema({
   price: { type: Number, required: true, min: 0 },
   hospital: { type: ObjectId, ref: 'Hospitals', required: true },
   category: { type: ObjectId, ref: 'Categories', required: true },
+  appointedDates: { type: [Date] },
   deleted: { type: Boolean, default: false }
 }, {
   timestamps: true

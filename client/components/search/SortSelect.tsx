@@ -4,7 +4,7 @@ import Select, { SelectProps } from 'antd/lib/select'
 
 import { Sort } from '../../types/search'
 
-const SortComponent: React.FC<SelectProps<Sort>> = ({ value, onChange }) => {
+const SortSelect: React.FC<SelectProps<Sort>> = ({ value, onChange }) => {
   return (
     <div className="sort">
       <Select
@@ -21,4 +21,4 @@ const SortComponent: React.FC<SelectProps<Sort>> = ({ value, onChange }) => {
   )
 }
 
-export default SortComponent
+export default SortSelect

@@ -26,8 +26,6 @@ const getAppointmentHours = (date: Moment, schedule: IWeekSchedule, appointedDat
     .filter(appointedDate => formatDate(appointedDate) === formatDate(date))
     .map(time => formatTime(time))
 
-  console.log(appointedTimes)
-
   return Array(24)
     .fill(0)
     .map((_, index) => index)

@@ -32,7 +32,9 @@ const RegisterByLink: React.FC<IRegisterByLinkProps> = ({ link }) => {
   const [registration, setRegistration] = useState<boolean>(false)
 
   const onRegister = (values: IRegisterHospitalData) => {
-    if(!Array.isArray(values.schedule)) return
+    if(!Array.isArray(values.schedule)) {
+      return
+    }
     const schedule = formatSchedule(values.schedule)
     const data = { ...values , schedule, link }
     const success = () => router.push('/profile')

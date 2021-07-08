@@ -1,7 +1,7 @@
 import { Moment } from 'moment'
 
 import { ISchedule } from './'
-import { IShortService } from './services'
+import { IService } from './services'
 
 export interface IRegisterHospitalData {
   email: string
@@ -20,7 +20,7 @@ export interface IServiceList {
     saturday: ISchedule
     sunday: ISchedule
   }
-  services: IShortService[]
+  services: IService[]
 }
 
 export interface IHospital {

@@ -73,11 +73,15 @@ class Controller {
     try {
       const { serviceId } = req.params
 
+      const service = await Service.findById(serviceId)
+      if(!service) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
+
       const appointments = await Appointment.find({ service: serviceId })
+      const appointedDates = [...appointments.map(appointment => appointment.date), ...service.appointedDates]
 
-      const result = appointments.map(appointment => appointment.date)
-
-      return res.json({ appointedDates: result })
+      return res.json({ appointedDates })
     } catch (e) {
       console.log(e)
       await createError(e)

@@ -33,6 +33,8 @@ import getPhoneHref from '../../utils/getPhoneHref'
 import getAppointmentHours from '../../utils/getAppointmentHours'
 import connectSocket from '../../utils/connectSocket'
 import formatPrice from '../../utils/formatPrice'
+import getDisabledDate from '../../utils/getDisabledDate'
+import parseAppointedDate from '../../utils/parseAppointedDate'
 
 import { IService } from '../../types/services'
 import { IHospital } from '../../types/hospitals'
@@ -63,19 +65,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
   const modalWidth = 525
 
-  const getWeekend = (schedule: IWeekSchedule) => {
-    const arr = []
-    !schedule?.saturday && arr.push(5)
-    !schedule?.sunday && arr.push(6)
-    return arr
-  }
-
-  const getDisabledDate = (date: Moment) => {
-    const isWeekend = getWeekend(schedule).includes(date.weekday())
-    const isBefore = date.isBefore(moment(new Date()).add(-1, 'days'))
-    return isWeekend || isBefore
-  }
-
   const onChangeTimeModal = (visible: boolean, date: string, hours: IAppointmentHour[]) => {
     setTimeModalVisible(visible)
     setDate(date)
@@ -99,7 +88,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     const serviceId = router.query.id
     const data = ({
       ...values,
-      date: new Date(`${date.split('.').reverse().join('-')} ${time}`),
+      date: parseAppointedDate(date, time),
       service: (typeof serviceId === 'string' && serviceId) || ''
     })
 
@@ -119,9 +108,12 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO доделать запись (больница должна добавлять свои записи)
   // TODO поменять поиск + пагинация
 
+  // TODO разобраться с link в register
+
   // TODO добавить галочки на согласие
   // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
   // TODO уведомление о куки
+  // TODO текст письма
 
   // TODO ? не выводить прошедшие записи в таблицу
   // TODO ? сделать поле seen у новых записей
@@ -138,7 +130,10 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   }, [dispatch])
 
   return (
-    <MainLayout title={name} keywords={!error ? [name, hospital.name, hospital.address, hospital.phone] : []}>
+    <MainLayout
+      title={name}
+      keywords={!error ? [name, formatPrice(price), hospital.name, hospital.address, hospital.phone] : []}
+    >
       {!error ? (
         <Row className="service">
           <Col xs={18}>
@@ -162,12 +157,12 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
               </Link>
             </Typography.Paragraph>
 
-            <div className="service__calendar">
+            <div className="calendar">
               <Calendar
-                disabledDate={getDisabledDate}
+                disabledDate={date => getDisabledDate(date, schedule)}
                 fullscreen={false}
                 dateCellRender={date => (
-                  <button className="service__trigger" onClick={() => onOpenTimeModal(date)} />
+                  <button className="calendar__trigger" onClick={() => onOpenTimeModal(date)} />
                 )}
               />
             </div>
@@ -175,11 +170,10 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             <TimeModal
               title={date}
               visible={timeModalVisible}
-              footer={null}
               width={modalWidth}
               onCancel={onCloseTimeModal}
               appointmentHours={appointmentHours}
-              onOpenAppointmentModal={onOpenAppointmentModal}
+              onSelectTime={onOpenAppointmentModal}
             />
 
             <AppointmentModal

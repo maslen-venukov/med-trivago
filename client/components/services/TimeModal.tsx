@@ -3,32 +3,43 @@ import React from 'react'
 import Modal, { ModalProps } from 'antd/lib/modal'
 import Tooltip from 'antd/lib/tooltip'
 import Tag from 'antd/lib/tag'
+import Popconfirm from 'antd/lib/popconfirm'
 
-import { IAppointmentHour, Colors } from '../../types'
+import { IAppointmentHour } from '../../types'
 
 interface ITimeModalProps extends ModalProps {
   appointmentHours: IAppointmentHour[]
-  onOpenAppointmentModal: (time: string) => void
+  popconfirm?: boolean
+  serviceName?: string
+  date?: string
+  onSelectTime: (time: string) => void
 }
 
 interface ITimeTagProps {
   hour: IAppointmentHour
 }
 
-const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, width, onCancel, appointmentHours, onOpenAppointmentModal }) => {
-  const FreeTimeTag: React.FC<ITimeTagProps> = ({ hour }) => (
-    <Tag
-      color={Colors.Accent}
-      className="service__appointment-hour"
-      onClick={() => onOpenAppointmentModal(hour.label)}
+const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, width, onCancel, appointmentHours, popconfirm, serviceName, date, onSelectTime }) => {
+  const FreeTimeTag: React.FC<ITimeTagProps> = ({ hour }) => popconfirm ? (
+    <Popconfirm
+      title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
+      onConfirm={() => onSelectTime(hour.label)}
+      okText="Да"
+      cancelText="Нет"
     >
+      <Tag className="service__appointment-hour">
+        {hour.label}
+      </Tag>
+    </Popconfirm>
+  ) : (
+    <Tag className="service__appointment-hour" onClick={() => onSelectTime(hour.label)}>
       {hour.label}
     </Tag>
   )
 
   const BusyTimeTag: React.FC<ITimeTagProps> = ({ hour }) => (
     <Tooltip title="Данное время занято" placement="right">
-      <Tag color={Colors.Red} className="service__appointment-hour">
+      <Tag className="service__appointment-hour service__appointment-hour--busy">
         {hour.label}
       </Tag>
     </Tooltip>
