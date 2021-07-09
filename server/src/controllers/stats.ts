@@ -1,6 +1,5 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 
-import { IUserRequest } from '../models/User'
 import Appointment from '../models/Appointment'
 import Service from '../models/Service'
 import Hospital from '../models/Hospital'
@@ -9,7 +8,7 @@ import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 
 class Controller {
-    async getCount(req: IUserRequest, res: Response): Promise<Response> {
+  async getCount(req: Request, res: Response): Promise<Response> {
     try {
       const appointments = await Appointment.countDocuments()
       const services = await Service.countDocuments()

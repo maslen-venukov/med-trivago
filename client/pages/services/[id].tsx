@@ -102,7 +102,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
-  // TODO поменять поиск + пагинация
+  // TODO ? пагинация
 
   // TODO header
 

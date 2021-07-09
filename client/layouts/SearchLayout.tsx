@@ -12,7 +12,6 @@ import Head from '../components/app/Head'
 import Filters from '../components/search/Filters'
 import SortSelect from '../components/search/SortSelect'
 import CategoriesFilter from '../components/search/CategoriesFilter'
-import Header from '../components/app/Header'
 
 import { setFilters, setSort } from '../store/actions/search'
 
@@ -55,7 +54,6 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
       <BackTop />
       <Head title={title} keywords={keywords} />
       <Layout hasSider={false} className="layout container">
-        {/* <Header /> */}
         <Layout.Content>
           <Row gutter={16} className="search-row">
             <Col style={{ width: 'calc(100% - 216px)'}}>

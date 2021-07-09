@@ -25,6 +25,18 @@
     transition: .2s color
     &:hover
       color: $accent
+  &__title.ant-typography
+    color: $accent
+    & + .ant-typography
+      margin-bottom: $size * 2
+  &__schedule
+    .ant-typography
+      margin: 0
+  &__phone a
+    color: inherit
+  &__appointment-hour
+    margin-bottom: $size
+    cursor: pointer
 
 .services-grid
   display: flex

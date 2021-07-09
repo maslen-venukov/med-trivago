@@ -20,29 +20,29 @@ interface ITimeTagProps {
 }
 
 const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, onCancel, appointmentHours, popconfirm, serviceName, date, onSelectTime }) => {
-  const FreeTimeTag: React.FC<ITimeTagProps> = ({ hour }) => popconfirm ? (
-    <Popconfirm
-      title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
-      onConfirm={() => onSelectTime(hour.label)}
-      okText="Да"
-      cancelText="Нет"
-    >
-      <Tag color={Colors.Accent} className="service__appointment-hour">
-        {hour.label}
-      </Tag>
-    </Popconfirm>
-  ) : (
-    <Tag color={Colors.Accent} className="service__appointment-hour" onClick={() => onSelectTime(hour.label)}>
-      {hour.label}
-    </Tag>
-  )
-
-  const BusyTimeTag: React.FC<ITimeTagProps> = ({ hour }) => (
+  const TimeTag: React.FC<ITimeTagProps> = ({ hour }) => hour.appointed ? (
     <Tooltip title="Данное время занято" placement="right">
       <Tag color={Colors.Red} style={{ cursor: 'default' }} className="service__appointment-hour">
         {hour.label}
       </Tag>
     </Tooltip>
+  ) : (
+    popconfirm ? (
+      <Popconfirm
+        title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
+        onConfirm={() => onSelectTime(hour.label)}
+        okText="Да"
+        cancelText="Нет"
+      >
+        <Tag color={Colors.Accent} className="service__appointment-hour">
+          {hour.label}
+        </Tag>
+      </Popconfirm>
+    ) : (
+      <Tag color={Colors.Accent} className="service__appointment-hour" onClick={() => onSelectTime(hour.label)}>
+        {hour.label}
+      </Tag>
+    )
   )
 
   return (
@@ -53,9 +53,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, onCancel, appoin
       width={525}
       onCancel={onCancel}
     >
-      {appointmentHours.map(hour => hour.appointed
-        ? <BusyTimeTag key={hour.label} hour={hour} />
-        : <FreeTimeTag key={hour.label} hour={hour} />)}
+      {appointmentHours.map(hour => <TimeTag key={hour.label} hour={hour} />)}
     </Modal>
   )
 }

@@ -105,7 +105,61 @@ class Controller {
         return { ...acc, [key]: value }
       }, {})
 
-      const services = await Service.find({ ...find, deleted: false}).sort(sort)
+      const services = await Service.find({ ...find, deleted: false }).sort(sort)
+
+      const hospitalsIds = getUniqueIds(services, 'hospital')
+      const hospitals = await Hospital.find({ _id: hospitalsIds })
+
+      const withHospitals = services.map(service => {
+        const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
+        const { name, address, phone } = hospital
+        return {
+          ...service._doc,
+          hospital: { name, address, phone }
+        }
+      })
+
+      const groupBy = <T>(arr: T[], key: string): T[][] => {
+        const values = arr.reduce((acc, el) => {
+          (acc[el[key]] = acc[el[key]] || []).push(el)
+          return acc
+        }, {})
+        return Object.values(values)
+      }
+
+      const getMinValue = <T>(arr: T[], key: string): number => {
+        return arr.reduce((min: number, next) => next[key] < min ? next[key] : min, arr[0][key])
+      }
+
+      const grouped = groupBy(withHospitals, 'name')
+
+      const mapped = grouped.map(group => {
+        const name = group[0].name
+        const min = getMinValue(group, 'price')
+        const services = group.sort((a, b) => a.price > b.price ? 1 : -1)
+        return {
+          name,
+          min,
+          services
+        }
+      })
+
+      return res.json({ searched: mapped })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async getCompare(req: Request, res: Response): Promise<Response> {
+    try {
+      const { serviceName } = req.params
+
+      const services = await Service.find({ name: serviceName, deleted: false })
+      if(!services.length) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
+      }
 
       const hospitalsIds = getUniqueIds(services, 'hospital')
       const hospitals = await Hospital.find({ _id: hospitalsIds })
@@ -115,15 +169,11 @@ class Controller {
         const { name, address, phone } = hospital
         return {
           ...service._doc,
-          hospital: {
-            name,
-            address,
-            phone
-          }
+          hospital: { name, address, phone }
         }
       })
 
-      return res.json({ services: result })
+      return res.json({ compared: result })
     } catch (e) {
       console.log(e)
       await createError(e)

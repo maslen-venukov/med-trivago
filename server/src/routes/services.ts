@@ -12,6 +12,7 @@ const router = Router()
 
 router.post('/', auth, role(Roles.Hospital), controller.create)
 router.get('/', controller.getAll)
+router.get('/compare/:serviceName', controller.getCompare)
 router.get('/hospital', auth, role(Roles.Hospital), controller.getByHospital)
 router.get('/:id', objectId(), controller.getById)
 router.put('/:id', auth, role(Roles.Hospital), objectId(), controller.update)
