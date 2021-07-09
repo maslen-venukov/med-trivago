@@ -1,3 +1,11 @@
+import { IService } from './services'
+
+export interface ISearchResult {
+  name: string
+  min: number
+  services: IService[]
+}
+
 export interface IFilters {
   cat: string
   minp: string | number

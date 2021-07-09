@@ -104,11 +104,9 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
   // TODO поменять поиск + пагинация
 
-  // TODO разобраться с link в register
+  // TODO header
 
-  // TODO добавить галочки на согласие
   // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
-  // TODO уведомление о куки
   // TODO текст письма
 
   // TODO ? не выводить прошедшие записи в таблицу

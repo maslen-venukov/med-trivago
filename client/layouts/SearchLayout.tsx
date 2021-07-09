@@ -58,7 +58,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
         {/* <Header /> */}
         <Layout.Content>
           <Row gutter={16} className="search-row">
-            <Col flex="1">
+            <Col style={{ width: 'calc(100% - 216px)'}}>
               <Search />
               <CategoriesFilter
                 categories={categories}
@@ -68,7 +68,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
               />
               {children}
             </Col>
-            <Col flex="160px">
+            <Col style={{ width: '216px' }}>
               <SortSelect value={sort.p} onChange={onSortChange} />
               <Filters />
             </Col>

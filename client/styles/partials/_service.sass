@@ -1,13 +1,35 @@
 .service
-  &__title.ant-typography
-    color: $accent
-    & + .ant-typography
-      margin-bottom: 14px
-  &__schedule
-    .ant-typography
-      margin: 0
-  &__phone a
-    color: inherit
-  &__appointment-hour
-    margin-bottom: $size
-    cursor: pointer
+  margin-bottom: $size * 2
+  cursor: default
+  .ant-card-body
+    padding: $size * 2
+  &__info
+    display: block
+    text-align: center
+  &__italic
+    font-style: italic
+  &__divider
+    margin: $size * 2 0
+  &__list
+    list-style: none
+    padding: 0
+    margin: 0
+  &__link
+    display: flex
+    justify-content: space-between
+  &__hospital
+    max-width: calc(100% - 60px)
+    white-space: nowrap
+    text-overflow: ellipsis
+    overflow: hidden
+    transition: .2s color
+    &:hover
+      color: $accent
+
+.services-grid
+  display: flex
+  margin-left: -$size * 2
+  width: auto
+  &__column
+    padding-left: $size * 2
+    background-clip: padding-box

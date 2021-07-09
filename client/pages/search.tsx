@@ -3,27 +3,25 @@ import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-
-import List from 'antd/lib/list'
+import Masonry from 'react-masonry-css'
 
 import SearchLayout from '../layouts/SearchLayout'
 
-import Service from '../components/services/Service'
+import Searched from '../components/services/Searched'
 
 import { setFilters, setQuery, setSort } from '../store/actions/search'
 
 import { ICategory } from '../types/categories'
-import { IService } from '../types/services'
 import { RootState } from '../store/reducers'
-import { Sort } from '../types/search'
+import { ISearchResult, Sort } from '../types/search'
 
 interface ISearchProps {
   categories: ICategory[]
-  services: IService[]
+  searched: ISearchResult[]
   error: string
 }
 
-const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
+const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -51,12 +49,12 @@ const Search: React.FC<ISearchProps> = ({ categories, services, error }) => {
       title={getTitle()}
       keywords={[getTitle()]}
     >
-      <List
-        className="services"
-        bordered
-        dataSource={services}
-        renderItem={(service: IService) => <Service {...service} />}
-      />
+      <Masonry
+        breakpointCols={3}
+        className="services-grid"
+        columnClassName="services-grid__column">
+        {searched.map(service => <Searched {...service} key={service.name} categories={categories} />)}
+      </Masonry>
     </SearchLayout>
   )
 }
@@ -71,12 +69,12 @@ export const getServerSideProps: GetServerSideProps  = async context => {
     ])
 
     const { categories } = res[0].data
-    const { services } = res[1].data
+    const { searched } = res[1].data
 
     return {
       props: {
         categories,
-        services
+        searched
       }
     }
   } catch {
