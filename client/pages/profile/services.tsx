@@ -49,7 +49,8 @@ const Services: React.FC = () => {
   } = useDrawers(form)
 
   const getServiceData = (data: IService | IShortService) => {
-    const { name, price, category } = data
+    const { name, price, category: categoryName } = data
+    const category = categories.find(category => category.name === categoryName)?._id
     return { name, price, category }
   }
 
@@ -60,7 +61,7 @@ const Services: React.FC = () => {
   }
 
   const onUpdate = (values: IShortService) => {
-    id && dispatch(fetchUpdateService(id, getServiceData(values)))
+    id && dispatch(fetchUpdateService(id, values))
     onCloseUpdateDrawer()
   }
 

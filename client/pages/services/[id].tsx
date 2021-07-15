@@ -102,6 +102,14 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
+  // TODO Поиск/сортировка по дате в записи
+  // TODO Выделять прошедшие даты
+  // TODO Календарь для занятых дат
+  // TODO Название услуги в модалках
+  // TODO Когда жмем на категории в поиске, строка очищается
+  // TODO Добавить города
+  // TODO Сайт при регистрации
+
   // TODO ? пагинация
 
   // TODO header
