@@ -98,6 +98,9 @@ const Appointment: React.FC = () => {
         loading={loading}
         size="middle"
         rowKey={record => record._id}
+        onRow={record => ({
+          className: new Date(record.date) < new Date ? 'past-time-row' : ''
+        })}
       >
         <Column title="Имя" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
         <Column
@@ -111,7 +114,13 @@ const Appointment: React.FC = () => {
             </Link>
           )}
         />
-        <Column title="Дата" dataIndex="date" key="date" render={renderDate} />
+        <Column
+          title="Дата"
+          dataIndex="date"
+          key="date"
+          render={renderDate}
+          sorter={(a: IAppointment, b: IAppointment) => a.date > b.date ? 1 : -1}
+        />
         <Column
           title="Услуга"
           dataIndex="service"
