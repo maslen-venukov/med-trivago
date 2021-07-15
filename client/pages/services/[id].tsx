@@ -104,9 +104,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
   // TODO Календарь для занятых дат
 
-  // TODO Название услуги в модалках
-  // TODO Когда жмем на категории в поиске, строка очищается
-
   // TODO Добавить города
   // TODO Сайт при регистрации
 
@@ -171,7 +168,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             </div>
 
             <TimeModal
-              title={date}
+              title={`${name} — ${date}`}
               visible={timeModalVisible}
               onCancel={onCloseTimeModal}
               appointmentHours={appointmentHours}
@@ -179,7 +176,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             />
 
             <AppointmentModal
-              title={`${time}, ${date}`}
+              title={`${name} — ${time}, ${date}`}
               visible={appointmentModalVisible}
               form={form}
               onCancel={onCloseAppointmentModal}

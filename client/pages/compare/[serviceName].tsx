@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import axios from 'axios'
@@ -22,12 +22,15 @@ interface ICompareProps {
 }
 
 const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
-  const service = compared[0]
-  const title = `Цены на ${service.name}`
+  const [title, setTitle] = useState<string>('')
 
-  const renderLinkToServicePage = (text: string) => (
-    <Link href={`/services/${service._id}`}><a>{text}</a></Link>
+  const renderLinkToServicePage = (id: string, text: string) => (
+    <Link href={`/services/${id}`}><a>{text}</a></Link>
   )
+
+  useEffect(() => {
+    !error && setTitle(`Цены на ${compared[0].name}`)
+  }, [error])
 
   return (
     <MainLayout title={title}>
@@ -39,10 +42,10 @@ const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
             dataSource={compared}
             renderItem={service => (
               <List.Item
-                actions={[<Button type="primary">{renderLinkToServicePage('Подробнее')}</Button>]}
+                actions={[<Button type="primary">{renderLinkToServicePage(service._id, 'Подробнее')}</Button>]}
               >
                 <List.Item.Meta
-                  title={renderLinkToServicePage(service.hospital.name)}
+                  title={renderLinkToServicePage(service._id, service.hospital.name)}
                   description={service.hospital.address}
                 />
                 <Typography.Title type="success" level={5}>{formatPrice(service.price)}</Typography.Title>
@@ -66,7 +69,8 @@ export const getServerSideProps: GetServerSideProps  = async context => {
         compared: res.data.compared
       }
     }
-  } catch {
+  } catch (e) {
+    console.log(e)
     return {
       props: {
         error: 'Ошибка при загрузке данных'

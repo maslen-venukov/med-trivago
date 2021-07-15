@@ -16,21 +16,14 @@ import { RootState } from '../../store/reducers'
 const Search: React.FC = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const [form] = Form.useForm()
 
   const { q, filters, sort } = useSelector((state: RootState) => state.search)
 
-  const initialValues = {
-    q: router.query.q || ''
-  }
-
   const onSearch = () => {
-    if(router.pathname === '/') {
-      const url = `/search${q ? `?q=${q}` : ''}`
-      router.push(url)
-    } else {
-      const data = { q, ...filters, ...sort }
-      pushQueryToUrl(router, data)
-    }
+    router.pathname === '/'
+      ? router.push(`/search${q ? `?q=${q}` : ''}`)
+      : pushQueryToUrl(router, { q, ...filters, ...sort })
   }
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,9 +37,13 @@ const Search: React.FC = () => {
     }
   }, [dispatch])
 
+  useEffect(() => {
+    form.setFieldsValue({ q })
+  }, [q])
+
   return (
     <div className="search">
-      <Form onFinish={onSearch} layout="inline" initialValues={initialValues}>
+      <Form onFinish={onSearch} layout="inline" form={form}>
         <Form.Item name="q">
           <Input
             placeholder="Поиск по услугам"

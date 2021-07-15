@@ -13,7 +13,7 @@ import Filters from '../components/search/Filters'
 import SortSelect from '../components/search/SortSelect'
 import CategoriesFilter from '../components/search/CategoriesFilter'
 
-import { setFilters, setSort } from '../store/actions/search'
+import { setFilters, setQuery, setSort } from '../store/actions/search'
 
 import pushQueryToUrl from '../utils/pushQueryToUrl'
 
@@ -44,7 +44,11 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
 
   const onCategoryChange = (e: React.MouseEvent<HTMLSpanElement>) => {
     const cat = e.currentTarget.textContent || ''
-    onDataChange({ ...filters, cat }, setFilters)
+    // onDataChange({ ...filters, cat }, setFilters)
+    const data = { ...filters, ...sort, cat, q: '' }
+    pushQueryToUrl(router, data)
+    dispatch(setFilters({ ...filters, cat }))
+    dispatch(setQuery(''))
   }
 
   const onResetCategory = () => onDataChange({ ...filters, cat: '' }, setFilters)
