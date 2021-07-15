@@ -6,6 +6,7 @@ import TimePicker from 'antd/lib/time-picker'
 import UserOutlined from '@ant-design/icons/UserOutlined'
 import HomeOutlined from '@ant-design/icons/HomeOutlined'
 import PhoneOutlined from '@ant-design/icons/PhoneOutlined'
+import GlobalOutlined from '@ant-design/icons/GlobalOutlined'
 
 const HospitalInfoForm: React.FC = () => {
   return (
@@ -40,6 +41,16 @@ const HospitalInfoForm: React.FC = () => {
         <Input
           prefix={<PhoneOutlined className="form__icon" />}
           placeholder="Телефон"
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="website"
+        label="Веб-сайт"
+      >
+        <Input
+          prefix={<GlobalOutlined className="form__icon" />}
+          placeholder="Веб-сайт"
         />
       </Form.Item>
 

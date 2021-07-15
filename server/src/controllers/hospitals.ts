@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
 
 import { cookieOptions } from '../core/cookie'
 
@@ -16,16 +15,14 @@ import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import updateData from '../utils/updateData'
 import getUniqueIds from '../utils/getUniqueIds'
+import createToken from '../utils/createToken'
 
 import { HTTPStatusCodes, Roles } from '../types'
-
-const SECRET_KEY = process.env.SECRET_KEY
-const TOKEN_LIFETIME = process.env.TOKEN_LIFETIME
 
 class Controller {
   async create(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password, passwordCheck, name, address, phone, schedule, link } = req.body
+      const { email, password, passwordCheck, name, address, phone, website, schedule, link } = req.body
 
       const userData = await register(email, password, passwordCheck)
 
@@ -51,12 +48,11 @@ class Controller {
       const role = Roles.Hospital
 
       const user = await User.create({ ...userData, role })
-      const hospital = await Hospital.create({ name, address, phone, schedule, user: user._id })
+      const hospital = await Hospital.create({ name, address, phone, website, schedule, user: user._id })
       await RegisterLink.deleteOne({ link })
 
       const data = { _id: user._id, email, role }
-
-      const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
+      const token = createToken(data)
 
       return res
         .status(HTTPStatusCodes.Created)
@@ -141,8 +137,8 @@ class Controller {
     try {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const { name, address, phone, schedule } = req.body
-      updateData(hospital, { name, address, phone, schedule })
+      const { name, address, phone, website, schedule } = req.body
+      updateData(hospital, { name, address, phone, website, schedule })
 
       await hospital.save()
       return res.json({ message: 'Информация успешно обновлена', hospital })

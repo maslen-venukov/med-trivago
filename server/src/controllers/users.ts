@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
 
 import { cookieOptions } from '../core/cookie'
 
@@ -10,11 +9,9 @@ import register from '../services/register'
 
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
+import createToken from '../utils/createToken'
 
 import { HTTPStatusCodes } from '../types'
-
-const SECRET_KEY = process.env.SECRET_KEY
-const TOKEN_LIFETIME = process.env.TOKEN_LIFETIME
 
 class Controller {
   async register(req: Request, res: Response): Promise<Response> {
@@ -33,7 +30,7 @@ class Controller {
 
       const data = { _id, email, role }
 
-      const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
+      const token = createToken(data)
 
       return res
         .status(HTTPStatusCodes.Created)
@@ -70,7 +67,7 @@ class Controller {
       const { _id, role } = user
       const data = { _id, email, role }
 
-      const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
+      const token = createToken(data)
 
       return res
         .cookie('token', token, cookieOptions)
@@ -96,7 +93,7 @@ class Controller {
       const { _id, email, role } = user
       const data = { _id, email, role }
 
-      const token = `Bearer ${jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_LIFETIME })}`
+      const token = createToken(data)
 
       return res
         .cookie('token', token, cookieOptions)

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { Socket } from 'socket.io-client'
 import axios from 'axios'
-import moment, { Moment } from 'moment'
+import { Moment } from 'moment'
 
 import Row from 'antd/lib/row'
 import Col from 'antd/lib/col'
@@ -15,6 +15,7 @@ import Form from 'antd/lib/form'
 import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
+import GlobalOutlined from '@ant-design/icons/GlobalOutlined'
 
 import MainLayout from '../../layouts/MainLayout'
 
@@ -105,12 +106,9 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO Календарь для занятых дат
 
   // TODO Добавить города
-  // TODO Сайт при регистрации
 
 
   // TODO ? пагинация
-
-  // TODO header
 
   // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
   // TODO текст письма
@@ -156,6 +154,14 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
                 <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
               </Link>
             </Typography.Paragraph>
+
+            {hospital.website && (
+              <Typography.Paragraph>
+                <Link href={hospital.website.includes('http') ? hospital.website : `//${hospital.website}`}>
+                  <a target="_blank" rel="noreferrer"><GlobalOutlined className="icon" /> {hospital.website}</a>
+                </Link>
+              </Typography.Paragraph>
+            )}
 
             <div className="calendar">
               <Calendar

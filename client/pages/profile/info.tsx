@@ -29,13 +29,13 @@ const Info: React.FC = () => {
 
   const { currentHospital, loading } = useSelector((state: RootState) => state.hospitals)
 
-  const initialValues = currentHospital && {
+  const initialValues = currentHospital ? {
     ...currentHospital,
     schedule: [
       parseTime(currentHospital.schedule.start),
       parseTime(currentHospital.schedule.end)
     ]
-  }
+  } : {}
 
   const onUpdate = (values: IInfoFormValues) => {
     const schedule = formatSchedule(values.schedule)
@@ -49,9 +49,8 @@ const Info: React.FC = () => {
         <Form
           onFinish={onUpdate}
           layout="vertical"
-          initialValues={initialValues || {}}
+          initialValues={initialValues}
           className="form form--info"
-          onChange={values => console.log(values)}
         >
           <HospitalInfoForm />
           <Form.Item>

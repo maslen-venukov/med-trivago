@@ -161,8 +161,6 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
       }
 
-      console.log(services)
-
       const hospitalsIds = getUniqueIds(services, 'hospital')
       const hospitals = await Hospital.find({ _id: hospitalsIds })
 
@@ -207,6 +205,7 @@ class Controller {
           name: hospital.name,
           address: hospital.address,
           phone: hospital.phone,
+          website: hospital.website,
           schedule: hospital.schedule
         }
       }
