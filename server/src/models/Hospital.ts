@@ -26,6 +26,7 @@ interface IHospital {
   schedule: ISchedule
   phone: string
   website?: string
+  city: string
   serviceList: IServiceList[]
   user: string
 }
@@ -44,6 +45,7 @@ const schema = new Schema({
   },
   phone: { type: String, required: true, unique: true },
   website: { type: String },
+  city: { type: String, required: true },
   serviceList: [{
     category: { type: ObjectId, ref: 'Categories', required: true },
     schedule: {

@@ -42,6 +42,10 @@ app.use('/api/service-lists', serviceListsRouter)
 app.use('/api/appointed-dates', appointedDatesRouter)
 app.use('/api/stats', statsRouter)
 
+app.get('/ip' , (req, res) => {
+  console.log(req.ip)
+})
+
 const start = async () => {
   try {
     await connectDB(MONGO_URI)

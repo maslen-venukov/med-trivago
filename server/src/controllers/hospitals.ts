@@ -22,7 +22,7 @@ import { HTTPStatusCodes, Roles } from '../types'
 class Controller {
   async create(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password, passwordCheck, name, address, phone, website, schedule, link } = req.body
+      const { email, password, passwordCheck, name, city, address, phone, website, schedule, link } = req.body
 
       const userData = await register(email, password, passwordCheck)
 
@@ -31,7 +31,7 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.BadRequest, registerError)
       }
 
-      if(!name || !address || !phone || !schedule.start || !schedule.end || !link) {
+      if(!name || !city || !address || !phone || !schedule.start || !schedule.end || !link) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
       }
 
@@ -48,7 +48,7 @@ class Controller {
       const role = Roles.Hospital
 
       const user = await User.create({ ...userData, role })
-      const hospital = await Hospital.create({ name, address, phone, website, schedule, user: user._id })
+      const hospital = await Hospital.create({ name, city, address, phone, website, schedule, user: user._id })
       await RegisterLink.deleteOne({ link })
 
       const data = { _id: user._id, email, role }
@@ -137,8 +137,8 @@ class Controller {
     try {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const { name, address, phone, website, schedule } = req.body
-      updateData(hospital, { name, address, phone, website, schedule })
+      const { name, city, address, phone, website, schedule } = req.body
+      updateData(hospital, { name, city, address, phone, website, schedule })
 
       await hospital.save()
       return res.json({ message: 'Информация успешно обновлена', hospital })

@@ -200,14 +200,7 @@ class Controller {
         ...service._doc,
         category: category.name,
         schedule,
-        hospital: {
-          _id: hospital._id,
-          name: hospital.name,
-          address: hospital.address,
-          phone: hospital.phone,
-          website: hospital.website,
-          schedule: hospital.schedule
-        }
+        hospital
       }
 
       return res.json({ service: result })

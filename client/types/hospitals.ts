@@ -29,6 +29,7 @@ export interface IHospital {
   address: string
   phone: string
   website?: string
+  city: string
   schedule: ISchedule
   serviceList: IServiceList[]
 }

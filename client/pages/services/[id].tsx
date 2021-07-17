@@ -16,6 +16,7 @@ import ClockCircleTwoTone from '@ant-design/icons/ClockCircleTwoTone'
 import HomeTwoTone from '@ant-design/icons/HomeTwoTone'
 import PhoneTwoTone from '@ant-design/icons/PhoneTwoTone'
 import GlobalOutlined from '@ant-design/icons/GlobalOutlined'
+import MedicineBoxTwoTone from '@ant-design/icons/MedicineBoxTwoTone'
 
 import MainLayout from '../../layouts/MainLayout'
 
@@ -104,7 +105,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   }
 
   // TODO Календарь для занятых дат
-
+  // TODO сделать поле seen у новых записей
   // TODO Добавить города
 
 
@@ -113,8 +114,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
   // TODO текст письма
 
-  // TODO ? не выводить прошедшие записи в таблицу
-  // TODO ? сделать поле seen у новых записей
   // TODO ? по удалению больницы удалять и записи на прием (а может и нет)
 
   useEffect(() => {
@@ -146,7 +145,11 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             </Typography.Paragraph>
 
             <Typography.Paragraph>
-              <HomeTwoTone className="icon" /> {hospital.name}, {hospital.address}
+              <MedicineBoxTwoTone className="icon" /> {hospital.name}
+            </Typography.Paragraph>
+
+            <Typography.Paragraph>
+              <HomeTwoTone className="icon" />{hospital.city}, {hospital.address}
             </Typography.Paragraph>
 
             <Typography.Paragraph className="service__phone">
