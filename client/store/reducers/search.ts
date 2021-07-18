@@ -4,6 +4,7 @@ const initialState: ISearchState = {
   q: '',
   filters: {
     cat: '',
+    city: '',
     minp: '',
     maxp: ''
   },

@@ -10,6 +10,7 @@ export interface IService {
   deleted: boolean
   hospital: {
     name: string
+    city: string
     address: string
     phone: string
     schedule?: ISchedule

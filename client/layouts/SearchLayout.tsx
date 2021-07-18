@@ -42,16 +42,18 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
 
   const onSortChange = (p: Sort) => onDataChange({ p }, setSort)
 
-  const onCategoryChange = (e: React.MouseEvent<HTMLSpanElement>) => {
+  const onResetCategory = () => onDataChange({ ...filters, cat: '' }, setFilters)
+
+  const onCategoryChange = (e: React.MouseEvent<HTMLSpanElement>, selected: boolean) => {
+    if(selected) {
+      return onResetCategory()
+    }
     const cat = e.currentTarget.textContent || ''
-    // onDataChange({ ...filters, cat }, setFilters)
     const data = { ...filters, ...sort, cat, q: '' }
     pushQueryToUrl(router, data)
     dispatch(setFilters({ ...filters, cat }))
     dispatch(setQuery(''))
   }
-
-  const onResetCategory = () => onDataChange({ ...filters, cat: '' }, setFilters)
 
   return (
     <>

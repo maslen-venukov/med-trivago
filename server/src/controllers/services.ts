@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { IUserRequest } from '../models/User'
-import Service from '../models/Service'
+import Service, { IService } from '../models/Service'
 import Category from '../models/Category'
 import Hospital from '../models/Hospital'
 import Appointment from '../models/Appointment'
@@ -74,7 +74,7 @@ class Controller {
 
   async getAll(req: Request, res: Response): Promise<Response> {
     try {
-      const { q, cat, minp, maxp, p } = req.query
+      const { q, cat, city, minp, maxp, p } = req.query
 
       let name: NameFilter = null
       if(q && typeof q === 'string') {
@@ -110,14 +110,26 @@ class Controller {
       const hospitalsIds = getUniqueIds(services, 'hospital')
       const hospitals = await Hospital.find({ _id: hospitalsIds })
 
-      const withHospitals = services.map(service => {
+      const withHospitals = services.reduce((acc, service) => {
         const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
-        const { name, address, phone } = hospital
-        return {
-          ...service._doc,
-          hospital: { name, address, phone }
+
+        if(city && city !== hospital.city) {
+          return acc
         }
-      })
+
+        return acc = [
+          ...acc,
+          {
+            ...service._doc,
+            hospital: {
+              name: hospital.name,
+              city: hospital.city,
+              address: hospital.address,
+              phone: hospital.phone
+            }
+          }
+        ]
+      }, [])
 
       const groupBy = <T>(arr: T[], key: string): T[][] => {
         const values = arr.reduce((acc, el) => {
@@ -164,16 +176,18 @@ class Controller {
       const hospitalsIds = getUniqueIds(services, 'hospital')
       const hospitals = await Hospital.find({ _id: hospitalsIds })
 
-      const result = services.map(service => {
-        const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
-        const { name, address, phone } = hospital
-        return {
-          ...service._doc,
-          hospital: { name, address, phone }
-        }
-      })
+      const compared = services
+        .sort((a, b) => a.price > b.price ? 1 : -1)
+        .map(service => {
+          const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
+          const { name, city, address, phone } = hospital
+          return {
+            ...service._doc,
+            hospital: { name, city, address, phone }
+          }
+        })
 
-      return res.json({ compared: result })
+      return res.json({ compared })
     } catch (e) {
       console.log(e)
       await createError(e)

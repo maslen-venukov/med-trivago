@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import Masonry from 'react-masonry-css'
 
+import Result from 'antd/lib/result'
+
 import SearchLayout from '../layouts/SearchLayout'
 
 import Searched from '../components/services/Searched'
@@ -37,7 +39,7 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
     dispatch(setSort({ ...sort, p }))
     return () => {
       dispatch(setQuery(''))
-      dispatch(setFilters({ cat: '', minp: '', maxp: '' }))
+      dispatch(setFilters({ cat: '', city: '', minp: '', maxp: '' }))
       dispatch(setSort({ p: '' }))
     }
   }, [dispatch])
@@ -49,12 +51,21 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
       title={getTitle()}
       keywords={[getTitle()]}
     >
-      <Masonry
+      {searched.length ? (
+        <Masonry
         breakpointCols={3}
         className="services-grid"
-        columnClassName="services-grid__column">
+        columnClassName="services-grid__column"
+      >
         {searched.map(service => <Searched {...service} key={service.name} categories={categories} />)}
       </Masonry>
+      ) : (
+        <Result
+          status="404"
+          title="Услуги не найдены"
+          subTitle="По вашему запросу не найдено никаких услуг"
+        />
+      )}
     </SearchLayout>
   )
 }

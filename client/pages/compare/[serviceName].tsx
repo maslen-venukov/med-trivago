@@ -46,7 +46,7 @@ const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
               >
                 <List.Item.Meta
                   title={renderLinkToServicePage(service._id, service.hospital.name)}
-                  description={service.hospital.address}
+                  description={`г. ${service.hospital.city}, ${service.hospital.address}`}
                 />
                 <Typography.Title type="success" level={5}>{formatPrice(service.price)}</Typography.Title>
               </List.Item>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Layout from 'antd/lib/layout'
@@ -7,6 +7,7 @@ import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import InputNumber from 'antd/lib/input-number'
 import Button from 'antd/lib/button'
+import Select from 'antd/lib/select'
 
 import { setFilters } from '../../store/actions/search'
 
@@ -17,6 +18,8 @@ import pushQueryToUrl from '../../utils/pushQueryToUrl'
 import { RootState } from '../../store/reducers'
 import { IFilters } from '../../types/search'
 
+import cities from '../../data/cities.json'
+
 const Filters: React.FC = () => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -26,21 +29,27 @@ const Filters: React.FC = () => {
   const [mounted, setMounted] = useState<boolean>(false)
   const lazy = useLazyInput()
 
-  const { cat, minp, maxp } = router.query
+  const { cat, city, minp, maxp } = router.query
+  const initialValues = {
+    city: city || '',
+    minp: minp || '',
+    maxp: maxp || ''
+  }
 
   const onShow = () => {
     const data = { q, ...filters, ...sort }
     pushQueryToUrl(router, data)
   }
 
-  const onChange = (value: string | number, fieldName: string) => {
+  const onChange = (value: string | number, fieldName: string, router?: NextRouter) => {
     const newFilters = { ...filters, [fieldName]: value }
     const setState = () => dispatch(setFilters(newFilters))
     lazy(setState)
+    router && pushQueryToUrl(router, { q, ...sort, ...newFilters })
   }
 
   useEffect(() => {
-    const filters = { cat, minp, maxp } as IFilters
+    const filters = { cat, city, minp, maxp } as IFilters
     dispatch(setFilters(filters))
   }, [dispatch])
 
@@ -48,12 +57,37 @@ const Filters: React.FC = () => {
     setMounted(true)
   }, [])
 
+  // TODO доделать фильтр по городам
+
   return mounted ? (
     <Layout.Sider className="filters">
-      <Form onFinish={onShow} layout="vertical" initialValues={{
-        minp: minp || '',
-        maxp: maxp || ''
-      }}>
+      <Form
+        onFinish={onShow}
+        layout="vertical"
+        initialValues={initialValues}
+      >
+        <Form.Item name="city" label="Город">
+          <Select
+            showSearch
+            allowClear
+            placeholder="Выберите город"
+            optionFilterProp="children"
+            onSelect={(value: string) => onChange(value, 'city', router)}
+            onClear={() => onChange('', 'city', router)}
+            filterOption={(input, option) => {
+              const children = option?.children.props ? option.children.props.children : option?.children
+              return children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }}
+          >
+            <Select.Option value="" disabled>
+              <span className="placeholder">Выберите город</span>
+            </Select.Option>
+            {cities.sort().map(city => (
+              <Select.Option key={city} value={city}>{city}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
         <Form.Item label="Цена">
           <Input.Group compact>
             <Form.Item name="minp">

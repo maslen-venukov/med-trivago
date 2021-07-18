@@ -71,15 +71,6 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 
   useEffect(() => {
     cookiesNotification(router)
-    axios.get('http://api.sypexgeo.net/')
-      .then(({ data }) => {
-        const ip = data.ip
-        const city = data.city.name_ru
-        console.log(ip, city)
-        if(cities.includes(city)) {
-          message.success(`Ваш город ${city}`)
-        }
-      })
   }, [])
 
   return (

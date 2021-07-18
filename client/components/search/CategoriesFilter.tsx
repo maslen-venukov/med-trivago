@@ -11,20 +11,20 @@ import { Colors } from '../../types'
 interface ICategoriesFilterProps {
   categories: ICategory[]
   error: string
-  onChange: (e: React.MouseEvent<HTMLSpanElement>) => void
+  onChange: (e: React.MouseEvent<HTMLSpanElement>, selected: boolean) => void
   onReset: () => void
 }
 
 const CategoriesFilter: React.FC<ICategoriesFilterProps> = ({ categories, error, onChange, onReset }) => {
   const { filters } = useSelector((state: RootState) => state.search)
 
-  return (
+  return !error ? (
     <div className="categories-filter">
-      {!error && categories.map(category => (
+      {categories.map(category => (
         <Tag
           key={category._id}
           color={filters.cat === category.name ? Colors.Green : Colors.Accent}
-          onClick={onChange}
+          onClick={e => onChange(e, filters.cat === category.name)}
           className="categories-filter__tag"
         >
           {category.name}
@@ -38,7 +38,7 @@ const CategoriesFilter: React.FC<ICategoriesFilterProps> = ({ categories, error,
         Сбросить
       </Tag>
     </div>
-  )
+  ) : null
 }
 
 export default CategoriesFilter

@@ -8,6 +8,7 @@ export interface ISearchResult {
 
 export interface IFilters {
   cat: string
+  city: string
   minp: string | number
   maxp: string | number
 }
