@@ -1,13 +1,11 @@
 const getQueryString = (values: any): string => {
-  const keys = Object.keys(values)
+  const entries = Object.entries(values)
 
-  const str = keys.reduce((acc, key) => {
-    const value = values[key]
-    return acc += `${key}=${value}&`
-  }, '')
+  const str = entries.reduce((acc, [key, value]) => (
+    acc += `${key}=${value}&`
+  ), '')
 
   const query = str.slice(0, -1)
-
   return query ? `?${query}` : ''
 }
 

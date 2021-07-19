@@ -105,7 +105,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   }
 
   // TODO Календарь для занятых дат
-  // TODO сделать поле seen у новых записей
   // TODO Добавить города
 
 

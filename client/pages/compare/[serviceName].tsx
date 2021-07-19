@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import axios from 'axios'
-import stringify from 'qs-stringify'
+import queryStringify from 'qs-stringify'
 
 import List from 'antd/lib/list'
 import Typography from 'antd/lib/typography'
@@ -62,8 +62,10 @@ export default Compare
 
 export const getServerSideProps: GetServerSideProps  = async context => {
   try {
-    const serviceName = stringify({ serviceName: context.params?.serviceName?.toString() }).replace('serviceName=', '')
-    const res = await axios.get(`/api/services/compare/${serviceName}`)
+    const serviceName = queryStringify({ serviceName: context.params?.serviceName?.toString() }).replace('serviceName=', '')
+    const query = { ...context.query } as { [name: string]: string }
+    delete query.serviceName
+    const res = await axios.get(`/api/services/compare/${serviceName}?${queryStringify(query)}`)
     return {
       props: {
         compared: res.data.compared

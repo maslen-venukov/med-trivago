@@ -54,8 +54,7 @@ const getAppointmentHours = (date: Moment, schedule: IWeekSchedule, appointedDat
       check(whole.label) && result.push(whole)
       check(half.label) && result.push(half)
 
-      acc = [...acc, ...result]
-      return acc
+      return [...acc, ...result]
     }, [])
 }
 

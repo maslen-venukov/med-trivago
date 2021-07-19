@@ -1,6 +1,5 @@
 const updateData = (document: object, data: object) => {
-  Object.keys(data).forEach(key => {
-    const value = data[key]
+  Object.entries(data).forEach(([key, value]) => {
     if(value) {
       document[key] = value
     }

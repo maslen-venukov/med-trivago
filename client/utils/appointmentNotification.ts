@@ -12,19 +12,27 @@ import { IAppointment } from '../types/appointments'
 import { SocketAction } from '../types/socket'
 
 const appointmentNotification = (data: IAppointment, router: NextRouter) => (dispatch: Dispatch<SocketAction>) => {
+  const id = data._id
+  const service = typeof data.service !== 'string' && data.service.name
+  const date = renderDate(data.date.toString())
+
+  const onClose = (id: string) => {
+    setAppointmentsSeen(id)
+    dispatch(decrementNotifications())
+  }
+
   notification.open({
-    key: data._id,
+    key: id,
     message: 'Новая запись на прием',
-    description: `${typeof data.service !== 'string' && data.service.name} — ${renderDate(data.date.toString())}`,
+    description: `${service} — ${date}`,
     className: 'cursor-pointer',
     duration: 0,
     onClick: () => {
       router.push('/profile/appointment')
-      notification.close(data._id)
-      setAppointmentsSeen(data._id)
-      dispatch(decrementNotifications())
+      notification.close(id)
+      onClose(id)
     },
-    onClose: () => dispatch(decrementNotifications())
+    onClose: () => onClose(id)
   })
 }
 

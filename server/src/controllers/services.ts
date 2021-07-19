@@ -97,13 +97,9 @@ class Controller {
       }
 
       const filters = { name, category, price }
-      const find: IFilters = Object.keys(filters).reduce((acc, key) => {
-        const value = filters[key]
-        if(!value) {
-          return acc
-        }
-        return { ...acc, [key]: value }
-      }, {})
+      const find: IFilters = Object.entries(filters).reduce((acc, [key, value]) => (
+        value ? { ...acc, [key]: value } : acc
+      ), {})
 
       const services = await Service.find({ ...find, deleted: false }).sort(sort)
 
@@ -117,7 +113,7 @@ class Controller {
           return acc
         }
 
-        return acc = [
+        return [
           ...acc,
           {
             ...service._doc,
@@ -167,8 +163,17 @@ class Controller {
   async getCompare(req: Request, res: Response): Promise<Response> {
     try {
       const { serviceName } = req.params
+      const { city, minp, maxp } = req.query
 
-      const services = await Service.find({ name: serviceName, deleted: false })
+      let price: PriceFilter = null
+      if(minp) price = { ...price, $gte: Number(minp)}
+      if(maxp) price = { ...price, $lte: Number(maxp)}
+
+      const find: IFilters = Object.entries({ price }).reduce((acc, [key, value]) => (
+        value ? { ...acc, [key]: value } : acc
+      ), {})
+
+      const services = await Service.find({ ...find, name: serviceName, deleted: false })
       if(!services.length) {
         return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуга не найдена')
       }
@@ -178,14 +183,27 @@ class Controller {
 
       const compared = services
         .sort((a, b) => a.price > b.price ? 1 : -1)
-        .map(service => {
+        .reduce((acc, service) => {
           const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
-          const { name, city, address, phone } = hospital
-          return {
-            ...service._doc,
-            hospital: { name, city, address, phone }
+          const { name, city: hospitalCity, address, phone } = hospital
+
+          const withService = [
+            ...acc,
+            {
+              ...service._doc,
+              hospital: { name, city, address, phone }
+            }
+          ]
+
+          if(city) {
+            return hospitalCity === city ? withService : acc
           }
-        })
+          return withService
+        }, [])
+
+      if(!compared.length) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Услуги не найдены')
+      }
 
       return res.json({ compared })
     } catch (e) {

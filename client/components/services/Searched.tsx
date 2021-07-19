@@ -1,5 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
+import queryStringify from 'qs-stringify'
 
 import Typography from 'antd/lib/typography'
 import Card from 'antd/lib/card'
@@ -10,22 +12,31 @@ import formatPrice from '../../utils/formatPrice'
 
 import { ISearchResult } from '../../types/search'
 import { ICategory } from '../../types/categories'
+import { RootState } from '../../store/reducers'
 
 interface ISearchedProps extends ISearchResult {
   categories: ICategory[]
 }
 
 const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories }) => {
+  const { filters } = useSelector((state: RootState) => state.search)
+
   const first = services.slice(0, 3)
   const count = `в ${services.length} клиник${Number(services.length.toString().split('').pop()) === 1 ? 'е' : 'ах'}`
   const category = categories.find(category => category._id === services[0].category)
+
+  const query = queryStringify(
+    Object.entries(filters).reduce((acc, [key, value]) => (
+      value ? { [key]: value, ...acc } : acc
+    ), {})
+  )
 
   return (
     <Card
       hoverable
       className="service"
     >
-      <Link href={`/compare/${name}`}>
+      <Link href={`/compare/${name}${query && `?${query}`}`}>
         <a className="service__info">
           <Typography.Text type="secondary">
             <small>{category?.name}</small>
