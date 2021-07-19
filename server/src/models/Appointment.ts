@@ -9,6 +9,7 @@ export interface IAppointment {
   phone: string
   date: Date
   service: string
+  seen: boolean
   deleted: boolean
 }
 
@@ -17,6 +18,7 @@ const schema = new Schema({
   phone: { type: String, required: true },
   date: { type: Date, required: true },
   service: { type: ObjectId, ref: 'Services', required: true },
+  seen: { type: Boolean, default: false },
   deleted: { type: Boolean, default: false }
 }, {
   timestamps: true

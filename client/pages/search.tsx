@@ -63,7 +63,7 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
         <Result
           status="404"
           title="Услуги не найдены"
-          subTitle="По вашему запросу не найдено никаких услуг"
+          subTitle="Попробуйте изменить параметры поиска"
         />
       )}
     </SearchLayout>

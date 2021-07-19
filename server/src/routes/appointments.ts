@@ -12,6 +12,8 @@ const router = Router()
 
 router.post('/', controller.create)
 router.get('/', auth, role(Roles.Hospital), controller.getByHospital)
+router.get('/not-seen', auth, role(Roles.Hospital), controller.getNotSeen)
+router.put('/set-seen/:id', auth, role(Roles.Hospital), objectId(), controller.setSeen)
 router.put('/:id', auth, role(Roles.Hospital), objectId(), controller.update)
 router.delete('/:id', auth, role(Roles.Hospital), objectId(), controller.remove)
 

@@ -2,6 +2,8 @@ import { Dispatch } from 'redux'
 import { NextRouter } from 'next/router'
 import notification from 'antd/lib/notification'
 
+import { setAppointmentsSeen } from '../api/appointments'
+
 import { decrementNotifications } from '../store/actions/socket'
 
 import renderDate from './renderDate'
@@ -19,11 +21,10 @@ const appointmentNotification = (data: IAppointment, router: NextRouter) => (dis
     onClick: () => {
       router.push('/profile/appointment')
       notification.close(data._id)
+      setAppointmentsSeen(data._id)
       dispatch(decrementNotifications())
     },
-    onClose: () => {
-      dispatch(decrementNotifications())
-    }
+    onClose: () => dispatch(decrementNotifications())
   })
 }
 

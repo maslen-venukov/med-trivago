@@ -114,8 +114,6 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
   // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
   // TODO текст письма
 
-  // TODO ? по удалению больницы удалять и записи на прием (а может и нет)
-
   useEffect(() => {
     const serviceId = router.query.id
     if(serviceId && typeof serviceId === 'string') {

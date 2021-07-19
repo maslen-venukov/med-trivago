@@ -57,8 +57,6 @@ const Filters: React.FC = () => {
     setMounted(true)
   }, [])
 
-  // TODO доделать фильтр по городам
-
   return mounted ? (
     <Layout.Sider className="filters">
       <Form

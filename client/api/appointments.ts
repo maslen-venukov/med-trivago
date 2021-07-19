@@ -1,3 +1,4 @@
+import { NextRouter } from 'next/router'
 import { Dispatch } from 'redux'
 import { Socket } from 'socket.io-client'
 import axios from 'axios'
@@ -12,11 +13,14 @@ import {
   updateAppointment
 } from '../store/actions/appointments'
 import { setCurrentHospital } from '../store/actions/hospitals'
+import { setNotifications } from '../store/actions/socket'
 
 import catchError from '../utils/catchError'
+import appointmentNotification from '../utils/appointmentNotification'
 
-import { AppointmentsAction, IShortAppointment } from '../types/appointments'
+import { AppointmentsAction, IAppointment, IShortAppointment } from '../types/appointments'
 import { HospitalsAction } from '../types/hospitals'
+import { SocketAction } from '../types/socket'
 import { SocketActions } from '../types'
 
 export const fetchAppointments = () => (dispatch: Dispatch<AppointmentsAction>) => {
@@ -25,6 +29,24 @@ export const fetchAppointments = () => (dispatch: Dispatch<AppointmentsAction>) 
     .then(({ data }) => dispatch(setAppointments(data.appointments)))
     .catch(catchError)
     .finally(() => dispatch(setAppointmentsLoading(false)))
+}
+
+export const fetchNotSeenAppointments = (router: NextRouter) => (dispatch: Dispatch<AppointmentsAction | SocketAction> | any) => {
+  dispatch(setAppointmentsLoading(true))
+  axios.get('/api/appointments/not-seen')
+    .then(({ data }) => {
+      dispatch(setNotifications(data.appointments.length))
+      data.appointments.forEach((appointment: IAppointment) => {
+        dispatch(appointmentNotification(appointment, router))
+      })
+    })
+    .catch(catchError)
+    .finally(() => dispatch(setAppointmentsLoading(false)))
+}
+
+export const setAppointmentsSeen = (id: string) => {
+  axios.put(`/api/appointments/set-seen/${id}`)
+    .catch(catchError)
 }
 
 export const fetchCreateAppointment = (data: IShortAppointment, hospitalId: string, socket: Socket) => (dispatch: Dispatch<AppointmentsAction>) => {

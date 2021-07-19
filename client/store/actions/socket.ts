@@ -7,6 +7,11 @@ export const setSocket = (payload: Socket): SocketAction => ({
   payload
 })
 
+export const setNotifications = (payload: number): SocketAction => ({
+  type: SocketActionTypes.SET_NOTIFICATIONS,
+  payload
+})
+
 export const incrementNotifications = (): SocketAction => ({
   type: SocketActionTypes.INCREMENT_NOTIFICATIONS
 })

@@ -5,6 +5,8 @@ import Hospital from '../models/Hospital'
 import Service from '../models/Service'
 import Appointment from '../models/Appointment'
 
+import getAppointments from '../services/getAppointments'
+
 import errorHandler from '../utils/errorHandler'
 import createError from '../utils/createError'
 import getUniqueIds from '../utils/getUniqueIds'
@@ -42,7 +44,6 @@ class Controller {
         service: serviceId
       })
 
-
       const result = { ...appointment._doc, service }
 
       return res
@@ -57,19 +58,41 @@ class Controller {
 
   async getByHospital(req: IUserRequest, res: Response): Promise<Response> {
     try {
+      const appointments = await getAppointments(req)
+      return res.json({ appointments })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async getNotSeen(req: IUserRequest, res: Response): Promise<Response> {
+    try {
+      const appointments = await getAppointments(req, { seen: false })
+      return res.json({ appointments })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
+  async setSeen(req: IUserRequest, res: Response) {
+    try {
       const hospital = await Hospital.findOne({ user: req.user._id })
 
-      const services = await Service.find({ hospital: hospital._id })
-      const servicesIds = getUniqueIds(services)
+      const appointment = await Appointment.findById(req.params.id)
+      const service = await Service.findById(appointment.service)
 
-      const appointments = await Appointment.find({ service: { $in: servicesIds }, deleted: false }).sort({ date: -1 })
+      if(hospital._id.toString() !== service.hospital.toString()) {
+        return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
+      }
 
-      const result = appointments.map(appointment => {
-        const service = services.find(service => service._id.toString() === appointment.service.toString())
-        return { ...appointment._doc, service }
-      })
+      appointment.seen = true
+      await appointment.save()
 
-      return res.json({ appointments: result })
+      return res.json({ message: 'Записи успешно обновлены' })
     } catch (e) {
       console.log(e)
       await createError(e)

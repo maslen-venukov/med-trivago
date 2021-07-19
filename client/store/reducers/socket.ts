@@ -13,6 +13,12 @@ const socket = (state = initialState, action: SocketAction): ISocketState => {
         socket: action.payload
       }
 
+    case SocketActionTypes.SET_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.payload
+      }
+
     case SocketActionTypes.INCREMENT_NOTIFICATIONS:
       return {
         ...state,
@@ -22,7 +28,7 @@ const socket = (state = initialState, action: SocketAction): ISocketState => {
     case SocketActionTypes.DECREMENT_NOTIFICATIONS:
       return {
         ...state,
-        notifications: --state.notifications
+        notifications: state.notifications > 0 ? --state.notifications : 0
       }
 
     default:
