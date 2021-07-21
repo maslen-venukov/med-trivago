@@ -53,7 +53,8 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     { label: 'Активные категории', href: '/profile/active-categories', role: Roles.Hospital },
     { label: 'Услуги', href: '/profile/services', role: Roles.Hospital },
     { label: 'Запись', href: '/profile/appointment', role: Roles.Hospital, notifications },
-    { label: 'Занятое время', href: '/profile/busy-time', role: Roles.Hospital }
+    { label: 'Занятое время', href: '/profile/busy-time', role: Roles.Hospital },
+    { label: 'Календарь', href: '/profile/calendar', role: Roles.Hospital }
   ]
 
   const onLogout = () => dispatch(logout(router))
@@ -85,7 +86,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
     rights ? (
       <Layout className="profile">
         <Head title={`${title ? `${title} - ` : ''}Профиль`} />
-        <Layout.Sider width={250}>
+        <Layout.Sider width={220}>
           <Menu
             mode="inline"
             theme="dark"

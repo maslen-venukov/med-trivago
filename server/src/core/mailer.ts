@@ -2,7 +2,9 @@ import nodemailer from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 const options: SMTPTransport.Options = {
-  service: 'gmail',
+  host: 'smtp.timeweb.ru',
+  port: 25,
+  secure: false,
   auth: {
     user: process.env.NODEMAILER_USER,
     pass: process.env.NODEMAILER_PASS

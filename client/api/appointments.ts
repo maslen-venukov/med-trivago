@@ -77,9 +77,12 @@ export const fetchUpdateAppointment = (id: string, data: IShortAppointment) => (
     .catch(catchError)
 }
 
-export const fetchAppointedDates = (serviceId: string) => (dispatch: Dispatch<AppointmentsAction>) => {
+export const fetchAppointedDates = (serviceId: string, cb?: () => void) => (dispatch: Dispatch<AppointmentsAction>) => {
   axios.get(`api/appointed-dates/${serviceId}`)
-    .then(({ data }) => dispatch(setAppointedDates(data.appointedDates)))
+    .then(({ data }) => {
+      dispatch(setAppointedDates(data.appointedDates))
+      cb && cb()
+    })
     .catch(catchError)
 }
 

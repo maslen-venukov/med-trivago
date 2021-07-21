@@ -99,7 +99,6 @@ const Busy: React.FC = () => {
         <Typography.Paragraph className="busy-time__label">Выберите услугу</Typography.Paragraph>
         <Select
           showSearch
-          style={{ width: 220 }}
           placeholder="Выберите услугу"
           optionFilterProp="children"
           onSelect={onOpenCalendarModal}
@@ -116,21 +115,7 @@ const Busy: React.FC = () => {
         loading={!currentHospital}
         size="middle"
         rowKey={record => record.date.toString()}
-        // className="active-categories__table"
       >
-        {/* <Column
-          width="32px"
-          dataIndex="active"
-          key="active"
-          render={(_, record: ICategory) => (
-            <ToggleActiveCheckbox
-              checked={checkActive(record._id)}
-              value={record._id}
-              onChange={onOpenAddModal}
-              onRemove={() => dispatch(fetchRemoveActiveCategory(record._id))}
-            />
-          )}
-        /> */}
         <Column title="Название" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
         <Column
           title="Дата"
@@ -139,13 +124,6 @@ const Busy: React.FC = () => {
           render={renderDate}
           sorter={(a: { date: Date }, b: { date: Date }) => a.date > b.date ? 1 : -1}
         />
-        {/* <Column
-          title="Количество услуг"
-          dataIndex="services"
-          key="services"
-          render={(_, record: ICategory) => getServicesLength(record)}
-          sorter={(a, b) => Number(getServicesLength(a)) - Number(getServicesLength(b))}
-        /> */}
       </Table>
 
       <Modal

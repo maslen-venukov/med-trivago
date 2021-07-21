@@ -1,11 +1,10 @@
 import React from 'react'
 
 import Modal, { ModalProps } from 'antd/lib/modal'
-import Tooltip from 'antd/lib/tooltip'
-import Tag from 'antd/lib/tag'
-import Popconfirm from 'antd/lib/popconfirm'
 
-import { Colors, IAppointmentHour } from '../../types'
+import TimeTag from './TimeTag'
+
+import { IAppointmentHour } from '../../types'
 
 interface ITimeModalProps extends ModalProps {
   appointmentHours: IAppointmentHour[]
@@ -15,36 +14,16 @@ interface ITimeModalProps extends ModalProps {
   onSelectTime: (time: string) => void
 }
 
-interface ITimeTagProps {
-  hour: IAppointmentHour
-}
-
-const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, onCancel, appointmentHours, popconfirm, serviceName, date, onSelectTime }) => {
-  const TimeTag: React.FC<ITimeTagProps> = ({ hour }) => hour.appointed ? (
-    <Tooltip title="Данное время занято" placement="right">
-      <Tag color={Colors.Red} style={{ cursor: 'default' }} className="service__appointment-hour">
-        {hour.label}
-      </Tag>
-    </Tooltip>
-  ) : (
-    popconfirm ? (
-      <Popconfirm
-        title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
-        onConfirm={() => onSelectTime(hour.label)}
-        okText="Да"
-        cancelText="Нет"
-      >
-        <Tag color={Colors.Accent} className="service__appointment-hour">
-          {hour.label}
-        </Tag>
-      </Popconfirm>
-    ) : (
-      <Tag color={Colors.Accent} className="service__appointment-hour" onClick={() => onSelectTime(hour.label)}>
-        {hour.label}
-      </Tag>
-    )
-  )
-
+const TimeModal: React.FC<ITimeModalProps> = ({
+  title,
+  visible,
+  onCancel,
+  appointmentHours,
+  popconfirm,
+  serviceName,
+  date,
+  onSelectTime
+}) => {
   return (
     <Modal
       title={title}
@@ -53,7 +32,16 @@ const TimeModal: React.FC<ITimeModalProps> = ({ title, visible, onCancel, appoin
       width={525}
       onCancel={onCancel}
     >
-      {appointmentHours.map(hour => <TimeTag key={hour.label} hour={hour} />)}
+      {appointmentHours.map(hour => (
+        <TimeTag
+          key={hour.label}
+          hour={hour}
+          popconfirm={popconfirm}
+          serviceName={serviceName}
+          date={date}
+          onSelect={onSelectTime}
+        />
+      ))}
     </Modal>
   )
 }
