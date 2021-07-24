@@ -29,7 +29,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({
       title={title}
       visible={visible}
       footer={null}
-      width={525}
+      width={530}
       onCancel={onCancel}
     >
       {appointmentHours.map(hour => (

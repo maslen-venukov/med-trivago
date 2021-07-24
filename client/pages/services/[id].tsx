@@ -146,7 +146,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
             </Typography.Paragraph>
 
             <Typography.Paragraph>
-              <HomeTwoTone className="icon" />г. {hospital.city}, {hospital.address}
+              <HomeTwoTone className="icon" /> г. {hospital.city}, {hospital.address}
             </Typography.Paragraph>
 
             <Typography.Paragraph className="service__phone">

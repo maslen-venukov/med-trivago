@@ -22,7 +22,7 @@ const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, fo
       title={title}
       visible={visible}
       footer={null}
-      width={525}
+      width={530}
       onCancel={onCancel}
     >
       <Form

@@ -1,0 +1,27 @@
+.footer
+  font-size: 16px
+  font-weight: 500
+  padding: $size 0
+  margin-top: auto
+
+.info
+  &__list
+    display: flex
+    flex-wrap: wrap
+    margin-bottom: $size
+  &__item
+    &:not(:last-child)
+      margin: 0 $size * 6 $size 0
+
+.contacts
+  &__list
+    display: flex
+    flex-wrap: wrap
+  &__item
+    &:not(:last-child)
+      margin: 0 $size * 4 $size 0
+  &__link
+    color: inherit
+  .anticon
+    color: $accent
+    margin-right: $size

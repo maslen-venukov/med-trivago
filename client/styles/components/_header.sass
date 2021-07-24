@@ -1,0 +1,32 @@
+.header
+  margin-bottom: $size * 3
+  &__container
+    display: flex
+    align-items: center
+    @media screen and ( max-width: 480px )
+      flex-direction: column
+  &__logo
+    display: flex
+    align-items: center
+    height: $size * 4
+    margin-right: $size * 6
+    @media screen and ( max-width: 480px )
+      margin: 0 0 $size * 2
+  &__nav
+    @media screen and ( max-width: 767px )
+      display: none
+  &__search
+    margin-left: auto
+    @media screen and ( max-width: 480px )
+      margin-left: 0
+
+.nav
+  font-size: 16px
+  font-weight: 500
+  &__list
+    display: flex
+  &__item
+    &:not(:last-child)
+      margin-right: $size * 4
+  &__link
+    color: inherit

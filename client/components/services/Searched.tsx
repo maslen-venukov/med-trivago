@@ -48,7 +48,7 @@ const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories })
         </a>
       </Link>
       <Divider className="service__divider" />
-      <ul className="service__list">
+      <ul className="service__list list-reset">
         {first.map(service => (
           <li key={service._id}>
             <Link href={`/services/${service._id}`}>

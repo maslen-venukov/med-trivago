@@ -7,7 +7,7 @@ import Row from 'antd/lib/row'
 import Col from 'antd/lib/col'
 import BackTop from 'antd/lib/back-top'
 
-import Search from '../components/search/Search'
+import Header from '../components/app/Header'
 import Head from '../components/app/Head'
 import Filters from '../components/search/Filters'
 import SortSelect from '../components/search/SortSelect'
@@ -61,9 +61,9 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
       <Head title={title} keywords={keywords} />
       <Layout hasSider={false} className="layout container">
         <Layout.Content>
+          <Header />
           <Row gutter={16} className="search-row">
-            <Col style={{ width: 'calc(100% - 216px)'}}>
-              <Search />
+            <Col className="search-row__services">
               <CategoriesFilter
                 categories={categories}
                 error={error}
@@ -72,7 +72,7 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
               />
               {children}
             </Col>
-            <Col style={{ width: '216px' }}>
+            <Col className="search-row__sidebar">
               <SortSelect value={sort.p} onChange={onSortChange} />
               <Filters />
             </Col>

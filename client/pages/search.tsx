@@ -53,12 +53,16 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
     >
       {searched.length ? (
         <Masonry
-        breakpointCols={3}
-        className="services-grid"
-        columnClassName="services-grid__column"
-      >
-        {searched.map(service => <Searched {...service} key={service.name} categories={categories} />)}
-      </Masonry>
+          breakpointCols={{
+            default: 3,
+            768: 2,
+            425: 1
+          }}
+          className="services-grid"
+          columnClassName="services-grid__column"
+        >
+          {searched.map(service => <Searched {...service} key={service.name} categories={categories} />)}
+        </Masonry>
       ) : (
         <Result
           status="404"

@@ -13,7 +13,11 @@ import pushQueryToUrl from '../../utils/pushQueryToUrl'
 
 import { RootState } from '../../store/reducers'
 
-const Search: React.FC = () => {
+interface ISearchProps {
+  className?: string
+}
+
+const Search: React.FC<ISearchProps> = ({ className }) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [form] = Form.useForm()
@@ -42,7 +46,7 @@ const Search: React.FC = () => {
   }, [q])
 
   return (
-    <div className="search">
+    <div className={`search ${className || ''}`}>
       <Form onFinish={onSearch} layout="inline" form={form}>
         <Form.Item name="q">
           <Input

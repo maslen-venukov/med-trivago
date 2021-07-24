@@ -45,7 +45,8 @@ const Head: React.FC<IHeadProps> = ({ title, description, keywords, robots = tru
       <meta name="robots" content={robots ? 'all' : 'none'} />
       <meta name="keywords" content={`меди, медицинская диагностика, диагностика, запись на анализы, анализы, оренбург, мрт, узи, экг, кт, клиника, больница${keywords ? `, ${keywords.join(', ')}` : ''}`} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" href={flag ? '/notification/icon.ico' : '/favicon.ico'} />
+      <link rel="icon" href={flag ? '/notification/favicon.ico' : '/favicon.ico'} />
+      <meta name="theme-color" content="#ffffff" />
     </NextHead>
   )
 }

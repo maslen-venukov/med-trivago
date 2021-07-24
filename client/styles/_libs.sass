@@ -1,4 +1,6 @@
 @import 'antd/dist/antd.css'
+@import 'swiper/swiper.scss'
+@import 'swiper/components/pagination/pagination.scss'
 
 .ant-input-number,
 .ant-picker
@@ -22,3 +24,21 @@
 
 .ant-back-top-icon
   background-color: $accent
+
+.swiper-container
+  width: 100%
+  height: 100%
+
+.swiper-pagination-bullets
+  max-width: 984px
+
+.swiper-pagination-bullet
+  width: 16px
+  height: 3px
+  border-radius: 3px
+  background-color: #fff
+  opacity: .3
+  transition: width .5s, opacity .5s
+  &-active
+    width: 24px
+    opacity: 1
