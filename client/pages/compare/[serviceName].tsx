@@ -66,6 +66,7 @@ export const getServerSideProps: GetServerSideProps  = async context => {
     const query = { ...context.query } as { [name: string]: string }
     delete query.serviceName
     const res = await axios.get(`/api/services/compare/${serviceName}?${queryStringify(query)}`)
+
     return {
       props: {
         compared: res.data.compared

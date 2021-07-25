@@ -83,13 +83,10 @@ export const getServerSideProps: GetServerSideProps  = async context => {
       axios.get('/api/services', { params: context.query })
     ])
 
-    const { categories } = res[0].data
-    const { searched } = res[1].data
-
     return {
       props: {
-        categories,
-        searched
+        categories: res[0].data.categories,
+        searched: res[1].data.searched
       }
     }
   } catch {

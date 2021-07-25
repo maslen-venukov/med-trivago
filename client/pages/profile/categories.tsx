@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Table from 'antd/lib/table'
@@ -25,9 +25,14 @@ import renderDate from '../../utils/renderDate'
 
 import { RootState } from '../../store/reducers'
 import { ICategory } from '../../types/categories'
+import { UploadFile } from 'antd/lib/upload/interface'
+
+import { API_URL } from '../../constants'
 
 interface ICategoriesFormValues {
   name: string
+  description: string
+  image: { file: UploadFile, fileList: UploadFile[] }
 }
 
 const Categories: React.FC = () => {
@@ -35,6 +40,7 @@ const Categories: React.FC = () => {
   const [form] = Form.useForm()
 
   const { categories, loading } = useSelector((state: RootState) => state.categories)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
 
   const getColumnSearchProps = useSearch()
   const {
@@ -47,13 +53,37 @@ const Categories: React.FC = () => {
     onCloseUpdateDrawer
   } = useDrawers(form)
 
+  const getFormData = (values: ICategoriesFormValues) => {
+    const { name, description, image } = values
+    const fileObj = typeof image !== 'string' && image.file.originFileObj
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('description', description)
+    if(fileObj) {
+      formData.append('file', fileObj)
+    }
+    return formData
+  }
+
+  const setupUpdateDrawer = (record: ICategory) => {
+    console.log(record)
+    setFileList([{
+      uid: '1',
+      name: record.name,
+      url: `${API_URL}/uploads/${record.image}`,
+    }])
+    onOpenUpdateDrawer(record._id, record)
+  }
+
   const onCreate = (values: ICategoriesFormValues) => {
-    dispatch(fetchCreateCategory(values.name))
+    const formData = getFormData(values)
+    dispatch(fetchCreateCategory(formData))
     onCloseCreateDrawer()
   }
 
   const onUpdate = (values: ICategoriesFormValues) => {
-    id && dispatch(fetchUpdateCategory(id, values.name))
+    const formData = getFormData(values)
+    id && dispatch(fetchUpdateCategory(id, formData))
     onCloseUpdateDrawer()
   }
 
@@ -82,7 +112,7 @@ const Categories: React.FC = () => {
           key="action"
           render={(_, record: ICategory) => (
             <Space split={<Divider type="vertical" />}>
-              <Typography.Link onClick={() => onOpenUpdateDrawer(record._id, { name: record.name })}>
+              <Typography.Link onClick={() => setupUpdateDrawer(record)}>
                 Изменить
               </Typography.Link>
 
@@ -115,6 +145,8 @@ const Categories: React.FC = () => {
         visible={updateDrawerVisible}
         form={form}
         submitText="Сохранить"
+        fileList={fileList}
+        setFileList={setFileList}
         onFinish={onUpdate}
         onClose={onCloseUpdateDrawer}
       />

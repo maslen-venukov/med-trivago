@@ -2,11 +2,21 @@ import React from 'react'
 
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
+import Upload from 'antd/lib/upload'
+import Button from 'antd/lib/button'
+import UploadOutlined from '@ant-design/icons/UploadOutlined'
 
-import { ICustomDrawerProps } from '../../types'
 import CustomDrawer from '../app/CustomDrawer'
 
-const CategoriesDrawer: React.FC<ICustomDrawerProps> = ({ title, visible, submitText, form, onFinish, onClose }) => {
+import { ICustomDrawerProps } from '../../types'
+import { UploadFile } from 'antd/lib/upload/interface'
+
+interface ICategoriesDrawerProps extends ICustomDrawerProps {
+  fileList?: UploadFile[]
+  setFileList?: (state: UploadFile[]) => void
+}
+
+const CategoriesDrawer: React.FC<ICategoriesDrawerProps> = ({ title, visible, submitText, form, fileList, setFileList, onFinish, onClose }) => {
   return (
     <CustomDrawer
       title={title}
@@ -22,6 +32,25 @@ const CategoriesDrawer: React.FC<ICustomDrawerProps> = ({ title, visible, submit
         rules={[{ required: true, message: 'Пожалуйста введите название!' }]}
       >
         <Input placeholder="Название" />
+      </Form.Item>
+
+      <Form.Item
+        label="Описание"
+        name="description"
+        rules={[{ required: true, message: 'Пожалуйста введите описание!' }]}
+      >
+        <Input.TextArea autoSize={{ minRows: 4 }} />
+      </Form.Item>
+
+      <Form.Item
+        name="image"
+        label="Изображение"
+        valuePropName="file"
+        rules={[{ required: true, message: 'Пожалуйста загрузите изображение!' }]}
+      >
+        <Upload listType="picture" maxCount={1} accept="image/*" fileList={fileList} onChange={image => setFileList && setFileList([image.file])}>
+          <Button icon={<UploadOutlined />}>Загрузить</Button>
+        </Upload>
       </Form.Item>
     </CustomDrawer>
   )

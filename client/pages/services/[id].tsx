@@ -199,8 +199,7 @@ export default Service
 
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    const { id } = context.query
-    const res = await axios.get(`/api/services/${id}`)
+    const res = await axios.get(`/api/services/${context.query.id}`)
     return {
       props: {
         ...res.data.service

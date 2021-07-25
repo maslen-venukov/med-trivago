@@ -178,7 +178,7 @@ const Appointment: React.FC = () => {
             name="name"
             rules={[{ required: true, message: 'Пожалуйста введите имя!' }]}
           >
-            <Input allowClear />
+            <Input />
           </Form.Item>
 
           <Form.Item
@@ -186,7 +186,7 @@ const Appointment: React.FC = () => {
             name="phone"
             rules={[{ required: true, message: 'Пожалуйста введите номер телефона!' }]}
           >
-            <Input allowClear />
+            <Input />
           </Form.Item>
 
           <Form.Item

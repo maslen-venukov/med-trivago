@@ -16,8 +16,8 @@ export const fetchCategories = () => (dispatch: Dispatch<CategoriesAction>) => {
     .finally(() => dispatch(setCategoriesLoading(false)))
 }
 
-export const fetchCreateCategory = (name: string) => (dispatch: Dispatch<CategoriesAction>) => {
-  axios.post('/api/categories', { name })
+export const fetchCreateCategory = (category: FormData) => (dispatch: Dispatch<CategoriesAction>) => {
+  axios.post('/api/categories', category)
     .then(({ data }) => {
       message.success(data.message)
       dispatch(createCategory(data.category))
@@ -25,8 +25,8 @@ export const fetchCreateCategory = (name: string) => (dispatch: Dispatch<Categor
     .catch(catchError)
 }
 
-export const fetchUpdateCategory = (id: string, name: string) => (dispatch: Dispatch<CategoriesAction>) => {
-  axios.put(`/api/categories/${id}`, { name })
+export const fetchUpdateCategory = (id: string, category: FormData) => (dispatch: Dispatch<CategoriesAction>) => {
+  axios.put(`/api/categories/${id}`, category)
     .then(({ data }) => {
       message.success(data.message)
       dispatch(updateCategory(data.category))

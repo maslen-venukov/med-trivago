@@ -9,18 +9,21 @@ import MainLayout from '../layouts/MainLayout'
 
 import Stats from '../components/home/Stats'
 import Banner from '../components/home/Banner'
+import ServicesTypes from '../components/home/ServicesTypes'
 
 import { setLoggedOut } from '../store/actions/user'
 
 import { RootState } from '../store/reducers'
+import { ICategory } from '../types/categories'
 import { IStats } from '../types'
 
 interface IIndexProps {
+  categories: ICategory[]
   stats: IStats
   error: string
 }
 
-const Index: React.FC<IIndexProps> = ({ stats, error }) => {
+const Index: React.FC<IIndexProps> = ({ categories, stats, error }) => {
   const dispatch = useDispatch()
 
   const { loggedOut } = useSelector((state: RootState) => state.user)
@@ -37,7 +40,7 @@ const Index: React.FC<IIndexProps> = ({ stats, error }) => {
     <MainLayout>
       <Banner />
       {!error && <Stats stats={stats} />}
-      {/* TODO services */}
+      {!error && <ServicesTypes categories={categories} />}
     </MainLayout>
   )
 }
@@ -46,10 +49,15 @@ export default Index
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const res = await axios.get('/api/stats/count')
+    const res = await axios.all([
+      axios.get('/api/categories'),
+      axios.get('/api/stats/count')
+    ])
+
     return {
       props: {
-        stats: res.data
+        categories: res[0].data.categories,
+        stats: res[1].data
       }
     }
   } catch (e) {

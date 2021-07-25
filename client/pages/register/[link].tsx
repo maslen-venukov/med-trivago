@@ -127,10 +127,9 @@ export default RegisterByLink
 export const getServerSideProps: GetServerSideProps  = async context => {
   try {
     const res = await axios.get(`/api/register-links/${context.query.link}`)
-    const { link } = res.data
     return {
       props: {
-        link
+        link: res.data.link
       }
     }
   } catch {
