@@ -1,24 +1,27 @@
 .header
+  display: flex
+  align-items: center
   margin-bottom: $size * 3
-  &__container
-    display: flex
-    align-items: center
-    @media screen and ( max-width: 480px )
-      flex-direction: column
+  @media screen and ( max-width: 575px )
+    flex-wrap: wrap
+    justify-content: space-between
   &__logo
     display: flex
     align-items: center
     height: $size * 4
     margin-right: $size * 6
-    @media screen and ( max-width: 480px )
-      margin: 0 0 $size * 2
+    @media screen and ( max-width: 575px )
+      order: 1
+      margin: 0
   &__nav
-    @media screen and ( max-width: 767px )
-      display: none
+    @media screen and ( max-width: 575px )
+      order: 2
   &__search
     margin-left: auto
-    @media screen and ( max-width: 480px )
-      margin-left: 0
+    @media screen and ( max-width: 575px )
+      order: 0
+      width: 100%
+      margin-bottom: $size * 2
 
 .nav
   font-size: 16px

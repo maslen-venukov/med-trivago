@@ -2095,6 +2095,13 @@ react-masonry-css@^1.0.16:
   resolved "https://registry.yarnpkg.com/react-masonry-css/-/react-masonry-css-1.0.16.tgz#72b28b4ae3484e250534700860597553a10f1a2c"
   integrity sha512-KSW0hR2VQmltt/qAa3eXOctQDyOu7+ZBevtKgpNDSzT7k5LA/0XntNa9z9HKCdz3QlxmJHglTZ18e4sX4V8zZQ==
 
+react-number-format@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.6.4.tgz#72534d62adee77eb959ba730fb4971cc770a164b"
+  integrity sha512-xHUtaN5wXBiFL4C2v2Sgn3Fut76UxHqJH3rzuVMwZvHZA8HkHtCZBvflvqAgmcEkFC2eoS27Iqpa0vNXrdt8GQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-redux@^7.2.4:
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.4.tgz#1ebb474032b72d806de2e0519cd07761e222e225"

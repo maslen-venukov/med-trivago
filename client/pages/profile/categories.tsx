@@ -66,7 +66,6 @@ const Categories: React.FC = () => {
   }
 
   const setupUpdateDrawer = (record: ICategory) => {
-    console.log(record)
     setFileList([{
       uid: '1',
       name: record.name,

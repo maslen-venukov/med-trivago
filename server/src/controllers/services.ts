@@ -187,18 +187,18 @@ class Controller {
           const hospital = hospitals.find(hospital => hospital._id.toString() === service.hospital.toString())
           const { name, city: hospitalCity, address, phone } = hospital
 
-          const withService = [
+          const withHospital = [
             ...acc,
             {
               ...service._doc,
-              hospital: { name, city, address, phone }
+              hospital: { name, city: hospitalCity, address, phone }
             }
           ]
 
           if(city) {
-            return hospitalCity === city ? withService : acc
+            return hospitalCity === city ? withHospital : acc
           }
-          return withService
+          return withHospital
         }, [])
 
       if(!compared.length) {

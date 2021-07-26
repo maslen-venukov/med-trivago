@@ -104,13 +104,9 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
-  // TODO Календарь для занятых дат
-  // TODO Добавить города
-
-
   // TODO ? пагинация
 
-  // TODO страницы: персональнеые данные, политика конфеденциальности, куки файлы
+  // TODO страницы: персональные данные, политика конфиденциальности, куки файлы
   // TODO текст письма
 
   useEffect(() => {

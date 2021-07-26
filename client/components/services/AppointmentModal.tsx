@@ -1,4 +1,5 @@
 import React from 'react'
+import NumberFormat from 'react-number-format'
 
 import Modal, { ModalProps } from 'antd/lib/modal'
 import Form, { FormProps } from 'antd/lib/form'
@@ -35,15 +36,32 @@ const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, fo
           name="name"
           rules={[{ required: true, message: 'Пожалуйста введите ваше имя!' }]}
         >
-          <Input allowClear />
+          <Input />
         </Form.Item>
 
         <Form.Item
           label="Номер телефона"
           name="phone"
-          rules={[{ required: true, message: 'Пожалуйста введите ваш номер телефона!' }]}
+          rules={[
+            () => ({
+              validator(_, value) {
+                if(!value || value === '+7 (___) ___-__-__') {
+                  return Promise.reject(new Error('Пожалуйста введите ваш номер телефона!'))
+                }
+                if(value.includes('_')) {
+                  return Promise.reject(new Error('Некорректный формат номера телефона!'))
+                }
+                return Promise.resolve()
+              }
+            })
+          ]}
         >
-          <Input allowClear />
+          <NumberFormat
+            customInput={Input}
+            format="+7 (###) ###-##-##"
+            allowEmptyFormatting
+            mask="_"
+          />
         </Form.Item>
 
         <Form.Item>
