@@ -16,11 +16,11 @@ const MainLayout: React.FC<IMainLayoutProps> = ({ children, title, keywords }) =
     <>
       <Head title={title} keywords={keywords} />
       <Layout className="layout layout--main container">
+        <Header />
         <Layout.Content>
-          <Header />
           {children}
-          <Footer />
         </Layout.Content>
+        <Footer />
       </Layout>
     </>
   )

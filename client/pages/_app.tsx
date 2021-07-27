@@ -44,6 +44,7 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const { socket } = useSelector((state: RootState) => state.socket)
 
   useEffect(() => {
+    cookiesNotification()
     dispatch(auth())
   }, [dispatch])
 
@@ -70,10 +71,6 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       audio.play()
     })
   }, [socket])
-
-  useEffect(() => {
-    cookiesNotification(router)
-  }, [])
 
   return (
     <ConfigProvider locale={locale}>

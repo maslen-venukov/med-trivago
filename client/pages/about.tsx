@@ -6,7 +6,7 @@ import MainLayout from '../layouts/MainLayout'
 
 const About: React.FC = () => {
   return (
-    <MainLayout>
+    <MainLayout title="О нас">
       <Typography.Title level={2} className="text-center">МеДи — Медицинская Диагностика</Typography.Title>
       <Typography.Title level={3} className="text-center subtitle">Сайт онлайн записи на диагностику №1</Typography.Title>
       <Typography.Title level={5} className="quote">
