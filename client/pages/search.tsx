@@ -12,6 +12,7 @@ import SearchLayout from '../layouts/SearchLayout'
 import Searched from '../components/services/Searched'
 
 import { setFilters, setQuery, setSort } from '../store/actions/search'
+import { setMobile } from '../store/actions/sidebar'
 
 import { ICategory } from '../types/categories'
 import { RootState } from '../store/reducers'
@@ -34,13 +35,22 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
     return typeof q === 'string' ? q : ''
   }
 
+  const changeMobile = () => dispatch(setMobile(window.innerWidth <= 575))
+
   useEffect(() => {
     const p = (router.query.p || '') as Sort
     dispatch(setSort({ ...sort, p }))
+
+    if(typeof window !== 'undefined') {
+      changeMobile()
+      window.addEventListener('resize', changeMobile)
+    }
+
     return () => {
       dispatch(setQuery(''))
       dispatch(setFilters({ cat: '', city: '', minp: '', maxp: '' }))
       dispatch(setSort({ p: '' }))
+      typeof window !== 'undefined' && window.removeEventListener('resize', changeMobile)
     }
   }, [dispatch])
 

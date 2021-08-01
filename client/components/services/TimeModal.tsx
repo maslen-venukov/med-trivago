@@ -32,7 +32,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({
       width={530}
       onCancel={onCancel}
     >
-      {appointmentHours.map(hour => (
+      {appointmentHours.length ? appointmentHours.map(hour => (
         <TimeTag
           key={hour.label}
           hour={hour}
@@ -41,7 +41,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({
           date={date}
           onSelect={onSelectTime}
         />
-      ))}
+      )) : 'Нет доступного времени для записи'}
     </Modal>
   )
 }

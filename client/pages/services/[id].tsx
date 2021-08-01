@@ -106,7 +106,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
   // TODO ? пагинация
 
-  // TODO страницы: персональные данные, политика конфиденциальности, куки файлы
+  // TODO страницы: сотрудничество, контакты
   // TODO текст письма
 
   useEffect(() => {

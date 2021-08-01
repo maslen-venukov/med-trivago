@@ -10,6 +10,7 @@ import Button from 'antd/lib/button'
 import Select from 'antd/lib/select'
 
 import { setFilters } from '../../store/actions/search'
+import { setVisible } from '../../store/actions/sidebar'
 
 import useLazyInput from '../../hooks/useLazyInput'
 
@@ -39,6 +40,7 @@ const Filters: React.FC = () => {
   const onShow = () => {
     const data = { q, ...filters, ...sort }
     pushQueryToUrl(router, data)
+    dispatch(setVisible(false))
   }
 
   const onChange = (value: string | number, fieldName: string, router?: NextRouter) => {

@@ -2,11 +2,13 @@ import React from 'react'
 import NumberFormat from 'react-number-format'
 
 import Modal, { ModalProps } from 'antd/lib/modal'
-import Form, { FormProps } from 'antd/lib/form'
+import Form, { FormProps, RuleObject } from 'antd/lib/form'
 import Input from 'antd/lib/input'
 import Button from 'antd/lib/button'
 
 import Agreement from '../app/Agreement'
+
+import { StoreValue } from 'antd/lib/form/interface'
 
 export interface IAppointmentFormValues {
   name: string
@@ -18,6 +20,18 @@ interface IAppointmentModalProps extends ModalProps, FormProps<IAppointmentFormV
 }
 
 const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, form, onCancel, onFinish }) => {
+  const validatePhone = () => ({
+    validator(_: RuleObject, value: StoreValue) {
+      if(!value || value === '+7 (___) ___-__-__') {
+        return Promise.reject(new Error('Пожалуйста введите ваш номер телефона!'))
+      }
+      if(value.includes('_')) {
+        return Promise.reject(new Error('Некорректный формат номера телефона!'))
+      }
+      return Promise.resolve()
+    }
+  })
+
   return (
     <Modal
       title={title}
@@ -42,19 +56,7 @@ const AppointmentModal: React.FC<IAppointmentModalProps> = ({ title, visible, fo
         <Form.Item
           label="Номер телефона"
           name="phone"
-          rules={[
-            () => ({
-              validator(_, value) {
-                if(!value || value === '+7 (___) ___-__-__') {
-                  return Promise.reject(new Error('Пожалуйста введите ваш номер телефона!'))
-                }
-                if(value.includes('_')) {
-                  return Promise.reject(new Error('Некорректный формат номера телефона!'))
-                }
-                return Promise.resolve()
-              }
-            })
-          ]}
+          rules={[validatePhone]}
         >
           <NumberFormat
             customInput={Input}

@@ -124,6 +124,19 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.Forbidden, 'Недостаточно прав')
       }
 
+      const services = await Service.find({ category: hospitalService.category, hospital: hospital._id })
+      const servicesIds = getUniqueIds(services)
+
+      const existingAppointment = await Appointment.findOne({ date, service: { $in: servicesIds } })
+      if(existingAppointment) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
+      }
+
+      const appointmentsByHospital = services.map(service => service.appointedDates).flat().map(service => service.toString())
+      if(appointmentsByHospital.includes(new Date(date).toString())) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
+      }
+
       updateData(appointment, { name, phone, date, service })
       await appointment.save()
 

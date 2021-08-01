@@ -8,6 +8,7 @@ import registerLinks from './registerLinks'
 import services from './services'
 import appointments from './appointments'
 import socket from './socket'
+import sidebar from './sidebar'
 
 const rootReducer = combineReducers({
   user,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   registerLinks,
   services,
   appointments,
-  socket
+  socket,
+  sidebar
 })
 
 export type RootState = ReturnType<typeof rootReducer>

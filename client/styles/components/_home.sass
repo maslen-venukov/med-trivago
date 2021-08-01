@@ -1,9 +1,63 @@
 .banner
-  margin: $size 0 $size * 4
+  position: relative
+  height: 400px
+  margin-bottom: $size * 4
+  @media screen and ( max-width: 991px )
+    height: auto
+  &__content
+    position: relative
+    z-index: 1
+    height: 100%
+    display: flex
+    flex-direction: column
+    max-width: 580px
+    line-height: 1.2
+    padding-top: $size * 4
+    @media screen and ( max-width: 991px )
+      align-items: center
+      text-align: center
+      margin: 0 auto
+    @media screen and ( max-width: 767px )
+      padding-top: 0
+  &__title
+    font-size: 36px
+    margin-bottom: $size * 3
+    @media screen and ( max-width: 575px )
+      font-size: 32px
+    @media screen and ( max-width: 375px )
+      font-size: 28px
+      margin-bottom: $size * 2
+  &__info
+    font-size: 18px
+    max-width: 490px
+    margin-bottom: $size * 4
+    @media screen and ( max-width: 767px )
+      margin-bottom: $size * 3
+    @media screen and ( max-width: 375px )
+      font-size: 16px
+  &__btn
+    font-size: 18px
+    font-weight: 600
+    height: $size * 6
+    @media screen and ( max-width: 991px )
+      margin-bottom: $size * 2
+  &__small
+    max-width: 255px
+    font-size: 12px
+    color: #c9c9c9
+    margin-top: auto
+  &__img
+    position: absolute
+    top: 0
+    right: 0
+    @media screen and ( max-width: 991px )
+      display: none
 
 .stats
   text-align: center
   margin-bottom: $size * 6
+  @media screen and ( max-width: 575px )
+    margin-bottom: $size * 3
   &__item
     display: flex
     justify-content: center
@@ -14,3 +68,21 @@
     height: 100%
     &-cover img
       object-fit: cover
+
+.contacts
+  &__list
+    display: flex
+    flex-wrap: wrap
+    @media screen and ( max-width: 767px )
+      flex-direction: column
+  &__item
+    &:not(:last-child)
+      margin-right: $size * 4
+      @media screen and ( max-width: 767px )
+        margin-right: 0
+  &__link
+    color: inherit
+    white-space: nowrap
+  .anticon
+    color: $accent
+    margin-right: $size

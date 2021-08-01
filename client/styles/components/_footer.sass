@@ -1,8 +1,12 @@
 .footer
   font-size: 16px
   font-weight: 500
-  padding: $size 0
+  padding: $size * 2 0
   margin-top: auto
+  @media screen and ( max-width: 575px )
+    padding-bottom: 0
+  &__contacts
+    margin-bottom: $size
 
 .info
   &__list
@@ -12,16 +16,3 @@
   &__item
     &:not(:last-child)
       margin: 0 $size * 6 $size 0
-
-.contacts
-  &__list
-    display: flex
-    flex-wrap: wrap
-  &__item
-    &:not(:last-child)
-      margin: 0 $size * 4 $size 0
-  &__link
-    color: inherit
-  .anticon
-    color: $accent
-    margin-right: $size

@@ -1,5 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import Button from 'antd/lib/button'
 // import { Swiper, SwiperSlide } from 'swiper/react'
 // import SwiperCore, { Pagination, Autoplay } from 'swiper/core'
 
@@ -20,12 +22,31 @@ const Banner: React.FC = () => {
 
   return (
     <div className="banner">
-      <Image
-        src="/banner.png"
-        alt="Единая онлайн запись на диагностику"
-        width={984}
-        height={400}
-      />
+      <div className="banner__content">
+        <h1 className="banner__title">Единая онлайн запись на&nbsp;медицинскую диагностику</h1>
+        <div className="banner__info">
+          <ul className="banner__info-list list-reset">
+            <li>Все виды диагностических исследований: МРТ, КТ, УЗИ, ЭКГ, ЭЭГ, холтер, денситометрия и др</li>
+            <li>Запись во всех клиниках России 24 часа</li>
+          </ul>
+        </div>
+        <div>
+          <Link href="/search">
+            <a>
+              <Button type="primary" className="banner__btn">Запишитесь сейчас</Button>
+            </a>
+          </Link>
+        </div>
+        <small className="banner__small">Имеются противопоказания необходима консультация специалиста</small>
+      </div>
+      <div className="banner__img">
+        <Image
+          src="/banner.png"
+          alt="Единая онлайн запись на медицинскую диагностику"
+          width={502}
+          height={400}
+        />
+      </div>
     </div>
     // <Swiper
     //   className="banner"

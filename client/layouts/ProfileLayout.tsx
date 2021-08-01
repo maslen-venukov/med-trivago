@@ -118,7 +118,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
               </Row>
             </div>
           </Layout.Header>
-          <Layout.Content className={`container profile__container profile__content ${className}`}>
+          <Layout.Content className={`container profile__container profile__content ${className || ''}`}>
             {children}
           </Layout.Content>
         </Layout>

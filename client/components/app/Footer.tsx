@@ -8,22 +8,16 @@ import MailFilled from '@ant-design/icons/MailFilled'
 
 import getPhoneHref from '../../utils/getPhoneHref'
 
+import { PHONE, EMAIL } from '../../constants'
+import Contacts, { IContact } from './Contacts'
+
 interface IInfoLink {
   href: string
   text: string
   blank?: boolean
 }
 
-interface IContact {
-  text: string,
-  icon: React.ReactNode,
-  href?: string
-}
-
 const Footer = () => {
-  const phone = '8 (905) 840-44-04'
-  const email = 'ooomk_nv@mail.ru'
-
   const infoLinks: IInfoLink[] = [
     {
       href: '/privacy',
@@ -42,14 +36,14 @@ const Footer = () => {
       icon: <HomeFilled />
     },
     {
-      text: phone,
+      text: PHONE,
       icon: <PhoneFilled className="mirrored" />,
-      href: getPhoneHref(phone)
+      href: getPhoneHref(PHONE)
     },
     {
-      text: email,
+      text: EMAIL,
       icon: <MailFilled />,
-      href: `mailto:${email}`
+      href: `mailto:${EMAIL}`
     }
   ]
 
@@ -74,21 +68,7 @@ const Footer = () => {
 
       <Typography.Paragraph>Общество с ограниченной ответственностью «МК «НОВЫЕ ТЕХНОЛОГИИ»</Typography.Paragraph>
 
-      <div className="contacts">
-        <ul className="contacts__list list-reset">
-          {contacts.map(contact => (
-            <li key={Math.random()} className="contacts__item">
-              {contact.href ? (
-                <Link href={contact.href}>
-                  <a className="contacts__link">{contact.icon} {contact.text}</a>
-                </Link>
-              ) : (
-                <>{contact.icon} {contact.text}</>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Contacts contacts={contacts} className="footer__contacts" />
     </footer>
   )
 }
