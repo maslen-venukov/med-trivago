@@ -32,8 +32,8 @@ class Controller {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
       }
 
-      const appointmentsByHospital = services.map(service => service.appointedDates).flat().map(service => service.toString())
-      if(appointmentsByHospital.includes(new Date(date).toString())) {
+      const appointmentsByHospital = services.map(service => service.appointedDates).flat()
+      if(appointmentsByHospital.find(appointedDate => appointedDate.toJSON() === new Date(date).toJSON())) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
       }
 
@@ -128,12 +128,12 @@ class Controller {
       const servicesIds = getUniqueIds(services)
 
       const existingAppointment = await Appointment.findOne({ date, service: { $in: servicesIds } })
-      if(existingAppointment) {
+      if(existingAppointment && existingAppointment._id.toString() !== id) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
       }
 
-      const appointmentsByHospital = services.map(service => service.appointedDates).flat().map(service => service.toString())
-      if(appointmentsByHospital.includes(new Date(date).toString())) {
+      const appointmentsByHospital = services.map(service => service.appointedDates).flat()
+      if(appointmentsByHospital.find(appointedDate => appointedDate.toJSON() === new Date(date).toJSON())) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Данное время занято')
       }
 

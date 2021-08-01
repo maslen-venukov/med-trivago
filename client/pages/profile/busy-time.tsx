@@ -8,12 +8,13 @@ import Modal from 'antd/lib/modal'
 import Calendar from 'antd/lib/calendar'
 import Table from 'antd/lib/table'
 import Column from 'antd/lib/table/Column'
+import Popconfirm from 'antd/lib/popconfirm'
 
 import ProfileLayout from '../../layouts/ProfileLayout'
 
 import TimeModal from '../../components/services/TimeModal'
 
-import { fetchCreateAppointDate, fetchAppointedDates } from '../../api/appointments'
+import { fetchCreateAppointDate, fetchAppointedDates, fetchRemoveAppointDate } from '../../api/appointments'
 
 import { addAppointedDate, setAppointedDates } from '../../store/actions/appointments'
 
@@ -28,6 +29,14 @@ import renderDate from '../../utils/renderDate'
 import { RootState } from '../../store/reducers'
 import { IService } from '../../types/services'
 import { IAppointmentHour } from '../../types'
+
+interface IBusyTime {
+  service: {
+    _id: string,
+    name: string
+  },
+  date: Date
+}
 
 const Busy: React.FC = () => {
   const dispatch = useDispatch()
@@ -44,7 +53,13 @@ const Busy: React.FC = () => {
   const getColumnSearchProps = useSearch()
 
   const services = getServicesFromCurrentHospital(currentHospital)
-  const dates = services.map(service => service.appointedDates.map(date => ({ name: service.name, date }))).flat().sort((a, b) => a.date < b.date ? 1 : -1)
+  const dates: IBusyTime[] = services
+    .map(service => service.appointedDates.map(date => {
+      const { _id, name } = service
+      return { service: { _id, name }, date }
+    }))
+    .flat()
+    .sort((a, b) => a.date < b.date ? 1 : -1)
   const schedule = currentHospital?.serviceList.find(list => list.category === service?.category)?.schedule
 
   const onChangeCalendarModal = (service: IService | null, visible: boolean) => {
@@ -93,6 +108,11 @@ const Busy: React.FC = () => {
     onCloseCalendarModal()
   }
 
+  const onRemove = (record: IBusyTime) => {
+    dispatch(fetchRemoveAppointDate(record.service._id, record.date))
+    console.log(record)
+  }
+
   return (
     <ProfileLayout title="Занятое время" className="busy-time">
       <div className="busy-time__select">
@@ -114,15 +134,41 @@ const Busy: React.FC = () => {
         dataSource={dates}
         loading={!currentHospital}
         size="middle"
-        rowKey={record => record.date.toString()}
+        rowKey={Math.random}
+        onRow={record => ({
+          className: new Date(record.date) < new Date ? 'past-time-row' : ''
+        })}
       >
-        <Column title="Название" dataIndex="name" key="name" {...getColumnSearchProps('name')} />
+        <Column
+          title="Название"
+          dataIndex="name"
+          key="name" {...getColumnSearchProps('name')}
+          render={(_, record: IBusyTime) => record.service.name}
+        />
+
         <Column
           title="Дата"
           dataIndex="date"
           key="date"
           render={renderDate}
-          sorter={(a: { date: Date }, b: { date: Date }) => a.date > b.date ? 1 : -1}
+          sorter={(a: IBusyTime, b: IBusyTime) => a.date > b.date ? 1 : -1}
+        />
+
+        <Column
+          title="Действия"
+          key="action"
+          render={(_, record: IBusyTime) => (
+            <Popconfirm
+              title="Вы действительно хотите удалить запись?"
+              onConfirm={() => onRemove(record)}
+              okText="Да"
+              cancelText="Нет"
+            >
+              <Typography.Text type="danger" className="cursor-pointer">
+                Удалить
+              </Typography.Text>
+            </Popconfirm>
+          )}
         />
       </Table>
 

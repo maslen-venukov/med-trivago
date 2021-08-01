@@ -10,7 +10,8 @@ import { Roles } from '../types'
 
 const router = Router()
 
-router.post('/:serviceId', auth, role(Roles.Hospital), objectId('serviceId'), controller.create)
 router.get('/:serviceId', objectId('serviceId'), controller.getByService)
+router.post('/:serviceId', auth, role(Roles.Hospital), objectId('serviceId'), controller.create)
+router.delete('/:serviceId', auth, role(Roles.Hospital), objectId('serviceId'), controller.remove)
 
 export default router

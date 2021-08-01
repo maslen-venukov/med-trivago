@@ -89,10 +89,18 @@ export const fetchAppointedDates = (serviceId: string, cb?: () => void) => (disp
 export const fetchCreateAppointDate = (serviceId: string, date: Date, cb: () => void) => (dispatch: Dispatch<HospitalsAction>) => {
   axios.post(`/api/appointed-dates/${serviceId}`, { date })
     .then(({ data }) => {
-      console.log(data)
       message.success(data.message)
       dispatch(setCurrentHospital(data.hospital))
       cb()
+    })
+    .catch(catchError)
+}
+
+export const fetchRemoveAppointDate = (serviceId: string, date: Date) => (dispatch: Dispatch<HospitalsAction>) => {
+  axios.delete(`/api/appointed-dates/${serviceId}`, { params: date })
+    .then(({ data }) => {
+      message.success(data.message)
+      dispatch(setCurrentHospital(data.hospital))
     })
     .catch(catchError)
 }
