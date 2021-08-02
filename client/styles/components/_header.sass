@@ -69,8 +69,12 @@
   &__list
     position: relative
     z-index: 2
+    height: 100%
     display: flex
+    align-items: center
     overflow-x: auto
+    padding: 0 16px
+    margin: 0 -16px
   &__item
     &:not(:last-child)
       margin-right: $size * 8
@@ -79,6 +83,10 @@
   &__link
     color: inherit
     white-space: nowrap
+    padding: 4px 8px
+    border-radius: 12px
+    transition: background-color .2s, box-shadow .2s, color .2s
     &:hover,
     &:active
-      color: inherit
+      background-color: #fff
+      box-shadow: 0 0 24px 0 rgba(#fff, .7)
