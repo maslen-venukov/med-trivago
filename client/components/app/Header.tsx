@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-import Contacts, { IContact } from './Contacts'
+import Connections, { IConnection } from './Connections'
 
 import PhoneFilled from '@ant-design/icons/PhoneFilled'
 import MailFilled from '@ant-design/icons/MailFilled'
@@ -40,7 +40,7 @@ const Header: React.FC = () => {
     }
   ]
 
-  const contacts: IContact[] = [
+  const connections: IConnection[] = [
     {
       text: PHONE,
       icon: <PhoneFilled className="mirrored" />,
@@ -73,7 +73,7 @@ const Header: React.FC = () => {
           <p>единая онлайн запись 24 часа</p>
         </div>
 
-        <Contacts contacts={contacts} className="header__contacts" />
+        <Connections connections={connections} className="header__connections" />
       </div>
 
       <div className="header__lower">

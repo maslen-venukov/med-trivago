@@ -43,6 +43,7 @@ const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
             renderItem={service => (
               <List.Item
                 actions={[<Button type="primary">{renderLinkToServicePage(service._id, 'Подробнее')}</Button>]}
+                className="compared"
               >
                 <List.Item.Meta
                   title={renderLinkToServicePage(service._id, service.hospital.name)}

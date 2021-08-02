@@ -16,7 +16,7 @@ import Button from 'antd/lib/button'
 
 const Banner: React.FC = () => {
   // const slides: ISlide[] = [{
-  //   src: '/banner.png',
+  //   src: '/banner.jpg',
   //   alt: 'Единая онлайн запись на диагностику'
   // }]
 
@@ -37,13 +37,13 @@ const Banner: React.FC = () => {
             </a>
           </Link>
         </div>
-        <small className="banner__small">Имеются противопоказания необходима консультация специалиста</small>
+        <small className="banner__small">Имеются противопоказания, необходима консультация специалиста</small>
       </div>
       <div className="banner__img">
         <Image
-          src="/banner.png"
+          src="/banner.jpg"
           alt="Единая онлайн запись на медицинскую диагностику"
-          width={502}
+          width={540}
           height={400}
         />
       </div>

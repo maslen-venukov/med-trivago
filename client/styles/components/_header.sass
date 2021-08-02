@@ -33,7 +33,6 @@
         width: 150px
       @media screen and ( max-width: 375px )
         width: 120px
-
   &__info
     font-size: 12px
     color: #000
@@ -41,7 +40,7 @@
       display: none
     p
       margin: 0
-  &__contacts
+  &__connections
     margin-left: auto
     @media screen and ( max-width: 820px )
       font-size: 18px
@@ -75,6 +74,8 @@
   &__item
     &:not(:last-child)
       margin-right: $size * 8
+      @media screen and ( max-width: 575px )
+        margin-right: $size * 4
   &__link
     color: inherit
     white-space: nowrap
