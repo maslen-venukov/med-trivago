@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
 
 import Connections, { IConnection } from './Connections'
 
@@ -8,6 +9,8 @@ import PhoneFilled from '@ant-design/icons/PhoneFilled'
 import MailFilled from '@ant-design/icons/MailFilled'
 
 import getPhoneHref from '../../utils/getPhoneHref'
+
+import { RootState } from '../../store/reducers'
 
 import { EMAIL, PHONE } from '../../constants'
 
@@ -17,6 +20,8 @@ interface INavItem {
 }
 
 const Header: React.FC = () => {
+  const { user, ready } = useSelector((state: RootState) => state.user)
+
   const nav: INavItem[] = [
     {
       href: '/',
@@ -86,6 +91,13 @@ const Header: React.FC = () => {
                 </Link>
               </li>
             ))}
+            {ready && user && (
+              <li className="nav__item">
+                <Link href="/profile">
+                  <a className="nav__link">Личный кабинет</a>
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

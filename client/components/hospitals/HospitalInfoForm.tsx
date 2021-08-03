@@ -6,8 +6,9 @@ import Select from 'antd/lib/select'
 import TimePicker from 'antd/lib/time-picker'
 import MedicineBoxOutlined from '@ant-design/icons/MedicineBoxOutlined'
 import HomeOutlined from '@ant-design/icons/HomeOutlined'
-import PhoneOutlined from '@ant-design/icons/PhoneOutlined'
 import GlobalOutlined from '@ant-design/icons/GlobalOutlined'
+
+import PhoneInput from '../app/PhoneInput'
 
 import cities from '../../data/cities.json'
 
@@ -54,16 +55,7 @@ const HospitalInfoForm: React.FC = () => {
         />
       </Form.Item>
 
-      <Form.Item
-        name="phone"
-        label="Телефон"
-        rules={[{ required: true, message: 'Пожалуйста введите номер телефона!' }]}
-      >
-        <Input
-          prefix={<PhoneOutlined className="form__icon" />}
-          placeholder="Телефон"
-        />
-      </Form.Item>
+      <PhoneInput />
 
       <Form.Item
         name="website"
