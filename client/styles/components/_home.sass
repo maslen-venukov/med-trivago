@@ -4,21 +4,46 @@
   margin-bottom: $size * 4
   @media screen and ( max-width: 991px )
     height: auto
+    padding-bottom: $size * 3
+  .swiper-wrapper
+    min-height: 100%
+    @media screen and ( max-width: 991px )
+      min-height: auto
+  .swiper-pagination
+    @media screen and ( max-width: 991px )
+      bottom: 0
+  &__item
+    min-height: 100%
+    @media screen and ( max-width: 991px )
+      min-height: auto
+    &--1
+      .banner__content
+        padding-top: $size * 4
+        @media screen and ( max-width: 991px )
+          padding-top: 0
+    &--2
+      color: #fff
+      padding: 0 $size * 2
+      .banner__title
+        color: inherit
+      @media screen and ( max-width: 991px )
+        color: #000
   &__content
-    position: relative
+    position: absolute
     z-index: 1
-    height: 100%
+    top: $size * 2
+    bottom: $size * 2
     display: flex
     flex-direction: column
     max-width: 580px
     line-height: 1.2
-    padding-top: $size * 4
     @media screen and ( max-width: 991px )
+      position: relative
+      top: auto
+      bottom: auto
       align-items: center
       text-align: center
       margin: 0 auto
-    @media screen and ( max-width: 767px )
-      padding-top: 0
   &__title
     font-size: 36px
     font-weight: 700
@@ -33,6 +58,8 @@
     font-size: 18px
     max-width: 490px
     margin-bottom: $size * 4
+    p
+      margin: 0
     @media screen and ( max-width: 767px )
       margin-bottom: $size * 3
     @media screen and ( max-width: 375px )

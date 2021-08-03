@@ -8,7 +8,7 @@ const About: React.FC = () => {
   return (
     <MainLayout title="О нас">
       <section className="about">
-        <Typography.Title level={2} className="text-center">МеДи — Медицинская Диагностика</Typography.Title>
+        <Typography.Title level={2} className="text-center">MeDi — Медицинская Диагностика</Typography.Title>
         <Typography.Title level={3} className="text-center subtitle">Сайт онлайн записи на диагностику №1</Typography.Title>
         <Typography.Title level={5} className="quote">
           Диагностика достигла таких успехов, что <br />

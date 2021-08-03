@@ -65,7 +65,7 @@ const Header: React.FC = () => {
           <a className="header__logo">
             <Image
               src="/logo.svg"
-              alt="МеДи — Медицинская диагностика"
+              alt="MeDi — Медицинская диагностика"
               width={192}
               height={64}
             />
