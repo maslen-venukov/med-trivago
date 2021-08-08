@@ -32,29 +32,29 @@ const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories })
   )
 
   return (
-    <Card hoverable className="service">
+    <Card hoverable className="searched">
       <Link href={`/compare/${name}${query && `?${query}`}`}>
-        <a className="service__info">
+        <a className="searched__info">
           <Typography.Text type="secondary">
             <small>{category?.name}</small>
           </Typography.Text>
           <Typography.Title level={5}>{name}</Typography.Title>
-          <Typography.Paragraph type="secondary" className="service__italic">Цены от</Typography.Paragraph>
+          <Typography.Paragraph type="secondary" className="searched__italic">Цены от</Typography.Paragraph>
           <Typography.Title level={5}>{formatPrice(min)}</Typography.Title>
-          <Typography.Paragraph type="secondary" className="service__italic">{count}</Typography.Paragraph>
+          <Typography.Paragraph type="secondary" className="searched__italic">{count}</Typography.Paragraph>
         </a>
       </Link>
 
-      <Divider className="service__divider" />
+      <Divider className="searched__divider" />
 
-      <ul className="service__list list-reset">
+      <ul className="searched__list list-reset">
         {first.map(service => (
           <li key={service._id}>
             <Link href={`/services/${service._id}`}>
-              <a className="service__link">
+              <a className="searched__link">
                 <Typography.Text type="success">{formatPrice(service.price)}</Typography.Text>
                 <Tooltip title={service.hospital.name}>
-                  <Typography.Text className="service__hospital">
+                  <Typography.Text className="searched__hospital">
                     {service.hospital.name}
                   </Typography.Text>
                 </Tooltip>

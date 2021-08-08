@@ -145,7 +145,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
               <HomeTwoTone className="icon" /> г. {hospital.city}, {hospital.address}
             </Typography.Paragraph>
 
-            <Typography.Paragraph className="service__phone">
+            <Typography.Paragraph>
               <Link href={getPhoneHref(hospital.phone)}>
                 <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
               </Link>
@@ -175,6 +175,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
               onCancel={onCloseTimeModal}
               appointmentHours={appointmentHours}
               onSelectTime={onOpenAppointmentModal}
+              className="service__time-modal"
             />
 
             <AppointmentModal

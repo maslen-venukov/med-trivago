@@ -17,6 +17,7 @@ interface ITimeModalProps extends ModalProps {
 const TimeModal: React.FC<ITimeModalProps> = ({
   title,
   visible,
+  className,
   onCancel,
   appointmentHours,
   popconfirm,
@@ -31,6 +32,7 @@ const TimeModal: React.FC<ITimeModalProps> = ({
       footer={null}
       width={530}
       onCancel={onCancel}
+      className={className}
     >
       {appointmentHours.length ? appointmentHours.map(hour => (
         <TimeTag

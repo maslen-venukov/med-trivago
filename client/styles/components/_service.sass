@@ -1,4 +1,19 @@
 .service
+  &__title.ant-typography
+    color: $accent
+    & + .ant-typography
+      margin-bottom: $size * 2
+  &__schedule
+    .ant-typography
+      margin: 0
+  &__appointment-hour
+    margin-bottom: $size
+    cursor: pointer
+  &__time-modal
+    .ant-modal-body
+      padding-bottom: $size * 2
+
+.searched
   height: 100%
   border: 1px solid $accent
   cursor: default
@@ -28,15 +43,3 @@
     transition: .2s color
     &:hover
       color: $accent
-  &__title.ant-typography
-    color: $accent
-    & + .ant-typography
-      margin-bottom: $size * 2
-  &__schedule
-    .ant-typography
-      margin: 0
-  &__phone a
-    color: inherit
-  &__appointment-hour
-    margin-bottom: $size
-    cursor: pointer
