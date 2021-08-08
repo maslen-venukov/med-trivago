@@ -131,7 +131,7 @@ const Executors = () => {
           renderItem={service => (
             <List.Item key={service._id}>
               <Typography.Text>{service.name}</Typography.Text>
-              <Typography.Text type="success">{formatPrice(service.price)}</Typography.Text>
+              <Typography.Text type="success" className="executors__price">{formatPrice(service.price)}</Typography.Text>
             </List.Item>
           )}
         />

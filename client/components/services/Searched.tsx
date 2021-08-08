@@ -32,10 +32,7 @@ const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories })
   )
 
   return (
-    <Card
-      hoverable
-      className="service"
-    >
+    <Card hoverable className="service">
       <Link href={`/compare/${name}${query && `?${query}`}`}>
         <a className="service__info">
           <Typography.Text type="secondary">
@@ -47,7 +44,9 @@ const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories })
           <Typography.Paragraph type="secondary" className="service__italic">{count}</Typography.Paragraph>
         </a>
       </Link>
+
       <Divider className="service__divider" />
+
       <ul className="service__list list-reset">
         {first.map(service => (
           <li key={service._id}>

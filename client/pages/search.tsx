@@ -3,9 +3,10 @@ import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import Masonry from 'react-masonry-css'
 
 import Result from 'antd/lib/result'
+import Row from 'antd/lib/row'
+import Col from 'antd/lib/col'
 
 import SearchLayout from '../layouts/SearchLayout'
 
@@ -62,17 +63,13 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
       keywords={[getTitle()]}
     >
       {searched.length ? (
-        <Masonry
-          breakpointCols={{
-            default: 3,
-            768: 2,
-            425: 1
-          }}
-          className="services-grid"
-          columnClassName="services-grid__column"
-        >
-          {searched.map(service => <Searched {...service} key={service.name} categories={categories} />)}
-        </Masonry>
+        <Row gutter={[16, 16]}>
+          {searched.map(service => (
+            <Col key={service.name} md={8} sm={12} xs={24}>
+              <Searched categories={categories} {...service} />
+            </Col>
+          ))}
+        </Row>
       ) : (
         <Result
           status="404"

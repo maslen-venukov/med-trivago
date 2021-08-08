@@ -78,7 +78,8 @@ class Controller {
 
       let name: NameFilter = null
       if(q && typeof q === 'string') {
-        name = new RegExp(q, 'gi')
+        const parsed = q.split(' ').join('(.*)')
+        name = new RegExp(parsed, 'gi')
       }
 
       let category: CategoryFilter = null

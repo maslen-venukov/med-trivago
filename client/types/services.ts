@@ -8,6 +8,7 @@ export interface IService {
   schedule?: IWeekSchedule
   appointedDates: Date[]
   deleted: boolean
+  createdAt: Date
   hospital: {
     name: string
     city: string

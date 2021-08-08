@@ -109,7 +109,13 @@ const Services: React.FC = () => {
             return category?.name === record.category
           }}
         />
-        <Column title="Дата добавления" dataIndex="createdAt" key="createdAt" render={renderDate} />
+        <Column
+          title="Дата добавления"
+          dataIndex="createdAt"
+          key="createdAt"
+          render={renderDate}
+          sorter={(a: IService, b: IService) => a.createdAt > b.createdAt ? 1 : -1}
+        />
         <Column
           title="Действия"
           key="action"

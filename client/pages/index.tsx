@@ -9,7 +9,7 @@ import MainLayout from '../layouts/MainLayout'
 
 import Stats from '../components/home/Stats'
 import Banner from '../components/home/Banner'
-import ServicesTypes from '../components/home/ServicesTypes'
+import Services from '../components/home/Services'
 
 import { setLoggedOut } from '../store/actions/user'
 
@@ -40,7 +40,7 @@ const Index: React.FC<IIndexProps> = ({ categories, stats, error }) => {
     <MainLayout>
       <Banner />
       {!error && <Stats stats={stats} />}
-      {!error && <ServicesTypes categories={categories} />}
+      {!error && <Services categories={categories} />}
     </MainLayout>
   )
 }

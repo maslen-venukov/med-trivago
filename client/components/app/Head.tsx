@@ -42,13 +42,14 @@ const Head: React.FC<IHeadProps> = ({ title, description, keywords, robots = tru
     <NextHead>
       <title>{flag ? `(${notifications}) Новая запись на прием - ` : ''}{title ? `${title} - ` : ''}MeDi - Медицинская Диагностика</title>
 
-      <meta name="description" content={description || 'Запись на платные анализы Оренбург, МРТ, УЗИ, ЭКГ'} />
+      <meta name="description" content={description || 'MeDi — Медицинская Диагностика. Наш ресурс предоставляет человеку возможность выбрать необходимое диагностическое исследование, возможность записаться на прием в один клик без очередей. Услуги предоставляются квалифицированными медицинскими учреждениями, которые имеют все необходимые лицензии и проходят тщательный отбор.'} />
       <meta name="robots" content={robots ? 'all' : 'none'} />
-      <meta name="keywords" content={`меди, medi, MeDi, медицинская диагностика, диагностика, запись на анализы, анализы, оренбург, мрт, узи, экг, кт, ${keywords ? `, ${keywords.join(', ')}` : ''}`} />
+      <meta name="keywords" content={`MeDi, меди, medi, медицинская диагностика, диагностика, запись на анализы, анализы, мрт, узи, экг, кт, ${keywords ? `, ${keywords.join(', ')}` : ''}`} />
+
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content="#ffffff" />
 
       <link rel="icon" href={flag ? '/notification/favicon.ico' : '/favicon.ico'} />
-      <meta name="theme-color" content="#ffffff" />
     </NextHead>
   )
 }

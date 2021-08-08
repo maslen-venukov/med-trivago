@@ -12,11 +12,11 @@ import { ICategory } from '../../types/categories'
 import { API_URL } from '../../constants'
 import { Tooltip } from 'antd'
 
-interface IServicesTypesProps {
+interface IServicesProps {
   categories: ICategory[]
 }
 
-const ServicesTypes: React.FC<IServicesTypesProps> = ({ categories }) => {
+const Services: React.FC<IServicesProps> = ({ categories }) => {
   return categories.length ? <>
     <Typography.Title level={2}>Виды услуг</Typography.Title>
     <Row gutter={[16, 16]} className="services-types">
@@ -48,4 +48,4 @@ const ServicesTypes: React.FC<IServicesTypesProps> = ({ categories }) => {
   </> : null
 }
 
-export default ServicesTypes
+export default Services

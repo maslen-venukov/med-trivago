@@ -56,7 +56,6 @@ const Banner: React.FC = () => {
       spaceBetween={32}
       autoHeight
       grabCursor
-      loop
     >
       <SwiperSlide className="banner__item banner__item--1">
         <div className="banner__content">

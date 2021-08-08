@@ -1,7 +1,13 @@
 .service
-  margin-bottom: $size * 2
+  height: 100%
+  border: 1px solid $accent
   cursor: default
+  &:hover
+    border: 1px solid $accent
   .ant-card-body
+    display: flex
+    flex-direction: column
+    height: 100%
     padding: $size * 2
   &__info
     display: block
@@ -9,7 +15,8 @@
   &__italic
     font-style: italic
   &__divider
-    margin: $size * 2 0
+    background-color: $accent
+    margin: auto 0 $size * 2
   &__link
     display: flex
     justify-content: space-between
@@ -33,11 +40,3 @@
   &__appointment-hour
     margin-bottom: $size
     cursor: pointer
-
-.services-grid
-  display: flex
-  margin-left: -$size * 2
-  width: auto
-  &__column
-    padding-left: $size * 2
-    background-clip: padding-box

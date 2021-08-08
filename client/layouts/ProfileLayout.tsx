@@ -85,7 +85,7 @@ const ProfileLayout: React.FC<IProfileLayoutProps> = ({ children, title, classNa
   return ready && user ? (
     rights ? (
       <Layout className="profile">
-        <Head title={`${title ? `${title} - ` : ''}Профиль`} />
+        <Head title={`${title ? `${title} - ` : ''}Профиль`} robots={false} />
         <Layout.Sider width={220}>
           <Menu
             mode="inline"
