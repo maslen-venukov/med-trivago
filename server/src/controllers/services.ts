@@ -74,7 +74,7 @@ class Controller {
 
   async getAll(req: Request, res: Response): Promise<Response> {
     try {
-      const { q, cat, city, minp, maxp, p } = req.query
+      const { q, cat, city, minp, maxp, p, page = 1 } = req.query
 
       let name: NameFilter = null
       if(q && typeof q === 'string') {
@@ -153,7 +153,10 @@ class Controller {
         }
       })
 
-      return res.json({ searched: mapped })
+      const pageSize = 12
+      const chunked = mapped.slice((Number(page) - 1) * pageSize, Number(page) * pageSize)
+
+      return res.json({ searched: chunked, total: mapped.length, pageSize })
     } catch (e) {
       console.log(e)
       await createError(e)

@@ -33,10 +33,14 @@ export const getSearchResult = async (context: GetServerSidePropsContext) => {
       axios.get('/api/services', { params: context.query })
     ])
 
+    const { searched, total, pageSize } = res[1].data
+
     return {
       props: {
         categories: res[0].data.categories,
-        searched: res[1].data.searched
+        searched,
+        total,
+        pageSize
       }
     }
   } catch {

@@ -29,9 +29,9 @@ import { RootState } from '../store/reducers'
 
 interface ISearchLayoutProps {
   categories: ICategory[]
-  error: string
   title: string
   keywords: string[]
+  error?: string
 }
 
 const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, error, title, keywords }) => {
