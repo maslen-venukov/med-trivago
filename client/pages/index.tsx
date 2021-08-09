@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
-
-import message from 'antd/lib/message'
 
 import MainLayout from '../layouts/MainLayout'
 
@@ -13,14 +10,16 @@ import Services from '../components/home/Services'
 
 import { setLoggedOut } from '../store/actions/user'
 
+import { getIndexPageData } from '../api'
+
 import { RootState } from '../store/reducers'
 import { ICategory } from '../types/categories'
 import { IStats } from '../types'
 
-interface IIndexProps {
-  categories: ICategory[]
-  stats: IStats
-  error: string
+export interface IIndexProps {
+  categories?: ICategory[]
+  stats?: IStats
+  error?: string
 }
 
 const Index: React.FC<IIndexProps> = ({ categories, stats, error }) => {
@@ -32,40 +31,19 @@ const Index: React.FC<IIndexProps> = ({ categories, stats, error }) => {
     loggedOut && dispatch(setLoggedOut(false))
   }, [loggedOut, dispatch])
 
-  useEffect(() => {
-    error && message.error(error)
-  }, [error])
+  console.log(error)
 
   return (
-    <MainLayout>
+    <MainLayout error={error}>
       <Banner />
-      {!error && <Stats stats={stats} />}
-      {!error && <Services categories={categories} />}
+      {!error && <>
+        {stats && <Stats stats={stats} />}
+        {categories && <Services categories={categories} />}
+      </>}
     </MainLayout>
   )
 }
 
 export default Index
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const res = await axios.all([
-      axios.get('/api/categories'),
-      axios.get('/api/stats/count')
-    ])
-
-    return {
-      props: {
-        categories: res[0].data.categories,
-        stats: res[1].data
-      }
-    }
-  } catch (e) {
-    console.log(e)
-    return {
-      props: {
-        error: 'Ошибка при загрузке данных'
-      }
-    }
-  }
-}
+export const getServerSideProps: GetServerSideProps = getIndexPageData

@@ -13,12 +13,11 @@ import { Colors } from '../../types'
 
 interface ICategoriesFilterProps {
   categories: ICategory[]
-  error: string
   onChange: (e: React.MouseEvent, selected: boolean) => void
   onReset: () => void
 }
 
-const CategoriesFilter: React.FC<ICategoriesFilterProps> = ({ categories, error, onChange, onReset }) => {
+const CategoriesFilter: React.FC<ICategoriesFilterProps> = ({ categories, onChange, onReset }) => {
   const dispatch = useDispatch()
 
   const { filters } = useSelector((state: RootState) => state.search)
@@ -28,7 +27,7 @@ const CategoriesFilter: React.FC<ICategoriesFilterProps> = ({ categories, error,
 
   const onSidebarVisibleChange = () => dispatch(setVisible(!visible))
 
-  return !error ? (
+  return (
     <div className="categories-filter">
       <Tag
         icon={<FilterOutlined />}
@@ -58,7 +57,7 @@ const CategoriesFilter: React.FC<ICategoriesFilterProps> = ({ categories, error,
         Сбросить
       </Tag>
     </div>
-  ) : null
+  )
 }
 
 export default CategoriesFilter

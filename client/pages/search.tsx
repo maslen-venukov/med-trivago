@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
 
 import Result from 'antd/lib/result'
 import Row from 'antd/lib/row'
@@ -14,6 +13,8 @@ import Searched from '../components/services/Searched'
 
 import { setFilters, setQuery, setSort } from '../store/actions/search'
 import { setMobile } from '../store/actions/sidebar'
+
+import { getSearchResult } from '../api'
 
 import { ICategory } from '../types/categories'
 import { RootState } from '../store/reducers'
@@ -62,7 +63,7 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
       title={getTitle()}
       keywords={[getTitle()]}
     >
-      {searched.length ? (
+      {searched?.length ? (
         <Row gutter={[16, 16]}>
           {searched.map(service => (
             <Col key={service.name} md={8} sm={12} xs={24}>
@@ -83,24 +84,4 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, error }) => {
 
 export default Search
 
-export const getServerSideProps: GetServerSideProps  = async context => {
-  try {
-    const res = await axios.all([
-      axios.get('/api/categories'),
-      axios.get('/api/services', { params: context.query })
-    ])
-
-    return {
-      props: {
-        categories: res[0].data.categories,
-        searched: res[1].data.searched
-      }
-    }
-  } catch {
-    return {
-      props: {
-        error: 'Ошибка при загрузке данных'
-      }
-    }
-  }
-}
+export const getServerSideProps: GetServerSideProps = getSearchResult

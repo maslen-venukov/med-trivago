@@ -4,11 +4,8 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { Socket } from 'socket.io-client'
-import axios from 'axios'
 import { Moment } from 'moment'
 
-import Row from 'antd/lib/row'
-import Col from 'antd/lib/col'
 import Typography from 'antd/lib/typography'
 import Calendar from 'antd/lib/calendar'
 import Form from 'antd/lib/form'
@@ -25,10 +22,11 @@ import Schedule from '../../components/services/Schedule'
 import TimeModal from '../../components/services/TimeModal'
 import AppointmentModal, { IAppointmentFormValues } from '../../components/services/AppointmentModal'
 
-import { setSocket } from '../../store/actions/socket'
-import { fetchAppointedDates, fetchCreateAppointment } from '../../api/appointments'
-
 import { setAppointedDates } from '../../store/actions/appointments'
+import { setSocket } from '../../store/actions/socket'
+
+import { getServiceData } from '../../api'
+import { fetchAppointedDates, fetchCreateAppointment } from '../../api/appointments'
 
 import getPeriod from '../../utils/getPeriod'
 import getPhoneHref from '../../utils/getPhoneHref'
@@ -45,12 +43,12 @@ import { IAppointmentHour, IWeekSchedule } from '../../types'
 import { RootState } from '../../store/reducers'
 
 interface IServiceProps extends IService {
-  error: string
   hospital: IHospital
   schedule: IWeekSchedule
+  error?: string
 }
 
-const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, error }) => {
+const Service: React.FC<IServiceProps> = ({ name, price, hospital, schedule, error }) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [form] = Form.useForm()
@@ -104,10 +102,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
     form.resetFields()
   }
 
-  // TODO ? пагинация
-
-  // TODO страницы: сотрудничество, контакты
-  // TODO текст письма
+  const parseWebsiteUrl = (url: string) => (url[url.length - 1] === '/' ? url.slice(0, -1) : url).replace(/http(s?):\/\//, '')
 
   useEffect(() => {
     const serviceId = router.query.id
@@ -125,68 +120,69 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
       keywords={!error ? [name, formatPrice(price), hospital.name, hospital.address, hospital.phone] : []}
     >
       {!error ? (
-        <Row className="service">
-          <Col xs={18}>
-            <Typography.Title level={3} className="service__title">{name}</Typography.Title>
+        <div className="service">
+          <Typography.Title level={3} className="service__title">{name}</Typography.Title>
 
-            <Typography.Title level={4} type="success">{formatPrice(price)}</Typography.Title>
+          <Typography.Title level={4} type="success">{formatPrice(price)}</Typography.Title>
 
+          <Typography.Paragraph>
+            <Schedule schedule={schedule}>
+              <ClockCircleTwoTone className="icon" /> {getPeriod(schedule?.weekdays)}
+            </Schedule>
+          </Typography.Paragraph>
+
+          <Typography.Paragraph>
+            <MedicineBoxTwoTone className="icon" /> {hospital.name}
+          </Typography.Paragraph>
+
+          <Typography.Paragraph>
+            <HomeTwoTone className="icon" /> г. {hospital.city}, {hospital.address}
+          </Typography.Paragraph>
+
+          <Typography.Paragraph>
+            <Link href={getPhoneHref(hospital.phone)}>
+              <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
+            </Link>
+          </Typography.Paragraph>
+
+          {hospital.website && (
             <Typography.Paragraph>
-              <Schedule schedule={schedule}>
-                <ClockCircleTwoTone className="icon" /> {getPeriod(schedule?.weekdays)}
-              </Schedule>
-            </Typography.Paragraph>
-
-            <Typography.Paragraph>
-              <MedicineBoxTwoTone className="icon" /> {hospital.name}
-            </Typography.Paragraph>
-
-            <Typography.Paragraph>
-              <HomeTwoTone className="icon" /> г. {hospital.city}, {hospital.address}
-            </Typography.Paragraph>
-
-            <Typography.Paragraph>
-              <Link href={getPhoneHref(hospital.phone)}>
-                <a><PhoneTwoTone className="icon mirrored" /> {hospital.phone}</a>
+              <Link href={hospital.website.includes('http') ? hospital.website : `//${hospital.website}`}>
+                <a target="_blank" rel="noreferrer">
+                  <GlobalOutlined className="icon color-accent" /> {parseWebsiteUrl(hospital.website)}
+                </a>
               </Link>
             </Typography.Paragraph>
+          )}
 
-            {hospital.website && (
-              <Typography.Paragraph>
-                <Link href={hospital.website.includes('http') ? hospital.website : `//${hospital.website}`}>
-                  <a target="_blank" rel="noreferrer"><GlobalOutlined className="icon" /> {hospital.website}</a>
-                </Link>
-              </Typography.Paragraph>
-            )}
-
-            <div className="calendar">
-              <Calendar
-                disabledDate={date => getDisabledDate(date, schedule)}
-                fullscreen={false}
-                dateCellRender={date => (
-                  <button className="calendar__trigger" onClick={() => onOpenTimeModal(date)} />
-                )}
-              />
-            </div>
-
-            <TimeModal
-              title={`${name} — ${date}`}
-              visible={timeModalVisible}
-              onCancel={onCloseTimeModal}
-              appointmentHours={appointmentHours}
-              onSelectTime={onOpenAppointmentModal}
-              className="service__time-modal"
+          <Typography.Title level={5} className="color-accent">Онлайн запись</Typography.Title>
+          <div className="calendar">
+            <Calendar
+              disabledDate={date => getDisabledDate(date, schedule)}
+              fullscreen={false}
+              dateCellRender={date => (
+                <button className="calendar__trigger" onClick={() => onOpenTimeModal(date)} />
+              )}
             />
+          </div>
 
-            <AppointmentModal
-              title={`${name} — ${time}, ${date}`}
-              visible={appointmentModalVisible}
-              form={form}
-              onCancel={onCloseAppointmentModal}
-              onFinish={onAppoint}
-            />
-          </Col>
-        </Row>
+          <TimeModal
+            title={`${name} — ${date}`}
+            visible={timeModalVisible}
+            onCancel={onCloseTimeModal}
+            appointmentHours={appointmentHours}
+            onSelectTime={onOpenAppointmentModal}
+            className="service__time-modal"
+          />
+
+          <AppointmentModal
+            title={`${name} — ${time}, ${date}`}
+            visible={appointmentModalVisible}
+            form={form}
+            onCancel={onCloseAppointmentModal}
+            onFinish={onAppoint}
+          />
+        </div>
       ) : <NotFound />}
     </MainLayout>
   )
@@ -194,20 +190,4 @@ const Service: React.FC<IServiceProps> = ({ name, price, schedule, hospital, err
 
 export default Service
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  try {
-    const res = await axios.get(`/api/services/${context.query.id}`)
-    return {
-      props: {
-        ...res.data.service
-      }
-    }
-  } catch (e) {
-    console.log(e)
-    return {
-      props: {
-        error: e.response.data.message
-      }
-    }
-  }
-}
+export const getServerSideProps: GetServerSideProps = getServiceData

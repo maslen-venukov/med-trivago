@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,6 +8,7 @@ import Col from 'antd/lib/col'
 import Button from 'antd/lib/button'
 import BackTop from 'antd/lib/back-top'
 import ArrowLeftOutlined from '@ant-design/icons/ArrowLeftOutlined'
+import message from 'antd/lib/message'
 
 import Head from '../components/app/Head'
 import Header from '../components/app/Header'
@@ -64,6 +65,10 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
 
   const onSidebarVisibleChange = () => dispatch(setVisible(!visible))
 
+  useEffect(() => {
+    error && message.error(error)
+  }, [error])
+
   return (
     <>
       <BackTop />
@@ -74,12 +79,13 @@ const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, categories, erro
           <Row gutter={16} className="search-row">
             <Search />
             <Col className="search-row__services">
-              <CategoriesFilter
-                categories={categories}
-                error={error}
-                onChange={onCategoryChange}
-                onReset={onResetCategory}
-              />
+              {!error && (
+                <CategoriesFilter
+                  categories={categories}
+                  onChange={onCategoryChange}
+                  onReset={onResetCategory}
+                />
+              )}
               {children}
             </Col>
             <Col

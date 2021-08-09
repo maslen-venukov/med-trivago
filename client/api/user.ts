@@ -39,6 +39,5 @@ export const logout = (router: NextRouter) => (dispatch: Dispatch<UserAction>) =
 export const auth = () => (dispatch: Dispatch<UserAction>) => {
   axios.get('/api/users/auth')
     .then(({ data }) => dispatch(setUser(data.user)))
-    .catch(e => console.log(e.response.data.message))
     .finally(() => dispatch(setReady()))
 }

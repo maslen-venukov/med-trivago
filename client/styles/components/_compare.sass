@@ -1,7 +1,15 @@
-.compared
-  @media screen and ( max-width: 480px )
-    flex-direction: column
-    text-align: center
-    .ant-list-item-meta
-      width: 100%
-      margin-bottom: $size
+.compare
+  &__title.ant-typography
+    color: $accent
+  &__item
+    @media screen and ( max-width: 480px )
+      flex-direction: column
+      text-align: center
+      .ant-list-item-meta
+        width: 100%
+        margin-bottom: $size
+  &__price.ant-typography
+    margin: 0 0 0 $size * 2
+    margin-bottom: 0
+    @media screen and ( max-width: 480px )
+      margin: 0 0 $size

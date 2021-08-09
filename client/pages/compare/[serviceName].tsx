@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
-import axios from 'axios'
-import queryStringify from 'qs-stringify'
 
 import List from 'antd/lib/list'
 import Typography from 'antd/lib/typography'
@@ -12,13 +10,15 @@ import MainLayout from '../../layouts/MainLayout'
 
 import NotFound from '../../components/app/NotFound'
 
+import { getCompareResult } from '../../api'
+
 import formatPrice from '../../utils/formatPrice'
 
 import { IService } from '../../types/services'
 
 interface ICompareProps {
-  compared: IService[]
-  error: string
+  compared?: IService[]
+  error?: string
 }
 
 const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
@@ -29,31 +29,33 @@ const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
   )
 
   useEffect(() => {
-    !error && setTitle(`Цены на ${compared[0].name}`)
+    !error && compared && setTitle(`Цены на ${compared[0].name}`)
   }, [error])
 
   return (
-    <MainLayout title={title}>
-      {!error ? (
-        <>
-          <Typography.Title level={3}>{title}</Typography.Title>
+    <MainLayout title={title} error={error}>
+      {!error && compared ? (
+        <div className="compare">
+          <Typography.Title level={3} className="compare__title">{title}</Typography.Title>
           <List
             itemLayout="horizontal"
             dataSource={compared}
             renderItem={service => (
               <List.Item
-                actions={[<Button type="primary">{renderLinkToServicePage(service._id, 'Подробнее')}</Button>]}
-                className="compared"
+                actions={[<Button type="primary">{renderLinkToServicePage(service._id, 'Записаться')}</Button>]}
+                className="compare__item"
               >
                 <List.Item.Meta
                   title={renderLinkToServicePage(service._id, service.hospital.name)}
                   description={`г. ${service.hospital.city}, ${service.hospital.address}`}
                 />
-                <Typography.Title type="success" level={5}>{formatPrice(service.price)}</Typography.Title>
+                <Typography.Title type="success" level={5} className="compare__price">
+                  {formatPrice(service.price)}
+                </Typography.Title>
               </List.Item>
             )}
           />
-        </>
+        </div>
       ) : <NotFound />}
     </MainLayout>
   )
@@ -61,24 +63,4 @@ const Compare: React.FC<ICompareProps> = ({ compared, error }) => {
 
 export default Compare
 
-export const getServerSideProps: GetServerSideProps  = async context => {
-  try {
-    const serviceName = queryStringify({ serviceName: context.params?.serviceName?.toString() }).replace('serviceName=', '')
-    const query = { ...context.query } as { [name: string]: string }
-    delete query.serviceName
-    const res = await axios.get(`/api/services/compare/${serviceName}?${queryStringify(query)}`)
-
-    return {
-      props: {
-        compared: res.data.compared
-      }
-    }
-  } catch (e) {
-    console.log(e)
-    return {
-      props: {
-        error: 'Ошибка при загрузке данных'
-      }
-    }
-  }
-}
+export const getServerSideProps: GetServerSideProps = getCompareResult

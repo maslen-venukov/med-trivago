@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 
 import Form from 'antd/lib/form'
 import Input from 'antd/lib/input'
@@ -16,6 +15,7 @@ import NotFound from '../../components/app/NotFound'
 import HospitalInfoForm from '../../components/hospitals/HospitalInfoForm'
 import Agreement from '../../components/app/Agreement'
 
+import { getRegisterLink } from '../../api'
 import { registerHospital } from '../../api/hospitals'
 
 import formatSchedule from '../../utils/formatSchedule'
@@ -124,19 +124,4 @@ const RegisterByLink: React.FC<IRegisterByLinkProps> = ({ link }) => {
 
 export default RegisterByLink
 
-export const getServerSideProps: GetServerSideProps  = async context => {
-  try {
-    const res = await axios.get(`/api/register-links/${context.query.link}`)
-    return {
-      props: {
-        link: res.data.link
-      }
-    }
-  } catch {
-    return {
-      props: {
-        link: null
-      }
-    }
-  }
-}
+export const getServerSideProps: GetServerSideProps = getRegisterLink
