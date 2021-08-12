@@ -68,6 +68,7 @@ const Header: React.FC = () => {
               alt="MeDi — Медицинская диагностика"
               width={192}
               height={64}
+              loading="eager"
             />
           </a>
         </Link>

@@ -41,6 +41,7 @@ const Banner: React.FC = () => {
             alt="Единая онлайн запись на медицинскую диагностику"
             width={540}
             height={400}
+            loading="eager"
           />
         </div>
       </SwiperSlide>
@@ -59,6 +60,7 @@ const Banner: React.FC = () => {
             alt="Единая онлайн запись на медицинскую диагностику"
             width={984}
             height={400}
+            loading="eager"
           />
         </div>
       </SwiperSlide>
