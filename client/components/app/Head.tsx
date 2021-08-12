@@ -29,9 +29,7 @@ const Head: React.FC<IHeadProps> = ({ title, description, keywords, robots = tru
   }
 
   useEffect(() => {
-    notifications
-      ? onNotify()
-      : onClearInterval()
+    notifications ? onNotify() : onClearInterval()
 
     return () => {
       onClearInterval()
@@ -42,7 +40,7 @@ const Head: React.FC<IHeadProps> = ({ title, description, keywords, robots = tru
     <NextHead>
       <title>{flag ? `(${notifications}) Новая запись на прием - ` : ''}{title ? `${title} - ` : ''}MeDi - Медицинская Диагностика</title>
 
-      <meta name="description" content={description || 'MeDi — Медицинская Диагностика. Наш ресурс предоставляет человеку возможность выбрать необходимое диагностическое исследование, возможность записаться на прием в один клик без очередей. Услуги предоставляются квалифицированными медицинскими учреждениями, которые имеют все необходимые лицензии и проходят тщательный отбор.'} />
+      <meta name="description" content={description || 'MeDi предоставляет человеку возможность выбрать необходимое диагностическое исследование, записаться на прием в один клик без очередей. Услуги предоставляются квалифицированными медицинскими учреждениями, которые имеют все необходимые лицензии и проходят тщательный отбор.'} />
       <meta name="robots" content={robots ? 'all' : 'none'} />
       <meta name="keywords" content={`MeDi, меди, medi, медицинская диагностика, диагностика, запись на анализы, анализы, мрт, узи, экг, кт, ${keywords ? `, ${keywords.join(', ')}` : ''}`} />
 

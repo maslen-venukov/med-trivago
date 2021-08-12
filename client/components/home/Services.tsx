@@ -24,6 +24,7 @@ const Services: React.FC<IServicesProps> = ({ categories }) => {
         <Col key={category._id} md={8} sm={12} xs={24}>
           <Card
             hoverable
+            className="services-types__card"
             cover={
               <Link href={`/search?cat=${category.name}`}>
                 <a>
@@ -32,13 +33,14 @@ const Services: React.FC<IServicesProps> = ({ categories }) => {
                     alt={`${category.name} ${category.description}`}
                     width={576}
                     height={324}
+                    loading="eager"
                   />
                 </a>
               </Link>
             }
           >
             <Card.Meta
-              title={<Tooltip title={category.name} placement="topLeft">{category.name}</Tooltip>}
+              title={category.name}
               description={category.description}
             />
           </Card>

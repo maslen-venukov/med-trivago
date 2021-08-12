@@ -48,13 +48,19 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, total, pageSize,
     pushQueryToUrl(router, { q, ...filters, ...sort, page: page === 1 ? undefined : page })
   }
 
+  const onScrollTop = () => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+  }
+
   useEffect(() => {
     const p = (router.query.p || '') as Sort
     dispatch(setSort({ ...sort, p }))
 
     if(typeof window !== 'undefined') {
-      onMobileChange()
       window.addEventListener('resize', onMobileChange)
+      onMobileChange()
+      onScrollTop()
     }
 
     return () => {
@@ -85,6 +91,7 @@ const Search: React.FC<ISearchProps> = ({ categories, searched, total, pageSize,
             current={Number(router.query.page) || 1}
             pageSize={pageSize}
             total={total}
+            showSizeChanger={false}
             onChange={onPageChange}
             className="search-pagination"
           />

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { IUserRequest } from '../models/User'
-import Service, { IService } from '../models/Service'
+import Service from '../models/Service'
 import Category from '../models/Category'
 import Hospital from '../models/Hospital'
 import Appointment from '../models/Appointment'
@@ -39,7 +39,9 @@ class Controller {
   async create(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const { name, price, category: categoryId } = req.body
-      if(!name || !price || !categoryId) {
+      const trimmedName = name.replace(/\s+/g, ' ').trim()
+
+      if(!trimmedName || !price || !categoryId) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Заполните все поля')
       }
 
@@ -50,13 +52,18 @@ class Controller {
 
       const hospital = await Hospital.findOne({ user: req.user._id })
 
+      const existingService = await Service.findOne({ hospital: hospital._id, name: new RegExp(trimmedName, 'gi') })
+      if(existingService) {
+        return errorHandler(res, HTTPStatusCodes.BadRequest, 'Услуга уже добавлена')
+      }
+
       const activeCategory = hospital.serviceList.find(list => list.category.toString() === categoryId)
       if(!activeCategory) {
         return errorHandler(res, HTTPStatusCodes.BadRequest, 'Категория не активна')
       }
 
       const service = await Service.create({
-        name,
+        name: trimmedName,
         price,
         category,
         hospital: hospital._id

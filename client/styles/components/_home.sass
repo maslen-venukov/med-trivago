@@ -1,18 +1,18 @@
 .banner
   position: relative
-  height: 400px
+  height: 422px
+  padding-bottom: 22px
   margin-bottom: $size * 4
   @media screen and ( max-width: 991px )
     height: auto
-    padding-bottom: $size * 3
+    margin-bottom: $size * 3
   .swiper-wrapper
     min-height: 100%
     max-height: 100%
     @media screen and ( max-width: 991px )
       min-height: auto
   .swiper-pagination
-    @media screen and ( max-width: 991px )
-      bottom: 0
+    bottom: -6px
   &__item
     min-height: 100%
     max-width: 100%
@@ -96,7 +96,14 @@
     align-items: center
 
 .services-types
-  .ant-card
+  &__card
     height: 100%
-    &-cover img
+    @include hoverable
+    img
       object-fit: cover
+    .ant-card-meta-title
+      overflow: visible
+      white-space: normal
+      text-overflow: clip
+    .ant-card-cover
+      margin: 0

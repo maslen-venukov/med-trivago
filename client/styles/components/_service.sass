@@ -17,10 +17,8 @@
 
 .searched
   height: 100%
-  border: 1px solid $accent
   cursor: default
-  &:hover
-    border: 1px solid $accent
+  @include hoverable
   .ant-card-body
     display: flex
     flex-direction: column
@@ -37,11 +35,14 @@
   &__link
     display: flex
     justify-content: space-between
+  &__price
+    white-space: nowrap
   &__hospital
     max-width: calc(100% - 60px)
     white-space: nowrap
     text-overflow: ellipsis
     overflow: hidden
+    margin-left: $size * 2
     transition: .2s color
     &:hover
       color: $accent

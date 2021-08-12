@@ -38,9 +38,13 @@ const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories })
           <Typography.Text type="secondary">
             <small>{category?.name}</small>
           </Typography.Text>
+
           <Typography.Title level={5}>{name}</Typography.Title>
+
           <Typography.Paragraph type="secondary" className="searched__italic">Цены от</Typography.Paragraph>
+
           <Typography.Title level={5}>{formatPrice(min)}</Typography.Title>
+
           <Typography.Paragraph type="secondary" className="searched__italic">{count}</Typography.Paragraph>
         </a>
       </Link>
@@ -52,7 +56,10 @@ const Searched: React.FC<ISearchedProps> = ({ name, min, services, categories })
           <li key={service._id}>
             <Link href={`/services/${service._id}`}>
               <a className="searched__link">
-                <Typography.Text type="success">{formatPrice(service.price)}</Typography.Text>
+                <Typography.Text type="success" className="searched__price">
+                  {formatPrice(service.price)}
+                </Typography.Text>
+
                 <Tooltip title={service.hospital.name}>
                   <Typography.Text className="searched__hospital">
                     {service.hospital.name}

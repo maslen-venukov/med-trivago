@@ -31,8 +31,6 @@ const Index: React.FC<IIndexProps> = ({ categories, stats, error }) => {
     loggedOut && dispatch(setLoggedOut(false))
   }, [loggedOut, dispatch])
 
-  console.log(error)
-
   return (
     <MainLayout error={error}>
       <Banner />
