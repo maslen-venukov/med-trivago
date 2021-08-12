@@ -27,8 +27,6 @@ import { RootState } from '../../store/reducers'
 import { ICategory } from '../../types/categories'
 import { UploadFile } from 'antd/lib/upload/interface'
 
-import { API_URL } from '../../constants'
-
 interface ICategoriesFormValues {
   name: string
   description: string
@@ -69,7 +67,7 @@ const Categories: React.FC = () => {
     setFileList([{
       uid: '1',
       name: record.name,
-      url: `${API_URL}/uploads/${record.image}`,
+      url: `${process.env.NEXT_PUBLIC_ENV_API_URL}/uploads/${record.image}`,
     }])
     onOpenUpdateDrawer(record._id, record)
   }

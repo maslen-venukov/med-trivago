@@ -9,9 +9,6 @@ import Card from 'antd/lib/card'
 
 import { ICategory } from '../../types/categories'
 
-import { API_URL } from '../../constants'
-import { Tooltip } from 'antd'
-
 interface IServicesProps {
   categories: ICategory[]
 }
@@ -29,7 +26,7 @@ const Services: React.FC<IServicesProps> = ({ categories }) => {
               <Link href={`/search?cat=${category.name}`}>
                 <a>
                   <Image
-                    src={`${API_URL}/uploads/${category.image}`}
+                    src={`${process.env.NEXT_PUBLIC_ENV_API_URL}/uploads/${category.image}`}
                     alt={`${category.name} ${category.description}`}
                     width={576}
                     height={324}

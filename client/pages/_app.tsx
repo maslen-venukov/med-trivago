@@ -11,8 +11,6 @@ import locale from 'antd/lib/locale/ru_RU'
 import 'moment/locale/ru'
 moment.locale('ru')
 
-import { API_URL } from '../constants'
-
 import { wrapper } from '../store'
 
 import { auth } from '../api/user'
@@ -32,7 +30,7 @@ import { IAppointment } from '../types/appointments'
 
 import '../styles/index.sass'
 
-axios.defaults.baseURL = API_URL
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_ENV_API_URL
 axios.defaults.withCredentials = true
 
 const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
@@ -42,7 +40,7 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const { user } = useSelector((state: RootState) => state.user)
   const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { socket } = useSelector((state: RootState) => state.socket)
-
+console.log(process.env.NEXT_PUBLIC_ENV_API_URL)
   useEffect(() => {
     cookiesNotification()
     dispatch(auth())
