@@ -40,7 +40,7 @@ const WrappedApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const { user } = useSelector((state: RootState) => state.user)
   const { currentHospital } = useSelector((state: RootState) => state.hospitals)
   const { socket } = useSelector((state: RootState) => state.socket)
-console.log(process.env.NEXT_PUBLIC_ENV_API_URL)
+
   useEffect(() => {
     cookiesNotification()
     dispatch(auth())
