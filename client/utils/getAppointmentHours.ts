@@ -10,14 +10,26 @@ const getAppointmentHours = (date: Moment, schedule: IWeekSchedule, appointedDat
   const formatTime = (date?: Date | Moment) => parseInt(moment(date).format('HHmm'))
 
   const getCurrentDaySchedule = (weekday: number, schedule: IWeekSchedule) => {
-    const { weekdays, saturday, sunday } = schedule
     switch(weekday) {
+      case 0:
+        return schedule.monday!
+      case 1:
+        return schedule.tuesday!
+      case 2:
+        return schedule.wednesday!
+      case 3:
+        return schedule.thursday!
+      case 4:
+        return schedule.friday!
       case 5:
-        return saturday || weekdays
+        return schedule.saturday!
       case 6:
-        return sunday || weekdays
+        return schedule.sunday!
       default:
-        return weekdays
+        return {
+          start: '00:00',
+          end: '23:30'
+        }
     }
   }
 

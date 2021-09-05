@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 
-import Modal from 'antd/lib/modal'
+import Modal, { ModalProps } from 'antd/lib/modal'
 import Form, { FormProps } from 'antd/lib/form'
-import TimePicker from 'antd/lib/time-picker'
 import Button from 'antd/lib/button'
 
 import WeekendDaySchedule from './WeekendDaySchedule'
 
 import { IWeekendState } from '../../pages/profile/active-categories'
-import { ModalProps } from 'antd'
+
+import { days } from '../../constants'
 
 interface IActiveCategoriesModalProps extends ModalProps, FormProps {
   title?: string
@@ -38,29 +38,16 @@ const ActiveCategoriesModal: React.FC<IActiveCategoriesModalProps> = ({ category
         layout="vertical"
         onFinish={onFinish}
       >
-        <Form.Item
-          label="Будние"
-          name="weekdays"
-          rules={[{ required: true, message: 'Пожалуйста введите расписание в будние дни!' }]}
-        >
-          <TimePicker.RangePicker inputReadOnly format="HH:mm" minuteStep={30} />
-        </Form.Item>
-
-        <WeekendDaySchedule
-          name="saturday"
-          label="Суббота"
-          message="Пожалуйста введите расписание в субботу!"
-          state={weekend}
-          setState={setWeekend}
-        />
-
-        <WeekendDaySchedule
-          label="Воскресенье"
-          name="sunday"
-          message="Пожалуйста введите расписание в воскресенье!"
-          state={weekend}
-          setState={setWeekend}
-        />
+        {days.map(day => (
+          <WeekendDaySchedule
+            key={day.name}
+            name={day.name}
+            label={day.label}
+            message={`Пожалуйста введите расписание в ${day.label.toLowerCase()}`}
+            state={weekend}
+            setState={setWeekend}
+          />
+        ))}
 
         <Form.Item>
           <Button type="primary" htmlType="submit">

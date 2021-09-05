@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { Socket } from 'socket.io-client'
-import { Moment } from 'moment'
+import moment, { Moment } from 'moment'
 
 import Typography from 'antd/lib/typography'
 import Calendar from 'antd/lib/calendar'
@@ -39,8 +39,10 @@ import parseAppointedDate from '../../utils/parseAppointedDate'
 import { IService } from '../../types/services'
 import { IHospital } from '../../types/hospitals'
 import { IShortAppointment } from '../../types/appointments'
-import { IAppointmentHour, IWeekSchedule } from '../../types'
+import { IAppointmentHour, IWeekSchedule, Weekday } from '../../types'
 import { RootState } from '../../store/reducers'
+
+import { daysNames } from '../../constants'
 
 interface IServiceProps extends IService {
   hospital: IHospital
@@ -114,6 +116,8 @@ const Service: React.FC<IServiceProps> = ({ name, price, hospital, schedule, err
     }
   }, [dispatch])
 
+  const todaySchedule = schedule[daysNames[moment().weekday()] as Weekday]
+
   return (
     <MainLayout
       title={name}
@@ -127,7 +131,7 @@ const Service: React.FC<IServiceProps> = ({ name, price, hospital, schedule, err
 
           <Typography.Paragraph>
             <Schedule schedule={schedule}>
-              <ClockCircleTwoTone className="icon" /> {getPeriod(schedule?.weekdays)}
+              <ClockCircleTwoTone className="icon" /> {getPeriod(todaySchedule)}
             </Schedule>
           </Typography.Paragraph>
 

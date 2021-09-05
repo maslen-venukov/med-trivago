@@ -5,9 +5,10 @@ import TimePicker from 'antd/lib/time-picker'
 import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox'
 
 import { IWeekendState } from '../../pages/profile/active-categories'
+import { Weekday } from '../../types'
 
 interface IWeekendDayScheduleProps {
-  name: 'saturday' | 'sunday'
+  name: Weekday
   label: string
   message: string
   state: IWeekendState

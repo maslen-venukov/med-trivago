@@ -1,7 +1,8 @@
 import moment, { Moment } from 'moment'
 
-import { IActiveCategoryFormValues } from '../pages/profile/active-categories'
 import { ISchedule, IWeekSchedule } from '../types'
+
+import { daysNames } from '../constants'
 
 export const parseTime = (date: string) => moment(new Date(`${date} 2021`))
 
@@ -13,25 +14,23 @@ const getActiveCategoryFormData = (schedule?: IWeekSchedule) => {
     return [parseTime(day.start), parseTime(day.end)]
   }
 
-  const data: IActiveCategoryFormValues = {
-    weekdays: parseWeekDay(schedule?.weekdays),
-    saturdayWeekend: false,
-    sundayWeekend: false
-  }
+  const data = schedule ? Object.entries(schedule).reduce((acc, [key, value]) => {
+    return {
+      ...acc,
+      [`${key}Weekend`]: false,
+      [key]: parseWeekDay(value)
+    }
+  }, {}) : {}
 
-  if(schedule?.saturday) {
-    data.saturday = parseWeekDay(schedule?.saturday)
-  } else {
-    data.saturdayWeekend = true
-  }
+  const weekends = daysNames.reduce((acc, day) => ({
+    ...acc,
+    [`${day}Weekend`]: true
+  }), {})
 
-  if(schedule?.sunday) {
-    data.sunday = parseWeekDay(schedule?.sunday)
-  } else {
-    data.sundayWeekend = true
+  return {
+    ...weekends,
+    ...data
   }
-
-  return data
 }
 
 export default getActiveCategoryFormData

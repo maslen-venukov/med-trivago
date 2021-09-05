@@ -40,5 +40,5 @@ export const auth = () => (dispatch: Dispatch<UserAction>) => {
   axios.get('/api/users/auth')
     .then(({ data }) => dispatch(setUser(data.user)))
     .finally(() => dispatch(setReady()))
-    .catch(e => console.log(e))
+    .catch(console.log)
 }

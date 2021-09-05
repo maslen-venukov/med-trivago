@@ -1,13 +1,16 @@
 import moment, { Moment } from 'moment'
 
-import { IWeekSchedule } from '../types'
+import { IWeekSchedule, Weekday } from '../types'
 
-const getWeekend = (schedule: IWeekSchedule) => {
-  const arr = []
-  !schedule?.saturday && arr.push(5)
-  !schedule?.sunday && arr.push(6)
-  return arr
-}
+import { daysNames } from '../constants'
+
+const getWeekend = (schedule: IWeekSchedule) => (
+  daysNames.reduce((acc: number[], day, index) => (
+    !schedule[day as Weekday]
+      ? [...acc, index]
+      : acc
+  ), [])
+)
 
 const getDisabledDate = (date: Moment, schedule: IWeekSchedule) => {
   const isWeekend = getWeekend(schedule).includes(date.weekday())

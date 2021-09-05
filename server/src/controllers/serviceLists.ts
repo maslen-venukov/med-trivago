@@ -65,6 +65,7 @@ class Controller {
           services: services.filter(service => list.category.toString() === service.category.toString())
         }))
       }
+
       return res.json({ message: 'Категория успешно деактивирована', hospital: currentHospital })
     } catch (e) {
       console.log(e)

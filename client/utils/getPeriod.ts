@@ -4,7 +4,7 @@ const getPeriod = (schedule?: ISchedule) => {
   if(schedule) {
     return `${schedule.start} — ${schedule.end}`
   }
-  return 'выходной'
+  return 'Выходной'
 }
 
 export default getPeriod

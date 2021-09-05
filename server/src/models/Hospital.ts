@@ -12,8 +12,12 @@ interface IServiceList {
   _id?: string
   category: string
   schedule: {
-    weekdays: ISchedule
-    saturday?: ISchedule
+    monday?: ISchedule,
+    tuesday?: ISchedule,
+    wednesday?: ISchedule,
+    thursday?: ISchedule,
+    friday?: ISchedule,
+    saturday?: ISchedule,
     sunday?: ISchedule
   }
 }
@@ -32,8 +36,11 @@ interface IHospital {
 }
 
 const schedule = {
-  start: { type: String, required: true },
-  end: { type: String, required: true }
+  type: {
+    start: { type: String, required: true },
+    end: { type: String, required: true }
+  },
+  required: false
 }
 
 const schema = new Schema({
@@ -49,9 +56,13 @@ const schema = new Schema({
   serviceList: [{
     category: { type: ObjectId, ref: 'Categories', required: true },
     schedule: {
-      weekdays: schedule,
-      saturday: { type: schedule },
-      sunday: { type: schedule }
+      monday: schedule,
+      tuesday: schedule,
+      wednesday: schedule,
+      thursday: schedule,
+      friday: schedule,
+      saturday: schedule,
+      sunday: schedule
     }
   }],
   user: { type: ObjectId, ref: 'Users', required: true, unique: true }

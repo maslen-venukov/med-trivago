@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
 
-import { ISchedule } from './'
+import { ISchedule, IWeekSchedule } from './'
 import { IService } from './services'
 
 export interface IRegisterHospitalData {
@@ -15,11 +15,7 @@ export interface IRegisterHospitalData {
 
 export interface IServiceList {
   category: string
-  schedule: {
-    weekdays: ISchedule
-    saturday: ISchedule
-    sunday: ISchedule
-  }
+  schedule: IWeekSchedule
   services: IService[]
 }
 

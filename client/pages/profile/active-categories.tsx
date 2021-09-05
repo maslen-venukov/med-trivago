@@ -28,16 +28,40 @@ import { ICategory } from '../../types/categories'
 import { IWeekSchedule } from '../../types'
 
 export interface IWeekendState {
+  monday: boolean
+  tuesday: boolean
+  wednesday: boolean
+  thursday: boolean
+  friday: boolean
   saturday: boolean
   sunday: boolean
 }
 
 export interface IActiveCategoryFormValues {
-  weekdays: [Moment, Moment]
+  monday?: [Moment, Moment]
+  tuesday?: [Moment, Moment]
+  wednesday?: [Moment, Moment]
+  thursday?: [Moment, Moment]
+  friday?: [Moment, Moment]
   saturday?: [Moment, Moment]
   sunday?: [Moment, Moment]
+  mondayWeekend: boolean
+  tuesdayWeekend: boolean
+  wednesdayWeekend: boolean
+  thursdayWeekend: boolean
+  fridayWeekend: boolean
   saturdayWeekend: boolean
   sundayWeekend: boolean
+}
+
+const defaultWeekendState = {
+  monday: false,
+  tuesday: false,
+  wednesday: false,
+  thursday: false,
+  friday: false,
+  saturday: false,
+  sunday: false
 }
 
 const ActiveCategories: React.FC = () => {
@@ -50,7 +74,7 @@ const ActiveCategories: React.FC = () => {
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false)
   const [categoryId, setCategoryId] = useState<string | null>(null)
-  const [weekend, setWeekend] = useState<IWeekendState>({ saturday: false, sunday: false })
+  const [weekend, setWeekend] = useState<IWeekendState>(defaultWeekendState)
 
   const getColumnSearchProps = useSearch()
 
@@ -58,7 +82,7 @@ const ActiveCategories: React.FC = () => {
 
   const checkActive = (id: string) => activeCategories?.includes(id)
 
-  const getServicesLength = (record: ICategory) => currentHospital?.serviceList.find(list => list.category === record._id)?.services.length || ''
+  const getServicesLength = (record: ICategory) => currentHospital?.serviceList.find(list => list.category === record._id)?.services.length || '0'
 
   const onOpenModal = (setModalVisible: (visible: boolean) => void, categoryId: string) => {
     setModalVisible(true)
@@ -69,7 +93,7 @@ const ActiveCategories: React.FC = () => {
     setAddModalVisible(false)
     setUpdateModalVisible(false)
     setCategoryId(null)
-    setWeekend({ saturday: false, sunday: false })
+    setWeekend(defaultWeekendState)
     setTimeout(form.resetFields, 300)
   }
 
@@ -93,7 +117,30 @@ const ActiveCategories: React.FC = () => {
     const schedule = currentHospital?.serviceList.find(list => list.category === record._id)?.schedule
     const data = getActiveCategoryFormData(schedule)
     onOpenModal(setUpdateModalVisible, record._id)
-    setWeekend({ saturday: !schedule?.saturday, sunday: !schedule?.sunday })
+
+    const getWeekend = (schedule?: IWeekSchedule) => {
+      if(!schedule) {
+        return defaultWeekendState
+      }
+
+      const days = Object.entries(schedule).reduce((acc, [key, value]) => ({
+        ...acc,
+        [key]: !value
+      }), {})
+
+      return {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
+        ...days
+      }
+    }
+
+    setWeekend(getWeekend(schedule))
     form.setFieldsValue(data)
   }
 
@@ -140,7 +187,7 @@ const ActiveCategories: React.FC = () => {
           title="Количество услуг"
           dataIndex="services"
           key="services"
-          render={(_, record: ICategory) => getServicesLength(record)}
+          render={(_, record: ICategory) => currentHospital?.serviceList.find(list => list.category === record._id) && getServicesLength(record)}
           sorter={(a, b) => Number(getServicesLength(a)) - Number(getServicesLength(b))}
         />
         <Column

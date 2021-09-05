@@ -7,8 +7,12 @@ export interface ISchedule {
 }
 
 export interface IWeekSchedule {
-  weekdays: ISchedule
-  saturday?: ISchedule
+  monday?: ISchedule,
+  tuesday?: ISchedule,
+  wednesday?: ISchedule,
+  thursday?: ISchedule,
+  friday?: ISchedule,
+  saturday?: ISchedule,
   sunday?: ISchedule
 }
 
@@ -26,6 +30,13 @@ export interface IStats {
   appointments: number
   services: number
   hospitals: number
+}
+
+export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+
+export interface IWeekDay {
+  name: Weekday
+  label: string
 }
 
 export enum Roles {

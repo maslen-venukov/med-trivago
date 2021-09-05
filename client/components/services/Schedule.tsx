@@ -7,16 +7,23 @@ import getPeriod from '../../utils/getPeriod'
 
 import { IWeekSchedule } from '../../types'
 
+import { days } from '../../constants'
+
 interface IScheduleProps {
   schedule?: IWeekSchedule
 }
 
 const Schedule: React.FC<IScheduleProps> = ({ children, schedule }) => {
+  const data = Object.entries(schedule!).map(([key, value]) => ({
+    ...days.find(day => day.name === key),
+    schedule: value
+  }))
+
   const content = (
     <div className="service__schedule">
-      <Typography.Paragraph>Будние: {getPeriod(schedule?.weekdays)}</Typography.Paragraph>
-      <Typography.Paragraph>Суббота: {getPeriod(schedule?.saturday)}</Typography.Paragraph>
-      <Typography.Paragraph>Воскресенье: {getPeriod(schedule?.sunday)}</Typography.Paragraph>
+      {data.map(item => (
+        <Typography.Paragraph key={item.name}>{item.label}: {getPeriod(item.schedule)}</Typography.Paragraph>
+      ))}
     </div>
   )
 

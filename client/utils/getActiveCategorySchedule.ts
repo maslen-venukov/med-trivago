@@ -1,21 +1,16 @@
 import { IActiveCategoryFormValues, IWeekendState } from '../pages/profile/active-categories'
-import { IWeekSchedule } from '../types'
+import { Weekday } from '../types'
 import formatSchedule from './formatSchedule'
 
-const getActiveCategoryData = (formValues: IActiveCategoryFormValues, weekend: IWeekendState) => {
-  const data: IWeekSchedule = {
-    weekdays: formatSchedule(formValues.weekdays)
-  }
-
-  if(!weekend.saturday && formValues.saturday) {
-    data.saturday = formatSchedule(formValues.saturday)
-  }
-
-  if(!weekend.sunday && formValues.sunday) {
-    data.sunday = formatSchedule(formValues.sunday)
-  }
-
-  return data
-}
+const getActiveCategoryData = (formValues: IActiveCategoryFormValues, weekend: IWeekendState) => (
+  Object.keys(weekend).reduce((acc, key) => (
+    !weekend[key as Weekday] && formValues[key as Weekday]
+      ? {
+        ...acc,
+        [key]: formatSchedule(formValues[key as Weekday]!)
+      }
+      : acc
+  ), {})
+)
 
 export default getActiveCategoryData
