@@ -104,13 +104,10 @@ const Busy: React.FC = () => {
       dispatch(addAppointedDate(appointedDate))
       onChangeAppointmentHours(moment(appointedDate), [...appointedDates, appointedDate])
     }))
-    onCloseTimeModal()
-    onCloseCalendarModal()
   }
 
   const onRemove = (record: IBusyTime) => {
     dispatch(fetchRemoveAppointDate(record.service._id, record.date))
-    console.log(record)
   }
 
   return (

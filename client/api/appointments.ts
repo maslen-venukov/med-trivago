@@ -104,3 +104,17 @@ export const fetchRemoveAppointDate = (serviceId: string, date: Date) => (dispat
     })
     .catch(catchError)
 }
+
+export const fetchAppointmentByServiceAndDate = async (serviceId: string, date: Date) => {
+  try {
+    const res = await axios.get('/api/appointments/by-service-and-date', {
+      params: {
+        serviceId,
+        date
+      }
+    })
+    return res.data.appointment
+  } catch {
+    return null
+  }
+}

@@ -16,24 +16,28 @@ interface ITimeTagProps {
 
 const TimeTag: React.FC<ITimeTagProps> = ({ hour, popconfirm, serviceName, date, onSelect }) => {
   if(hour.appointed) {
-    return <Tooltip title="Данное время занято" placement="right">
-    <Tag color={Colors.Red} style={{ cursor: 'default' }} className="service__appointment-hour">
-      {hour.label}
-    </Tag>
-  </Tooltip>
+    return (
+      <Tooltip title="Данное время занято" placement="right">
+        <Tag color={Colors.Red} style={{ cursor: 'default' }} className="service__appointment-hour">
+          {hour.label}
+        </Tag>
+      </Tooltip>
+    )
   }
 
   if(popconfirm) {
-    <Popconfirm
-      title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
-      onConfirm={() => onSelect && onSelect(hour.label)}
-      okText="Да"
-      cancelText="Нет"
-    >
-      <Tag color={Colors.Accent} className="service__appointment-hour">
-        {hour.label}
-      </Tag>
-    </Popconfirm>
+    return (
+      <Popconfirm
+        title={`Вы действительно хотите выбрать ${serviceName} на ${hour.label}, ${date}`}
+        onConfirm={() => onSelect && onSelect(hour.label)}
+        okText="Да"
+        cancelText="Нет"
+      >
+        <Tag color={Colors.Accent} className="service__appointment-hour">
+          {hour.label}
+        </Tag>
+      </Popconfirm>
+    )
   }
 
   return (

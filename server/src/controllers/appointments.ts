@@ -67,6 +67,28 @@ class Controller {
     }
   }
 
+  async getByServiceAndDate(req: IUserRequest, res: Response) {
+    try {
+      const { serviceId, date } = req.query
+
+      if(!(typeof serviceId === 'string' && typeof date === 'string')) {
+        return errorHandler(res)
+      }
+
+      const appointment = await Appointment.findOne({ service: serviceId, date: new Date(date) })
+
+      if(!appointment) {
+        return errorHandler(res, HTTPStatusCodes.NotFound, 'Запись не найдена')
+      }
+
+      return res.json({ appointment })
+    } catch (e) {
+      console.log(e)
+      await createError(e)
+      return errorHandler(res)
+    }
+  }
+
   async getNotSeen(req: IUserRequest, res: Response): Promise<Response> {
     try {
       const appointments = await getAppointments(req, { seen: false })

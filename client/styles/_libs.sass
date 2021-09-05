@@ -25,6 +25,30 @@
 .ant-back-top-icon
   background-color: $accent
 
+.ant-picker-panel-container
+  border: $border
+
+.ant-picker-panel
+  border-bottom: $border
+
+.ant-picker-time-panel
+  &-column
+    &:not(:first-child)
+      border-left: $border
+
+.ant-picker-range-arrow
+  border-top: $border
+  border-right: $border
+  &::before
+    content: ''
+    position: absolute
+    top: 4px
+    left: -2px
+    width: 13px
+    height: 1px
+    background-color: #fff
+    transform: rotate(45deg)
+
 .ant-upload-list-item-image
   object-fit: cover
 
