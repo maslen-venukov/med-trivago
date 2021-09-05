@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
 
 import Table from 'antd/lib/table'
 import Column from 'antd/lib/table/Column'
@@ -27,6 +28,9 @@ import formatPrice from '../../utils/formatPrice'
 
 import { RootState } from '../../store/reducers'
 import { IHospital, IServiceList } from '../../types/hospitals'
+import { Weekday } from '../../types'
+
+import { daysNames } from '../../constants'
 
 const Executors = () => {
   const dispatch = useDispatch()
@@ -123,7 +127,7 @@ const Executors = () => {
       >
         <Typography.Paragraph>
           <Schedule schedule={serviceList?.schedule}>
-            <ClockCircleTwoTone className="icon" /> {getPeriod(serviceList?.schedule.weekdays)}
+            <ClockCircleTwoTone className="icon" /> {getPeriod(serviceList?.schedule[daysNames[moment().weekday()] as Weekday])}
           </Schedule>
         </Typography.Paragraph>
         <List
