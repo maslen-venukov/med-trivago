@@ -32,6 +32,7 @@ const ActiveCategoriesModal: React.FC<IActiveCategoriesModalProps> = ({ category
       visible={visible}
       onCancel={onCancel}
       footer={null}
+      className="active-categories__modal"
     >
       <Form
         form={form}
